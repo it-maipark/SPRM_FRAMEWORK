@@ -1,49 +1,351 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - SPRM_FRAMEWORK</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/SPRM_FRAMEWORK.styles.css" asp-append-version="true" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<title>@ViewData["Title"] - SPRM_FRAMEWORK</title>
+	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
+	<link rel="icon" href="~/images/maipark.png" type="image/x-icon" />
+
+	<!-- Fonts and icons -->
+	<script src="~/atlantis/assets/js/plugin/webfont/webfont.min.js"></script>
+	<script>
+		WebFont.load({
+			google: {"families":["Lato:300,400,700,900"]},
+			custom: {"families":["Flaticon", "Font Awesome 5 Solid", "Font Awesome 5 Regular", "Font Awesome 5 Brands", "simple-line-icons"], urls: ['@Url.Content("~/atlantis/assets/css/fonts.min.css")']},
+			active: function() {
+				sessionStorage.fonts = true;
+			}
+		});
+	</script>
+
+	<!-- CSS Files -->
+	<link rel="stylesheet" href="~/atlantis/assets/css/bootstrap.min.css">
+	<link rel="stylesheet" href="~/atlantis/assets/css/atlantis.css">
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">SPRM_FRAMEWORK</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+	<div class="wrapper">
+		<div class="main-header">
+			<!-- Logo Header -->
+			<div class="logo-header" data-background-color="blue">
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - SPRM_FRAMEWORK - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+				<a href="index.html" class="logo">
+					<img src="~/images/maipark-logo-white.png" width="100" alt="navbar brand" class="navbar-brand">
+				</a>
+				<button class="navbar-toggler sidenav-toggler ml-auto" type="button" data-toggle="collapse" data-target="collapse" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon">
+						<i class="icon-menu"></i>
+					</span>
+				</button>
+				<button class="topbar-toggler more"><i class="icon-options-vertical"></i></button>
+				<div class="nav-toggle">
+					<button class="btn btn-toggle toggle-sidebar">
+						<i class="icon-menu"></i>
+					</button>
+				</div>
+			</div>
+			<!-- End Logo Header -->
+			<!-- Navbar Header -->
+			<nav class="navbar navbar-header navbar-expand-lg" data-background-color="blue2">
+				<div class="container-fluid">
+					<ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
+						<li class="nav-item dropdown hidden-caret">
+							<a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#" aria-expanded="false">
+								<div class="d-flex align-items-center">
+									<span class="text-white font-weight-bold mr-2" id="name-display">Nama User</span>
+									<div class="avatar-sm">
+										<img src="~/images/users/default.png" id="profile-pict" alt="Default" class="avatar-img rounded-circle">
+									</div>
+								</div>
+							</a>
+							<ul class="dropdown-menu dropdown-user animated fadeIn">
+								<li class="dropdown-user-scroll scrollbar-outer">
+									<div class="user-box">
+										<div class="avatar-xl mr-2"><img src="~/images/users/default.png" id="profile-pict-dropdown" alt="Default" class="avatar-img rounded"></div>
+										<div class="u-text">
+											<h4 id="name-display-dropdown">Nama User</h4>
+											<p class="text-muted" id="role-display-dropdown">Role</p>
+										</div>
+									</div>
+								</li>
+								<li class="dropdown-user-scroll scrollbar-outer">
+									<div class="dropdown-divider"></div>
+									<a class="dropdown-item" href="#" id="userLogout">Logout</a>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</nav>
+			<!-- End Navbar -->
+		</div>
+
+		<!-- Sidebar -->
+		<div class="sidebar sidebar-style-2">
+			<div class="sidebar-wrapper scrollbar scrollbar-inner">
+				<div class="sidebar-content">
+					<ul class="nav nav-primary" id="sidebar-menu">
+						<!-- Ini diisi dengan Javascript -->
+					</ul>
+				</div>
+			</div>
+		</div>
+		<!-- End Sidebar -->
+
+		<!-- Main Panel -->
+		<div class="main-panel">
+			<div class="container">
+				@RenderBody()
+			</div>
+			<footer class="footer">
+				<div class="container-fluid">
+					<div class="copyright ml-auto">
+						2025, made with <i class="fa fa-heart heart text-danger"></i> by <a href="#">PT. Reasuransi MAIPARK Indonesia</a>
+					</div>
+				</div>
+			</footer>
+		</div>
+		<!-- End Main Panel -->
+	</div>
+	<!--   Core JS Files   -->
+	<script src="~/atlantis/assets/js/core/jquery.3.2.1.min.js"></script>
+	<script src="~/atlantis/assets/js/core/popper.min.js"></script>
+	<script src="~/atlantis/assets/js/core/bootstrap.min.js"></script>
+
+	<!-- jQuery UI -->
+	<script src="~/atlantis/assets/js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
+	<script src="~/atlantis/assets/js/plugin/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js"></script>
+
+	<!-- jQuery Scrollbar -->
+	<script src="~/atlantis/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
+
+	<!-- Moment JS -->
+	<script src="~/atlantis/assets/js/plugin/moment/moment.min.js"></script>
+
+	<!-- Chart JS -->
+	<script src="~/atlantis/assets/js/plugin/chart.js/chart.min.js"></script>
+
+	<!-- jQuery Sparkline -->
+	<script src="~/atlantis/assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js"></script>
+
+	<!-- Chart Circle -->
+	<script src="~/atlantis/assets/js/plugin/chart-circle/circles.min.js"></script>
+
+	<!-- Datatables -->
+	<script src="~/atlantis/assets/js/plugin/datatables/datatables.min.js"></script>
+
+	<!-- Bootstrap Notify -->
+	<script src="~/atlantis/assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
+
+	<!-- Bootstrap Toggle -->
+	<script src="~/atlantis/assets/js/plugin/bootstrap-toggle/bootstrap-toggle.min.js"></script>
+
+	<!-- jQuery Vector Maps -->
+	<script src="~/atlantis/assets/js/plugin/jqvmap/jquery.vmap.min.js"></script>
+	<script src="~/atlantis/assets/js/plugin/jqvmap/maps/jquery.vmap.world.js"></script>
+
+	<!-- Google Maps Plugin -->
+	<script src="~/atlantis/assets/js/plugin/gmaps/gmaps.js"></script>
+
+	<!-- Dropzone -->
+	<script src="~/atlantis/assets/js/plugin/dropzone/dropzone.min.js"></script>
+
+	<!-- Fullcalendar -->
+	<script src="~/atlantis/assets/js/plugin/fullcalendar/fullcalendar.min.js"></script>
+
+	<!-- DateTimePicker -->
+	<script src="~/atlantis/assets/js/plugin/datepicker/bootstrap-datetimepicker.min.js"></script>
+
+	<!-- Bootstrap Tagsinput -->
+	<script src="~/atlantis/assets/js/plugin/bootstrap-tagsinput/bootstrap-tagsinput.min.js"></script>
+
+	<!-- Bootstrap Wizard -->
+	<script src="~/atlantis/assets/js/plugin/bootstrap-wizard/bootstrapwizard.js"></script>
+
+	<!-- jQuery Validation -->
+	<script src="~/atlantis/assets/js/plugin/jquery.validate/jquery.validate.min.js"></script>
+
+	<!-- Summernote -->
+	<script src="~/atlantis/assets/js/plugin/summernote/summernote-bs4.min.js"></script>
+
+	<!-- Select2 -->
+	<script src="~/atlantis/assets/js/plugin/select2/select2.full.min.js"></script>
+
+	<!-- Sweet Alert -->
+	<script src="~/js/sweetalert2.js"></script>
+
+	<!-- Owl Carousel -->
+	<script src="~/atlantis/assets/js/plugin/owl-carousel/owl.carousel.min.js"></script>
+
+	<!-- Magnific Popup -->
+	<script src="~/atlantis/assets/js/plugin/jquery.magnific-popup/jquery.magnific-popup.min.js"></script>
+
+	<!-- Atlantis JS -->
+	<script src="~/atlantis/assets/js/atlantis.min.js"></script>
+
+	<!-- SideBar -->
+	<script>
+		// Fungsi untuk membuat elemen li untuk menu item, termasuk jika ada subMenus
+		function createMenuItem(menu) {
+			var li = document.createElement("li");
+			li.classList.add("nav-item");
+			li.id = "navLink-" + menu.actionName + "-" + menu.controllerName;
+			// Jika ada sub menu, buat struktur collapse
+			if (menu.subMenus && menu.subMenus.length > 0) {
+				// Buat link dengan atribut collapse
+				var a = document.createElement("a");
+				a.setAttribute("data-toggle", "collapse");
+				// Gunakan id unik untuk collapse, misalnya "menu-2" berdasarkan menu.id
+				a.href = "#menu-" + menu.id;
+				a.classList.add("collapsed");
+				a.setAttribute("aria-expanded", "false");
+
+				// Jika ada icon, tambahkan
+				if (menu.icon) {
+					var icon = document.createElement("i");
+					icon.className = menu.icon;
+					a.appendChild(icon);
+				}
+				// Tambahkan teks menu
+				var p = document.createElement("p");
+				p.textContent = menu.menuText;
+				a.appendChild(p);
+				// Tambahkan caret
+				var spanCaret = document.createElement("span");
+				spanCaret.classList.add("caret");
+				a.appendChild(spanCaret);
+
+				li.appendChild(a);
+
+				// Buat div collapse untuk sub menu
+				var collapseDiv = document.createElement("div");
+				collapseDiv.classList.add("collapse");
+				collapseDiv.id = "menu-" + menu.id;
+
+				// Buat ul untuk sub menu
+				var ulSub = document.createElement("ul");
+				ulSub.classList.add("nav", "nav-collapse");
+
+				// Looping subMenus
+				menu.subMenus.forEach(function(sub) {
+					var subLi = document.createElement("li");
+					// Buat link sub menu
+					var subA = document.createElement("a");
+					// Jika actionName ada, set href; jika tidak, set "#" (atau sesuaikan)
+					subA.href = sub.actionName ? "/" + sub.controllerName + "/" + sub.actionName : "#";
+					var spanSub = document.createElement("span");
+					spanSub.classList.add("sub-item");
+					spanSub.textContent = sub.menuText;
+					subA.appendChild(spanSub);
+					subLi.appendChild(subA);
+					ulSub.appendChild(subLi);
+				});
+
+				collapseDiv.appendChild(ulSub);
+				li.appendChild(collapseDiv);
+			} else {
+				// Jika tidak ada subMenus, buat link biasa
+				var a = document.createElement("a");
+				a.href = menu.actionName ? "/" + menu.controllerName + "/" + menu.actionName : "#";
+				if (menu.icon) {
+					var icon = document.createElement("i");
+					icon.className = menu.icon;
+					a.appendChild(icon);
+				}
+				var p = document.createElement("p");
+				p.textContent = menu.menuText;
+				a.appendChild(p);
+				li.appendChild(a);
+			}
+			return li;
+		}
+
+		// Setelah DOM siap, lakukan looping untuk generate sidebar menu
+		document.addEventListener("DOMContentLoaded", function () {
+			// Ambil data dari sessionStorage (misalnya, disimpan sebelumnya)
+			var sidebarMenusJson = sessionStorage.getItem("SidebarMenus");
+			var sidebarMenus = sidebarMenusJson ? JSON.parse(sidebarMenusJson) : [];
+			var sidebarList = document.getElementById("sidebar-menu");
+			// Looping setiap menu dan append ke sidebar
+			sidebarMenus.forEach(function(menu) {
+				var li = createMenuItem(menu);
+				sidebarList.appendChild(li);
+			});
+
+			var username = sessionStorage.getItem("Username");
+			var token = sessionStorage.getItem("AccessToken");
+			
+			$.ajax({
+				type: 'GET',
+				url: 'http://sql-mvt-03/sprm/api/Lookup/GetEmployeeByUserMaipark',
+				headers: {
+					'Authorization': 'Bearer ' + token
+				},
+				data: { username: username },
+				contentType: 'application/json',
+				success: function (response) {
+					console.log(response);
+					$('#name-display').text(response.data.name);
+					$('#name-display-dropdown').text(response.data.name);
+					$('#role-display-dropdown').text(response.data.jobPosition);
+					$('#profile-pict').attr('src', response.data.image);
+					$('#profile-pict-dropdown').attr('src', response.data.image);
+				},
+				error: function (error) {
+					console.error('Get Data Failed', error);
+				}
+			});
+		});
+	</script>
+	<!--End Sidebar-->
+
+	<!-- Logout -->
+	<script>
+		$(document).ready(function () {
+			// Logout System
+			$('#userLogout').click(function (e) {
+				e.preventDefault();
+
+				Swal.fire({
+					title: "Are you sure?",
+					text: "You want to Logout this System?",
+					icon: "warning",
+					showCancelButton: true,
+					confirmButtonColor: "#3085d6",
+					cancelButtonColor: "#d33",
+					confirmButtonText: "Yes, Logout!"
+				}).then((result) => {
+					if (result.isConfirmed) {
+						$.ajax({
+							type: 'POST',
+							url: 'http://sql-mvt-03/sprm/api/Auth/Logout',
+							contentType: 'application/json',
+							success: function (response) {
+								Swal.fire({
+									title: "Logout successful!",
+									text: "See you again soon!",
+									icon: "success"
+								}).then(() => {
+									sessionStorage.clear();
+									window.location.href = '@Url.Action("Login", "Auth")';
+								});
+							},
+							error: function (error) {
+								Swal.fire({
+									icon: "error",
+									title: "Oops...",
+									text: "Something went wrong. Unable to logout."
+								}).then(() => {
+									console.error('Logout failed', error);
+								});
+							}
+						});
+					}
+				});
+			});
+		});
+	</script>
+	<!-- End Logout -->
+
+	@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

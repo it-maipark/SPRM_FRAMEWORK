@@ -14,7 +14,7 @@
     <script>
         WebFont.load({
             google: {"families":["Lato:300,400,700,900"]},
-            custom: {"families":["Flaticon", "Font Awesome 5 Solid", "Font Awesome 5 Regular", "Font Awesome 5 Brands", "simple-line-icons"], urls: ['~/atlantis/assets/css/fonts.min.css']},
+            custom: {"families":["Flaticon", "Font Awesome 5 Solid", "Font Awesome 5 Regular", "Font Awesome 5 Brands", "simple-line-icons"], urls: ['@Url.Content("~/atlantis/assets/css/fonts.min.css")']},
             active: function() {
                 sessionStorage.fonts = true;
             }
@@ -24,22 +24,41 @@
     <!-- CSS Files -->
     <link rel="stylesheet" href="~/atlantis/assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="~/atlantis/assets/css/atlantis.css">
+
+    <style>
+        .error {
+            color: #f44336 !important;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        input.error {
+            border-color: #f44336 !important;
+        }
+
+        label.error {
+            position: absolute;
+            bottom: -20px;
+            left: 0;
+        }
+
+        .form-floating-label label.placeholder.error {
+            position: absolute;
+            top: -7px;
+            font-size: 12px;
+            color: #f44336;
+        }
+    </style>
 </head>
 <body class="login">
     <div class="wrapper wrapper-login">
         <div class="container container-login animated fadeIn">
             <img src="~/images//maipark.png" width="170" class="mx-auto d-block mb-4" />
             <h4 class="text-center mb-4">Sign In To SPRM FRAMEWORK</h4>
-            @if (!ViewData.ModelState.IsValid)
-            {
-                <div class="alert alert-danger mt-3">
-                    @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
-                    {
-                        <p class="mb-0">@error.ErrorMessage</p>
-                    }
-                </div>
-            }
-            <form class="login-form" method="post">
+            <div class="alert alert-danger mt-3" style="display: none;" id="error-message">
+                @* <p class="mb-0">Testing</p> *@
+            </div>
+            <form id="loginValidation" enctype="multipart/form-data">
                 <div class="form-group form-floating-label">
                     <input id="username" name="username" type="text" class="form-control input-border-bottom" required>
                     <label for="username" class="placeholder">Username</label>
@@ -65,5 +84,73 @@
     <script src="~/atlantis/assets/js/core/popper.min.js"></script>
     <script src="~/atlantis/assets/js/core/bootstrap.min.js"></script>
     <script src="~/atlantis/assets/js/atlantis.min.js"></script>
+    <!-- jQuery Validation -->
+    <script src="~/atlantis/assets/js/plugin/jquery.validate/jquery.validate.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+    $('#loginValidation').validate({
+        rules: {
+            username: {
+                required: true
+            },
+            password: {
+                required: true
+            }
+        },
+        messages: {
+            username: {
+                required: "Username is required"
+            },
+            password: {
+                required: "Password is required"
+            }
+        },
+        errorElement: 'span',
+        errorPlacement: function(error, element) {
+            if (element.attr("name") === "username" || element.attr("name") === "password") {
+                error.insertAfter(element.parent());
+            } else {
+                error.insertAfter(element);
+            }
+        },
+        highlight: function(element, errorClass, validClass) {
+            $(element).addClass(errorClass).removeClass(validClass);
+            $(element).next('label').addClass(errorClass);
+        },
+        unhighlight: function(element, errorClass, validClass) {
+            $(element).removeClass(errorClass).addClass(validClass);
+            $(element).next('label').removeClass(errorClass);
+        },
+        submitHandler: function (form) {
+            var formData = {
+                username: $('#username').val(),
+                password: $('#password').val()
+            };
+
+            $.ajax({
+                url: 'http://sql-mvt-03/sprm/api/Auth/Login',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(formData),
+                success: function (response) {
+                    if (response.success) {
+                        sessionStorage.setItem('UserRole', JSON.stringify(response.data.role));
+                        sessionStorage.setItem('SidebarMenus', JSON.stringify(response.data.sidebarMenus));
+                        sessionStorage.setItem('Username', formData.username);
+                        sessionStorage.setItem('AccessToken', response.data.accessToken);
+                        window.location.href = '@Url.Action("Index", "Dashboard")';
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    let response = JSON.parse(jqXHR.responseText);
+                    $('#error-message').text(response.message);
+                    $('#error-message').show();
+                }
+            });
+        }
+    });
+});
+    </script>
 </body>
 </html>
