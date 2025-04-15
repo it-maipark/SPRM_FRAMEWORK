@@ -1,0 +1,544 @@
+﻿@{
+    ViewBag.Title = "Profitability";
+}
+
+<div class="page-inner">
+    <div class="page-header">
+        <h4 class="page-title">Strategy Matrix</h4>
+        <ul class="breadcrumbs">
+            <li class="nav-home">
+                <a href="#">
+                    <i class="flaticon-home"></i>
+                </a>
+            </li>
+            <li class="separator">
+                <i class="flaticon-right-arrow"></i>
+            </li>
+            <li class="nav-item">
+                <a href="#">Strategy Matrix</a>
+            </li>
+            <li class="separator">
+                <i class="flaticon-right-arrow"></i>
+            </li>
+            <li class="nav-item">
+                <a href="#">Profitability</a>
+            </li>
+        </ul>
+    </div>
+    <!-- Inner Page -->
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="strategyTable">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>Strategy</th>
+                            <th>Action Plan</th>
+                            <th>KPI</th>
+                            <th>Output</th>
+                            <th>Lead Group</th>
+                            <th>Support Group</th>
+                            <th>Expense</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="7" class="text-center">
+                                <a id="btnAddTools" class="btn btn-sm btn-success text-white" data-toggle="modal" data-target="#addStrategyModal">+ Add Strategy</a>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal placeholder -->
+<div class="modal fade" id="editModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Form Data</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <!-- form akan di-load di sini via AJAX -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Strategy Modal -->
+<div class="modal fade" id="addStrategyModal" aria-labelledby="addStrategyModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+            <form id="addStrategyValidation" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <h2 class="modal-title font-weight-bold" id="addStrategyModalLabel">New Strategy</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group form-show-validation row">
+                        <label for="title" class="col-4 mt-sm-2 text-left">Title <span class="required-label">*</span></label>
+                        <div class="col-8">
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" id="title" name="title" placeholder="Input title here..." required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group form-show-validation row">
+                        <label for="description" class="col-4 mt-sm-2 text-left">Description <span class="required-label">*</span></label>
+                        <div class="col-8">
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" id="description" name="description" placeholder="Input description here..." required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group form-show-validation row">
+                        <label for="strategic-goals" class="col-4 mt-sm-2 text-left">Strategic Goals <span class="required-label">*</span></label>
+                        <div class="col-8">
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" id="strategic-goals" name="strategic-goals" placeholder="Input strategic-goals here..." required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group form-show-validation row">
+                        <label for="main-target" class="col-4 mt-sm-2 text-left">Main Target <span class="required-label">*</span></label>
+                        <div class="col-8">
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" id="main-target" name="main-target" placeholder="Input main-target here..." required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group form-show-validation row">
+                        <label for="codification" class="col-4 mt-sm-2 text-left">Codification <span class="required-label">*</span></label>
+                        <div class="col-8">
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" id="codification" name="codification" placeholder="Input codification here..." required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group form-show-validation row">
+                        <label for="strategic-pilar" class="col-4 mt-sm-2 text-left">Strategic Pilar <span class="required-label">*</span></label>
+                        <div class="col-8">
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" id="strategic-pilar" name="strategic-pilar" value="Profitability" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group form-show-validation row">
+                        <label for="tag" class="col-4 mt-sm-2 text-left">Tag <span class="required-label">*</span></label>
+                        <div class="col-8">
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" id="tag" name="tag" placeholder="Input tag here..." required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group form-show-validation row">
+                        <label for="version-tag" class="col-4 mt-sm-2 text-left">Version Tag <span class="required-label">*</span></label>
+                        <div class="col-8">
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" id="version-tag" name="version-tag" placeholder="Input version-tag here..." required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group font-weight-bold mt-3">SWOT Analysis</div>
+                    <div class="form-group form-show-validation row">
+                        <label for="strengths" class="col-4 mt-sm-2 text-left">Strengths <span class="required-label">*</span></label>
+                        <div class="col-8">
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" id="strengths" name="strengths" placeholder="Input strengths here..." required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group form-show-validation row">
+                        <label for="weaknesses" class="col-4 mt-sm-2 text-left">Weaknesses <span class="required-label">*</span></label>
+                        <div class="col-8">
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" id="weaknesses" name="weaknesses" placeholder="Input weaknesses here..." required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group form-show-validation row">
+                        <label for="opportunities" class="col-4 mt-sm-2 text-left">Opportunities <span class="required-label">*</span></label>
+                        <div class="col-8">
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" id="opportunities" name="opportunities" placeholder="Input opportunities here..." required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group form-show-validation row">
+                        <label for="threats" class="col-4 mt-sm-2 text-left">Threats <span class="required-label">*</span></label>
+                        <div class="col-8">
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" id="threats" name="threats" placeholder="Input threats here..." required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group font-weight-bold mt-3">SSC Analysis</div>
+                    <div class="form-group form-show-validation row">
+                        <label for="start" class="col-4 mt-sm-2 text-left">Start <span class="required-label">*</span></label>
+                        <div class="col-8">
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" id="start" name="start" placeholder="Input start here..." required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group form-show-validation row">
+                        <label for="stop" class="col-4 mt-sm-2 text-left">Stop <span class="required-label">*</span></label>
+                        <div class="col-8">
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" id="stop" name="stop" placeholder="Input stop here..." required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group form-show-validation row">
+                        <label for="continue" class="col-4 mt-sm-2 text-left">Continue <span class="required-label">*</span></label>
+                        <div class="col-8">
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" id="continue" name="continue" placeholder="Input continue here..." required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var token = sessionStorage.getItem("AccessToken");
+        var userMaipark = sessionStorage.getItem("Username");
+        
+        $(document).ready(function () {
+            $('#navLink-2').addClass('nav-item active');
+
+            /* validate */
+            // handle validation add strategy
+            $("#addStrategyValidation").validate({
+                validClass: "success",
+                rules: {
+                    "title": {
+                        required: true,
+                    },
+                    "description": {
+                        required: true
+                    },
+                    "strategic-goals": {
+                        required: true
+                    },
+                    "main-target": {
+                        required: true
+                    },
+                    "codification": {
+                        required: true
+                    },
+                    "tag": {
+                        required: true
+                    },
+                    "version-tag": {
+                        required: true
+                    },
+                    "strengths": {
+                        required: true
+                    },
+                    "weaknesses": {
+                        required: true
+                    },
+                    "opportunities": {
+                        required: true
+                    },
+                    "threats": {
+                        required: true
+                    },
+                    "start": {
+                        required: true
+                    },
+                    "stop": {
+                        required: true
+                    },
+                    "continue": {
+                        required: true
+                    },
+                },
+                messages: {
+                    "title": {
+                        required: "Please Input Title.",
+                    },
+                    "description": {
+                        required: "Please Input Description.",
+                    },
+                    "strategic-goals": {
+                        required: "Please Input Strategic Goals.",
+                    },
+                    "main-target": {
+                        required: "Please Input Main Target.",
+                    },
+                    "codification": {
+                        required: "Please Input Codification.",
+                    },
+                    "tag": {
+                        required: "Please Input Tag.",
+                    },
+                    "version-tag": {
+                        required: "Please Input Version Tag.",
+                    },
+                    "strengths": {
+                        required: "Please Input Strengths.",
+                    },
+                    "weaknesses": {
+                        required: "Please Input Weaknesses.",
+                    },
+                    "opportunities": {
+                        required: "Please Input Opportunities.",
+                    },
+                    "threats": {
+                        required: "Please Input Threats.",
+                    },
+                    "start": {
+                        required: "Please Input Start.",
+                    },
+                    "stop": {
+                        required: "Please Input Stop.",
+                    },
+                    "continue": {
+                        required: "Please Input Continue.",
+                    },
+                },
+                submitHandler: function (form) {
+                    var formData = new FormData(form);
+                    var rawData = Object.fromEntries(formData.entries());
+
+                    // Mapping ke camelCase
+                    var jsonData = {
+                      title: rawData['title'],
+                      description: rawData['description'],
+                      strategicGoals: rawData['strategic-goals'],
+                      mainTarget: rawData['main-target'],
+                      codification: rawData['codification'],
+                      strategicPillar: rawData['strategic-pilar'],
+                      tag: rawData['tag'],
+                      versionTag: rawData['version-tag'],
+                      strengths: rawData['strengths'],
+                      weaknesses: rawData['weaknesses'],
+                      opportunities: rawData['opportunities'],
+                      threats: rawData['threats'],
+                      stop: rawData['stop'],
+                      start: rawData['start'],
+                      continue: rawData['continue'],
+                      createdBy: userMaipark
+                    };
+
+                    // Mengirim data menggunakan Ajax
+                    $.ajax({
+                        url: 'http://sql-mvt-03/sprm/api/StrategyMatrix/AddStrategy',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        headers: { 'Authorization': 'Bearer ' + token },
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        data: JSON.stringify(jsonData),
+                        success: function (response) {
+                            // Handle success response
+                            console.log(response);
+
+                            // Show SweetAlert2 success message
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Added successfully!',
+                                text: 'New Strategy has been added.',
+                            }).then(() => {
+                                // Refresh the user management page or perform any other actions
+                                location.reload();
+                            });
+                        },
+                        error: function (error) {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: "Something went wrong. Unable to added the strategy."
+                            }).then(() => {
+                                console.error('Unable to added the strategy', error);
+                            });
+                        }
+                    });
+                }
+            });
+        });
+
+        $(function() {
+          const $tbody = $('#strategyTable tbody'),
+                apiUrl = 'http://sql-mvt-03/sprm/api/StrategyMatrix';
+
+          function fetchAndRender() {
+            // tampilkan loading
+            $tbody.html('<tr><td colspan="7" class="text-center py-5">Loading…</td></tr>');
+
+            $.ajax({
+              url: apiUrl,
+              method: 'GET',
+              dataType: 'json',
+              xhrFields: {
+                withCredentials: true
+              },
+              headers: { 'Authorization': 'Bearer ' + token },
+              success(res) {
+                const data = res.data || [];
+                $tbody.empty();
+
+                data.forEach(strategy => {
+                  // hitung rowspan total untuk Strategy
+                  let stratRows = strategy.actionPlans.length
+                    ? strategy.actionPlans.reduce((sum, ap) => {
+                        if (ap.kpIs.length) {
+                          return sum + ap.kpIs.reduce((s2, kpi) => s2 + Math.max(kpi.outputs.length,1), 0);
+                        }
+                        return sum + 1;
+                      }, 0)
+                    : 1;
+
+                  let stratRendered = false;
+
+                  if (strategy.actionPlans.length) {
+                    // ada ActionPlans
+                    strategy.actionPlans.forEach(ap => {
+                      // hitung rowspan untuk this AP
+                      let apRows = ap.kpIs.length
+                        ? ap.kpIs.reduce((s,kpi) => s + Math.max(kpi.outputs.length,1), 0)
+                        : 1;
+
+                      if (ap.kpIs.length) {
+                        // ada KPI
+                        ap.kpIs.forEach(kpi => {
+                          let kpiRows = Math.max(kpi.outputs.length,1);
+                          if (kpi.outputs.length) {
+                            // ada Outputs
+                            kpi.outputs.forEach(output => {
+                              const $tr = $('<tr>');
+                              if (!stratRendered) {
+                                $tr.append(`<td rowspan="${stratRows}">${strategy.title}</td>`);
+                                stratRendered = true;
+                              }
+                              // AP cell
+                              $tr.append(`<td rowspan="${apRows}">
+                                ${ap.title}
+                                <button class="btn btn-sm btn-link btn-edit-ap" data-id="${ap.id}">✎</button>
+                              </td>`);
+                              // KPI cell
+                              $tr.append(`<td rowspan="${kpiRows}">
+                                ${kpi.title}
+                                <button class="btn btn-sm btn-link btn-edit-kpi" data-id="${kpi.id}">✎</button>
+                              </td>`);
+                              // Output cell
+                              $tr.append(`<td>
+                                ${output.title}
+                                <button class="btn btn-sm btn-link btn-edit-output" data-id="${output.id}">✎</button>
+                              </td>`);
+                              // Lead / Support / Expense
+                              $tr.append(`<td>${ap.leadGroup||''}</td>`);
+                              $tr.append(`<td>${ap.supportGroup||''}</td>`);
+                              $tr.append(`<td>${kpi.expense? kpi.expense.toLocaleString() : ''}</td>`);
+                              $tbody.append($tr);
+                            });
+                          } else {
+                            // KPI ada tapi no Outputs
+                            const $tr = $('<tr>');
+                            if (!stratRendered) {
+                              $tr.append(`<td rowspan="${stratRows}">${strategy.title}</td>`);
+                              stratRendered = true;
+                            }
+                            $tr.append(`<td rowspan="${apRows}">
+                              ${ap.title}
+                              <button class="btn btn-sm btn-link btn-edit-ap" data-id="${ap.id}">✎</button>
+                            </td>`);
+                            $tr.append(`<td rowspan="${kpiRows}">
+                              ${kpi.title}
+                              <button class="btn btn-sm btn-link btn-edit-kpi" data-id="${kpi.id}">✎</button>
+                            </td>`);
+                            $tr.append(`<td>
+                              <button class="btn btn-sm btn-outline-primary btn-add-output" data-kpiid="${kpi.id}">+ Output</button>
+                            </td>`);
+                            $tr.append(`<td>${ap.leadGroup||''}</td>`);
+                            $tr.append(`<td>${ap.supportGroup||''}</td>`);
+                            $tr.append(`<td>${kpi.expense ? kpi.expense.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' }) : ''}</td>`);
+                            $tbody.append($tr);
+                          }
+                        });
+                      } else {
+                        // AP ada tapi no KPI
+                        const $tr = $('<tr>');
+                        if (!stratRendered) {
+                          $tr.append(`<td rowspan="${stratRows}">${strategy.title}</td>`);
+                          stratRendered = true;
+                        }
+                        $tr.append(`<td rowspan="${apRows}">
+                          ${ap.title}
+                          <button class="btn btn-sm btn-link btn-edit-ap" data-id="${ap.id}">✎</button>
+                        </td>`);
+                        $tr.append(`<td>
+                          <button class="btn btn-sm btn-outline-primary btn-add-kpi" data-apid="${ap.id}">+ KPI</button>
+                        </td>`);
+                        $tr.append(`<td></td>`);
+                        $tr.append(`<td>${ap.leadGroup||''}</td>`);
+                        $tr.append(`<td>${ap.supportGroup||''}</td>`);
+                        $tr.append(`<td></td>`);
+                        $tbody.append($tr);
+                      }
+                    });
+                  } else {
+                    // strategy belum punya AP sama sekali
+                    const $tr = $('<tr>');
+                    $tr.append(`<td>${strategy.title}</td>`);
+                    $tr.append(`<td>
+                      <button class="btn btn-sm btn-outline-primary btn-add-ap" data-strid="${strategy.id}">+ AP</button>
+                    </td>`);
+                    $tr.append(`<td></td><td></td><td></td><td></td><td></td>`);
+                    $tbody.append($tr);
+                  }
+                });
+              },
+              error() {
+                $tbody.html('<tr><td colspan="7" class="text-danger text-center">Error loading data</td></tr>');
+              }
+            });
+          }
+
+          function openModal(url) {
+            $('#editModal .modal-body').html('Loading…');
+            $.ajax({
+              url, method: 'GET',
+              success(html) {
+                $('#editModal .modal-body').html(html);
+                new bootstrap.Modal($('#editModal')[0]).show();
+              },
+              error() {
+                $('#editModal .modal-body').html('<p class="text-danger">Failed to load form.</p>');
+              }
+            });
+          }
+
+          // event delegation
+          $tbody
+            .on('click', '.btn-add-ap',     e => openModal(`/PlanManager/AddActionPlanModal?strId=${e.currentTarget.dataset.strid}`))
+            .on('click', '.btn-edit-ap',    e => openModal(`/PlanManager/EditActionPlanModal/${e.currentTarget.dataset.id}`))
+            .on('click', '.btn-add-kpi',    e => openModal(`/Kpi/AddKpiModal?apId=${e.currentTarget.dataset.apid}`))
+            .on('click', '.btn-edit-kpi',   e => openModal(`/Kpi/EditKpiModal/${e.currentTarget.dataset.id}`))
+            .on('click', '.btn-add-output', e => openModal(`/Output/AddOutputModal?kpiId=${e.currentTarget.dataset.kpiid}`))
+            .on('click', '.btn-edit-output',e => openModal(`/Output/EditOutputModal/${e.currentTarget.dataset.id}`));
+
+          // initial load
+          fetchAndRender();
+        });
+    </script>
+}

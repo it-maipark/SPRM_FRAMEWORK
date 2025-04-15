@@ -89,68 +89,68 @@
 
     <script>
         $(document).ready(function () {
-    $('#loginValidation').validate({
-        rules: {
-            username: {
-                required: true
-            },
-            password: {
-                required: true
-            }
-        },
-        messages: {
-            username: {
-                required: "Username is required"
-            },
-            password: {
-                required: "Password is required"
-            }
-        },
-        errorElement: 'span',
-        errorPlacement: function(error, element) {
-            if (element.attr("name") === "username" || element.attr("name") === "password") {
-                error.insertAfter(element.parent());
-            } else {
-                error.insertAfter(element);
-            }
-        },
-        highlight: function(element, errorClass, validClass) {
-            $(element).addClass(errorClass).removeClass(validClass);
-            $(element).next('label').addClass(errorClass);
-        },
-        unhighlight: function(element, errorClass, validClass) {
-            $(element).removeClass(errorClass).addClass(validClass);
-            $(element).next('label').removeClass(errorClass);
-        },
-        submitHandler: function (form) {
-            var formData = {
-                username: $('#username').val(),
-                password: $('#password').val()
-            };
-
-            $.ajax({
-                url: 'http://sql-mvt-03/sprm/api/Auth/Login',
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify(formData),
-                success: function (response) {
-                    if (response.success) {
-                        sessionStorage.setItem('UserRole', JSON.stringify(response.data.role));
-                        sessionStorage.setItem('SidebarMenus', JSON.stringify(response.data.sidebarMenus));
-                        sessionStorage.setItem('Username', formData.username);
-                        sessionStorage.setItem('AccessToken', response.data.accessToken);
-                        window.location.href = '@Url.Action("Index", "Dashboard")';
+            $('#loginValidation').validate({
+                rules: {
+                    username: {
+                        required: true
+                    },
+                    password: {
+                        required: true
                     }
                 },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    let response = JSON.parse(jqXHR.responseText);
-                    $('#error-message').text(response.message);
-                    $('#error-message').show();
+                messages: {
+                    username: {
+                        required: "Username is required"
+                    },
+                    password: {
+                        required: "Password is required"
+                    }
+                },
+                errorElement: 'span',
+                errorPlacement: function(error, element) {
+                    if (element.attr("name") === "username" || element.attr("name") === "password") {
+                        error.insertAfter(element.parent());
+                    } else {
+                        error.insertAfter(element);
+                    }
+                },
+                highlight: function(element, errorClass, validClass) {
+                    $(element).addClass(errorClass).removeClass(validClass);
+                    $(element).next('label').addClass(errorClass);
+                },
+                unhighlight: function(element, errorClass, validClass) {
+                    $(element).removeClass(errorClass).addClass(validClass);
+                    $(element).next('label').removeClass(errorClass);
+                },
+                submitHandler: function (form) {
+                    var formData = {
+                        username: $('#username').val(),
+                        password: $('#password').val()
+                    };
+
+                    $.ajax({
+                        url: 'http://sql-mvt-03/sprm/api/Auth/Login',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(formData),
+                        success: function (response) {
+                            if (response.success) {
+                                sessionStorage.setItem('UserRole', JSON.stringify(response.data.role));
+                                sessionStorage.setItem('SidebarMenus', JSON.stringify(response.data.sidebarMenus));
+                                sessionStorage.setItem('Username', formData.username);
+                                sessionStorage.setItem('AccessToken', response.data.accessToken);
+                                window.location.href = '@Url.Action("Index", "Dashboard")';
+                            }
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            let response = JSON.parse(jqXHR.responseText);
+                            $('#error-message').text(response.message);
+                            $('#error-message').show();
+                        }
+                    });
                 }
             });
-        }
-    });
-});
+        });
     </script>
 </body>
 </html>

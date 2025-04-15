@@ -188,7 +188,7 @@
 		function createMenuItem(menu) {
 			var li = document.createElement("li");
 			li.classList.add("nav-item");
-			li.id = "navLink-" + menu.actionName + "-" + menu.controllerName;
+			li.id = "navLink-" + (menu.actionName ? menu.actionName + "-" + menu.controllerName : menu.id);
 			// Jika ada sub menu, buat struktur collapse
 			if (menu.subMenus && menu.subMenus.length > 0) {
 				// Buat link dengan atribut collapse
@@ -277,13 +277,13 @@
 			$.ajax({
 				type: 'GET',
 				url: 'http://sql-mvt-03/sprm/api/Lookup/GetEmployeeByUserMaipark',
-				headers: {
-					'Authorization': 'Bearer ' + token
+				xhrFields: {
+					withCredentials: true
 				},
+				headers: { 'Authorization': 'Bearer ' + token },
 				data: { username: username },
 				contentType: 'application/json',
 				success: function (response) {
-					console.log(response);
 					$('#name-display').text(response.data.name);
 					$('#name-display-dropdown').text(response.data.name);
 					$('#role-display-dropdown').text(response.data.jobPosition);
@@ -319,6 +319,9 @@
 							type: 'POST',
 							url: 'http://sql-mvt-03/sprm/api/Auth/Logout',
 							contentType: 'application/json',
+							xhrFields: {
+								withCredentials: true
+							},
 							success: function (response) {
 								Swal.fire({
 									title: "Logout successful!",
