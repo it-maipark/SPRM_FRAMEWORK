@@ -389,20 +389,19 @@
               url: apiUrl,
               method: 'GET',
               dataType: 'json',
-              xhrFields: {
-                withCredentials: true
-              },
+              xhrFields: { withCredentials: true },
               headers: { 'Authorization': 'Bearer ' + token },
               success(res) {
-                const data = res.data || [];
+                // filter Profitability
+                const data = (res.data || []).filter(s => s.strategicPillar === 'Profitability');
                 $tbody.empty();
 
                 data.forEach(strategy => {
-                  // hitung rowspan total untuk Strategy
-                  let stratRows = strategy.actionPlans.length
+                  // hitung total rowspan untuk strategy
+                  const stratRows = strategy.actionPlans.length
                     ? strategy.actionPlans.reduce((sum, ap) => {
                         if (ap.kpIs.length) {
-                          return sum + ap.kpIs.reduce((s2, kpi) => s2 + Math.max(kpi.outputs.length,1), 0);
+                          return sum + ap.kpIs.reduce((s2, kpi) => s2 + Math.max(kpi.outputs.length, 1), 0);
                         }
                         return sum + 1;
                       }, 0)
@@ -411,99 +410,155 @@
                   let stratRendered = false;
 
                   if (strategy.actionPlans.length) {
-                    // ada ActionPlans
                     strategy.actionPlans.forEach(ap => {
                       // hitung rowspan untuk this AP
-                      let apRows = ap.kpIs.length
-                        ? ap.kpIs.reduce((s,kpi) => s + Math.max(kpi.outputs.length,1), 0)
+                      const apRows = ap.kpIs.length
+                        ? ap.kpIs.reduce((s, kpi) => s + Math.max(kpi.outputs.length, 1), 0)
                         : 1;
 
+                      let apRendered = false;  // <<< flag untuk AP
+
                       if (ap.kpIs.length) {
-                        // ada KPI
                         ap.kpIs.forEach(kpi => {
-                          let kpiRows = Math.max(kpi.outputs.length,1);
+                          // hitung rowspan untuk this KPI
+                          const kpiRows = Math.max(kpi.outputs.length, 1);
+                          let kpiRendered = false;  // <<< flag untuk KPI
+
                           if (kpi.outputs.length) {
                             // ada Outputs
                             kpi.outputs.forEach(output => {
                               const $tr = $('<tr>');
+
+                              // Strategy cell sekali
                               if (!stratRendered) {
                                 $tr.append(`<td rowspan="${stratRows}">${strategy.title}</td>`);
                                 stratRendered = true;
                               }
-                              // AP cell
-                              $tr.append(`<td rowspan="${apRows}">
-                                ${ap.title}
-                                <button class="btn btn-sm btn-link btn-edit-ap" data-id="${ap.id}">✎</button>
-                              </td>`);
-                              // KPI cell
-                              $tr.append(`<td rowspan="${kpiRows}">
-                                ${kpi.title}
-                                <button class="btn btn-sm btn-link btn-edit-kpi" data-id="${kpi.id}">✎</button>
-                              </td>`);
+
+                              // Action Plan cell sekali
+                              if (!apRendered) {
+                                $tr.append(`
+                                  <td rowspan="${apRows}">
+                                    ${ap.title}
+                                    <button class="btn btn-sm btn-link btn-edit-ap" data-id="${ap.id}">✎</button>
+                                  </td>
+                                `);
+                                apRendered = true;
+                              }
+
+                              // KPI cell sekali
+                              if (!kpiRendered) {
+                                $tr.append(`
+                                  <td rowspan="${kpiRows}">
+                                    ${kpi.title}
+                                    <button class="btn btn-sm btn-link btn-edit-kpi" data-id="${kpi.id}">✎</button>
+                                  </td>
+                                `);
+                                kpiRendered = true;
+                              }
+
                               // Output cell
-                              $tr.append(`<td>
-                                ${output.title}
-                                <button class="btn btn-sm btn-link btn-edit-output" data-id="${output.id}">✎</button>
-                              </td>`);
+                              $tr.append(`
+                                <td>
+                                  ${output.title}
+                                  <button class="btn btn-sm btn-link btn-edit-output" data-id="${output.id}">✎</button>
+                                </td>
+                              `);
+
                               // Lead / Support / Expense
-                              $tr.append(`<td>${ap.leadGroup||''}</td>`);
-                              $tr.append(`<td>${ap.supportGroup||''}</td>`);
-                              $tr.append(`<td>${kpi.expense? kpi.expense.toLocaleString() : ''}</td>`);
+                              $tr.append(`<td>${ap.leadGroup || ''}</td>`);
+                              $tr.append(`<td>${ap.supportGroup || ''}</td>`);
+                              $tr.append(`<td>${kpi.expense
+                                ? kpi.expense.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })
+                                : ''}</td>`);
+
                               $tbody.append($tr);
                             });
+
                           } else {
                             // KPI ada tapi no Outputs
                             const $tr = $('<tr>');
+
                             if (!stratRendered) {
                               $tr.append(`<td rowspan="${stratRows}">${strategy.title}</td>`);
                               stratRendered = true;
                             }
-                            $tr.append(`<td rowspan="${apRows}">
-                              ${ap.title}
-                              <button class="btn btn-sm btn-link btn-edit-ap" data-id="${ap.id}">✎</button>
-                            </td>`);
-                            $tr.append(`<td rowspan="${kpiRows}">
-                              ${kpi.title}
-                              <button class="btn btn-sm btn-link btn-edit-kpi" data-id="${kpi.id}">✎</button>
-                            </td>`);
-                            $tr.append(`<td>
-                              <button class="btn btn-sm btn-outline-primary btn-add-output" data-kpiid="${kpi.id}">+ Output</button>
-                            </td>`);
-                            $tr.append(`<td>${ap.leadGroup||''}</td>`);
-                            $tr.append(`<td>${ap.supportGroup||''}</td>`);
-                            $tr.append(`<td>${kpi.expense ? kpi.expense.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' }) : ''}</td>`);
+                            if (!apRendered) {
+                              $tr.append(`
+                                <td rowspan="${apRows}">
+                                  ${ap.title}
+                                  <button class="btn btn-sm btn-link btn-edit-ap" data-id="${ap.id}">✎</button>
+                                </td>
+                              `);
+                              apRendered = true;
+                            }
+                            if (!kpiRendered) {
+                              $tr.append(`
+                                <td rowspan="${kpiRows}">
+                                  ${kpi.title}
+                                  <button class="btn btn-sm btn-link btn-edit-kpi" data-id="${kpi.id}">✎</button>
+                                </td>
+                              `);
+                              kpiRendered = true;
+                            }
+
+                            $tr.append(`
+                              <td>
+                                <button class="btn btn-sm btn-outline-primary btn-add-output" data-kpiid="${kpi.id}">+ Output</button>
+                              </td>
+                            `);
+                            $tr.append(`<td>${ap.leadGroup || ''}</td>`);
+                            $tr.append(`<td>${ap.supportGroup || ''}</td>`);
+                            $tr.append(`<td>${kpi.expense
+                              ? kpi.expense.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })
+                              : ''}</td>`);
+
                             $tbody.append($tr);
                           }
                         });
+
                       } else {
                         // AP ada tapi no KPI
                         const $tr = $('<tr>');
+
                         if (!stratRendered) {
                           $tr.append(`<td rowspan="${stratRows}">${strategy.title}</td>`);
                           stratRendered = true;
                         }
-                        $tr.append(`<td rowspan="${apRows}">
-                          ${ap.title}
-                          <button class="btn btn-sm btn-link btn-edit-ap" data-id="${ap.id}">✎</button>
-                        </td>`);
-                        $tr.append(`<td>
-                          <button class="btn btn-sm btn-outline-primary btn-add-kpi" data-apid="${ap.id}">+ KPI</button>
-                        </td>`);
-                        $tr.append(`<td></td>`);
-                        $tr.append(`<td>${ap.leadGroup||''}</td>`);
-                        $tr.append(`<td>${ap.supportGroup||''}</td>`);
-                        $tr.append(`<td></td>`);
+                        if (!apRendered) {
+                          $tr.append(`
+                            <td rowspan="${apRows}">
+                              ${ap.title}
+                              <button class="btn btn-sm btn-link btn-edit-ap" data-id="${ap.id}">✎</button>
+                            </td>
+                          `);
+                          apRendered = true;
+                        }
+
+                        $tr.append(`
+                          <td>
+                            <button class="btn btn-sm btn-outline-primary btn-add-kpi" data-apid="${ap.id}">+ KPI</button>
+                          </td>
+                        `);
+                        $tr.append('<td></td>');
+                        $tr.append(`<td>${ap.leadGroup || ''}</td>`);
+                        $tr.append(`<td>${ap.supportGroup || ''}</td>`);
+                        $tr.append('<td></td>');
+
                         $tbody.append($tr);
                       }
                     });
+
                   } else {
                     // strategy belum punya AP sama sekali
                     const $tr = $('<tr>');
                     $tr.append(`<td>${strategy.title}</td>`);
-                    $tr.append(`<td>
-                      <button class="btn btn-sm btn-outline-primary btn-add-ap" data-strid="${strategy.id}">+ AP</button>
-                    </td>`);
-                    $tr.append(`<td></td><td></td><td></td><td></td><td></td>`);
+                    $tr.append(`
+                      <td>
+                        <button class="btn btn-sm btn-outline-primary btn-add-ap" data-strid="${strategy.id}">+ AP</button>
+                      </td>
+                    `);
+                    $tr.append('<td></td><td></td><td></td><td></td><td></td>');
                     $tbody.append($tr);
                   }
                 });
@@ -528,7 +583,7 @@
             });
           }
 
-          // event delegation
+          // event delegation untuk tombol edit/add
           $tbody
             .on('click', '.btn-add-ap',     e => openModal(`/PlanManager/AddActionPlanModal?strId=${e.currentTarget.dataset.strid}`))
             .on('click', '.btn-edit-ap',    e => openModal(`/PlanManager/EditActionPlanModal/${e.currentTarget.dataset.id}`))
