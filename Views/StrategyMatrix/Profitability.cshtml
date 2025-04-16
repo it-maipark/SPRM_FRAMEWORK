@@ -50,7 +50,6 @@
                         </tr>
                     </tfoot>
                 </table>
-
             </div>
         </div>
     </div>
@@ -219,9 +218,23 @@
     <script>
         var token = sessionStorage.getItem("AccessToken");
         var userMaipark = sessionStorage.getItem("Username");
+        var userRole = sessionStorage.getItem("UserRole");
         
         $(document).ready(function () {
             $('#navLink-2').addClass('nav-item active');
+
+            // Hide button add strategy
+            if (userRole) {
+                var roleObj = JSON.parse(userRole);
+                var roleName = roleObj.roleName;
+
+                if (roleName !== "Group Head" && roleName !== "Administrator") {
+                    $("#strategyTable tfoot").hide();
+                }
+            } else {
+                // Jika userRole tidak ada di session, sembunyikan untuk jaga-jaga
+                $("#strategyTable tfoot").hide();
+            }
 
             /* validate */
             // handle validation add strategy
@@ -431,7 +444,16 @@
 
                               // Strategy cell sekali
                               if (!stratRendered) {
-                                $tr.append(`<td rowspan="${stratRows}">${strategy.title}</td>`);
+                                $tr.append(`
+                                  <td rowspan="${stratRows}">
+                                    ${strategy.title}
+                                    ${
+                                      (strategy.createdBy === userMaipark || JSON.parse(userRole).roleName === "Administrator")
+                                        ? `<button class="btn btn-sm btn-link btn-edit-ap" data-id="${strategy.id}">✎</button>`
+                                        : ''
+                                    }
+                                  </td>
+                                `);
                                 stratRendered = true;
                               }
 
@@ -440,7 +462,11 @@
                                 $tr.append(`
                                   <td rowspan="${apRows}">
                                     ${ap.title}
-                                    <button class="btn btn-sm btn-link btn-edit-ap" data-id="${ap.id}">✎</button>
+                                    ${
+                                      (strategy.createdBy === userMaipark || JSON.parse(userRole).roleName === "Administrator")
+                                        ? `<button class="btn btn-sm btn-link btn-edit-ap" data-id="${ap.id}">✎</button>`
+                                        : ''
+                                    }
                                   </td>
                                 `);
                                 apRendered = true;
@@ -451,7 +477,11 @@
                                 $tr.append(`
                                   <td rowspan="${kpiRows}">
                                     ${kpi.title}
-                                    <button class="btn btn-sm btn-link btn-edit-kpi" data-id="${kpi.id}">✎</button>
+                                    ${
+                                      (strategy.createdBy === userMaipark || JSON.parse(userRole).roleName === "Administrator")
+                                        ? `<button class="btn btn-sm btn-link btn-edit-kpi" data-id="${kpi.id}">✎</button>`
+                                        : ''
+                                    }
                                   </td>
                                 `);
                                 kpiRendered = true;
@@ -461,16 +491,26 @@
                               $tr.append(`
                                 <td>
                                   ${output.title}
-                                  <button class="btn btn-sm btn-link btn-edit-output" data-id="${output.id}">✎</button>
+                                  ${
+                                    (strategy.createdBy === userMaipark || JSON.parse(userRole).roleName === "Administrator")
+                                      ? `<button class="btn btn-sm btn-link btn-edit-ap" data-id="${output.id}">✎</button>`
+                                      : ''
+                                  }
                                 </td>
                               `);
 
                               // Lead / Support / Expense
                               $tr.append(`<td>${ap.leadGroup || ''}</td>`);
                               $tr.append(`<td>${ap.supportGroup || ''}</td>`);
-                              $tr.append(`<td>${kpi.expense
-                                ? kpi.expense.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })
-                                : ''}</td>`);
+                              $tr.append(`
+                                <td>
+                                  ${
+                                    kpi.expense
+                                      ? kpi.expense.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })
+                                      : ''
+                                  }
+                                </td>
+                              `);
 
                               $tbody.append($tr);
                             });
@@ -480,14 +520,27 @@
                             const $tr = $('<tr>');
 
                             if (!stratRendered) {
-                              $tr.append(`<td rowspan="${stratRows}">${strategy.title}</td>`);
+                              $tr.append(`
+                                <td rowspan="${stratRows}">
+                                  ${strategy.title}
+                                  ${
+                                    (strategy.createdBy === userMaipark || JSON.parse(userRole).roleName === "Administrator")
+                                      ? `<button class="btn btn-sm btn-link btn-edit-ap" data-id="${strategy.id}">✎</button>`
+                                      : ''
+                                  }
+                                </td>
+                              `);
                               stratRendered = true;
                             }
                             if (!apRendered) {
                               $tr.append(`
                                 <td rowspan="${apRows}">
                                   ${ap.title}
-                                  <button class="btn btn-sm btn-link btn-edit-ap" data-id="${ap.id}">✎</button>
+                                  ${
+                                    (strategy.createdBy === userMaipark || JSON.parse(userRole).roleName === "Administrator")
+                                      ? `<button class="btn btn-sm btn-link btn-edit-ap" data-id="${ap.id}">✎</button>`
+                                      : ''
+                                  }
                                 </td>
                               `);
                               apRendered = true;
@@ -496,16 +549,24 @@
                               $tr.append(`
                                 <td rowspan="${kpiRows}">
                                   ${kpi.title}
-                                  <button class="btn btn-sm btn-link btn-edit-kpi" data-id="${kpi.id}">✎</button>
+                                  ${
+                                    (strategy.createdBy === userMaipark || JSON.parse(userRole).roleName === "Administrator")
+                                      ? `<button class="btn btn-sm btn-link btn-edit-ap" data-id="${kpi.id}">✎</button>`
+                                      : ''
+                                  }
                                 </td>
                               `);
                               kpiRendered = true;
                             }
 
                             $tr.append(`
-                              <td>
-                                <button class="btn btn-sm btn-outline-primary btn-add-output" data-kpiid="${kpi.id}">+ Output</button>
-                              </td>
+                              ${
+                                (strategy.createdBy === userMaipark || JSON.parse(userRole).roleName === "Administrator")
+                                  ? `<td>
+                                        <button class="btn btn-sm btn-outline-primary btn-add-output" data-kpiid="${kpi.id}">+ Output</button>
+                                      </td>`
+                                  : '<td></td>'
+                              }
                             `);
                             $tr.append(`<td>${ap.leadGroup || ''}</td>`);
                             $tr.append(`<td>${ap.supportGroup || ''}</td>`);
@@ -522,23 +583,40 @@
                         const $tr = $('<tr>');
 
                         if (!stratRendered) {
-                          $tr.append(`<td rowspan="${stratRows}">${strategy.title}</td>`);
+                          $tr.append(`
+                          <td rowspan="${stratRows}">
+                            ${strategy.title}
+                            ${
+                              (strategy.createdBy === userMaipark || JSON.parse(userRole).roleName === "Administrator")
+                                ? `<button class="btn btn-sm btn-link btn-edit-ap" data-id="${strategy.id}">✎</button>`
+                                : ''
+                            }
+                          </td>
+                          `);
                           stratRendered = true;
                         }
                         if (!apRendered) {
                           $tr.append(`
                             <td rowspan="${apRows}">
                               ${ap.title}
-                              <button class="btn btn-sm btn-link btn-edit-ap" data-id="${ap.id}">✎</button>
+                              ${
+                                (strategy.createdBy === userMaipark || JSON.parse(userRole).roleName === "Administrator")
+                                  ? `<button class="btn btn-sm btn-link btn-edit-ap" data-id="${ap.id}">✎</button>`
+                                  : ''
+                              }
                             </td>
                           `);
                           apRendered = true;
                         }
 
                         $tr.append(`
-                          <td>
-                            <button class="btn btn-sm btn-outline-primary btn-add-kpi" data-apid="${ap.id}">+ KPI</button>
-                          </td>
+                          ${
+                            (strategy.createdBy === userMaipark || JSON.parse(userRole).roleName === "Administrator")
+                                ? `<td>
+                                     <button class="btn btn-sm btn-outline-primary btn-add-kpi" data-apid="${ap.id}">+ KPI</button>
+                                   </td>`
+                                : '<td></td>'
+                          }
                         `);
                         $tr.append('<td></td>');
                         $tr.append(`<td>${ap.leadGroup || ''}</td>`);
@@ -552,11 +630,24 @@
                   } else {
                     // strategy belum punya AP sama sekali
                     const $tr = $('<tr>');
-                    $tr.append(`<td>${strategy.title}</td>`);
                     $tr.append(`
                       <td>
-                        <button class="btn btn-sm btn-outline-primary btn-add-ap" data-strid="${strategy.id}">+ AP</button>
+                        ${strategy.title}
+                        ${
+                          (strategy.createdBy === userMaipark || JSON.parse(userRole).roleName === "Administrator")
+                            ? `<button class="btn btn-sm btn-link btn-edit-ap" data-id="${strategy.id}">✎</button>`
+                            : ''
+                        }
                       </td>
+                    `);
+                    $tr.append(`
+                      ${
+                        (strategy.createdBy === userMaipark || JSON.parse(userRole).roleName === "Administrator")
+                          ? `<td>
+                              <button class="btn btn-sm btn-outline-primary btn-add-ap" data-strid="${strategy.id}">+ AP</button>
+                            </td>`
+                          : '<td></td>'
+                      }
                     `);
                     $tr.append('<td></td><td></td><td></td><td></td><td></td>');
                     $tbody.append($tr);
