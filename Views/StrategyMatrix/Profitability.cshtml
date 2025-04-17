@@ -55,21 +55,6 @@
     </div>
 </div>
 
-<!-- Modal placeholder -->
-<div class="modal fade" id="editModal" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Form Data</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <!-- form akan di-load di sini via AJAX -->
-            </div>
-        </div>
-    </div>
-</div>
-
 <!-- Add Strategy Modal -->
 <div class="modal fade" id="addStrategyModal" aria-labelledby="addStrategyModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-lg">
@@ -214,6 +199,55 @@
     </div>
 </div>
 
+<!-- Add Action Plan Modal -->
+<div class="modal fade" id="addActionPlanModal" aria-labelledby="addActionPlanModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+            <form id="addActionPlanValidation" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <h2 class="modal-title font-weight-bold" id="addActionPlanModalLabel">New Action Plan</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="number" class="form-control" id="strategy-id" name="strategy-id" placeholder="Input strategy-id here..." hidden>
+                    <div class="form-group form-show-validation row">
+                        <label for="title" class="col-4 mt-sm-2 text-left">Title <span class="required-label">*</span></label>
+                        <div class="col-8">
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" id="title" name="title" placeholder="Input title here..." required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group form-show-validation row">
+                        <label for="select-lead-group" class="col-4 mt-sm-2 text-left">Lead Group <span class="required-label">*</span></label>
+                        <div class="col-8">
+                            <div class="select2-input">
+                                <select id="select-lead-group" name="select-lead-group" class="form-control">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group form-show-validation row">
+                        <label for="select-support-group" class="col-4 mt-sm-2 text-left">Support Group <span class="required-label">*</span></label>
+                        <div class="col-8">
+                            <div class="select2-input">
+                                <select id="select-support-group" name="select-support-group[]" class="form-control" multiple="multiple">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 @section Scripts {
     <script>
         var token = sessionStorage.getItem("AccessToken");
@@ -235,6 +269,45 @@
                 // Jika userRole tidak ada di session, sembunyikan untuk jaga-jaga
                 $("#strategyTable tfoot").hide();
             }
+
+            // GET Lead Group & Support Group Data (GET Divisions)
+            $.ajax({
+                type: 'GET',
+                url: 'http://sql-mvt-03/sprm/api/Lookup/GetDivisions',
+                headers: { 'Authorization': 'Bearer ' + token },
+                dataType: 'json',
+                success: function (response) {
+                    // Initials Lead Group
+                    $('#select-lead-group').empty();
+                    $('#select-lead-group').append('<option value="">Select Lead Group..</option>');
+
+                    // Initials Support Group
+                    $('#select-support-group').empty();
+                    $('#select-support-group').append('<option value="">Select Support Group..</option>');
+                    $('#select-support-group').append('<option value="All Group">All Group</option>');
+
+                    // Feeding Data
+                    $.each(response.data, function (index, item) {
+                        $('#select-lead-group').append('<option value="' + item.initial + '"> ' + item.divName + '</option>');
+                        $('#select-support-group').append('<option value="' + item.initial + '"> ' + item.divName + '</option>');
+                    });
+
+                    // Inisialisasi select2 Lead Group setelah opsi ditambahkan
+                    $('#select-lead-group').select2({
+                        theme: "bootstrap",
+                        width: '100%',
+                        placeholder: "Select Lead Group...",
+                    });
+
+                    // Inisialisasi select2 Support Group setelah opsi ditambahkan
+                    $('#select-support-group').select2({
+                        theme: "bootstrap",
+                        width: '100%',
+                        placeholder: "Select here...",
+                        tags: true,
+                    });
+                }
+            });
 
             /* validate */
             // handle validation add strategy
@@ -363,9 +436,6 @@
                         },
                         data: JSON.stringify(jsonData),
                         success: function (response) {
-                            // Handle success response
-                            console.log(response);
-
                             // Show SweetAlert2 success message
                             Swal.fire({
                                 icon: 'success',
@@ -383,6 +453,79 @@
                                 text: "Something went wrong. Unable to added the strategy."
                             }).then(() => {
                                 console.error('Unable to added the strategy', error);
+                            });
+                        }
+                    });
+                }
+            });
+
+            // handle validation add action plan
+            $("#addActionPlanValidation").validate({
+                validClass: "success",
+                rules: {
+                    "title": {
+                        required: true,
+                    },
+                    "lead-group": {
+                        required: true
+                    },
+                    "support-group[]": {
+                        required: true
+                    },
+                },
+                messages: {
+                    "title": {
+                        required: "Please Input Title.",
+                    },
+                    "lead-group": {
+                        required: "Please Select Lead Group.",
+                    },
+                    "support-group[]": {
+                        required: "Please Select Support Group.",
+                    },
+                },
+                submitHandler: function (form) {
+                    var formData = new FormData(form);
+                    var rawData = Object.fromEntries(formData.entries());
+                    var supportGroupValues = $('#select-support-group').val();
+
+                    // Mapping ke camelCase
+                    var jsonData = {
+                      title: rawData['title'],
+                      leadGroup: rawData['select-lead-group'],
+                      supportGroup: supportGroupValues.join(", "),
+                      strategyId: rawData['strategy-id'],
+                      createdBy: userMaipark
+                    };
+
+                    // Mengirim data menggunakan Ajax
+                    $.ajax({
+                        url: 'http://sql-mvt-03/sprm/api/StrategyMatrix/AddActionPlan',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        headers: { 'Authorization': 'Bearer ' + token },
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        data: JSON.stringify(jsonData),
+                        success: function (response) {
+                            // Show SweetAlert2 success message
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Added successfully!',
+                                text: 'New action plan has been added.',
+                            }).then(() => {
+                                // Refresh the user management page or perform any other actions
+                                location.reload();
+                            });
+                        },
+                        error: function (error) {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: "Something went wrong. Unable to added the action plan."
+                            }).then(() => {
+                                console.error('Unable to added the action plan', error);
                             });
                         }
                     });
@@ -644,7 +787,7 @@
                       ${
                         (strategy.createdBy === userMaipark || JSON.parse(userRole).roleName === "Administrator")
                           ? `<td>
-                              <button class="btn btn-sm btn-outline-primary btn-add-ap" data-strid="${strategy.id}">+ AP</button>
+                              <button type="button" class="btn btn-sm btn-outline-primary btn-add-ap" data-toggle="modal" data-target="#addActionPlanModal" data-strid="${strategy.id}">+ AP</button>
                             </td>`
                           : '<td></td>'
                       }
@@ -660,28 +803,14 @@
             });
           }
 
-          function openModal(url) {
-            $('#editModal .modal-body').html('Loading…');
-            $.ajax({
-              url, method: 'GET',
-              success(html) {
-                $('#editModal .modal-body').html(html);
-                new bootstrap.Modal($('#editModal')[0]).show();
-              },
-              error() {
-                $('#editModal .modal-body').html('<p class="text-danger">Failed to load form.</p>');
-              }
-            });
-          }
-
           // event delegation untuk tombol edit/add
           $tbody
-            .on('click', '.btn-add-ap',     e => openModal(`/PlanManager/AddActionPlanModal?strId=${e.currentTarget.dataset.strid}`))
-            .on('click', '.btn-edit-ap',    e => openModal(`/PlanManager/EditActionPlanModal/${e.currentTarget.dataset.id}`))
-            .on('click', '.btn-add-kpi',    e => openModal(`/Kpi/AddKpiModal?apId=${e.currentTarget.dataset.apid}`))
-            .on('click', '.btn-edit-kpi',   e => openModal(`/Kpi/EditKpiModal/${e.currentTarget.dataset.id}`))
-            .on('click', '.btn-add-output', e => openModal(`/Output/AddOutputModal?kpiId=${e.currentTarget.dataset.kpiid}`))
-            .on('click', '.btn-edit-output',e => openModal(`/Output/EditOutputModal/${e.currentTarget.dataset.id}`));
+            .on('click', '.btn-add-ap',     e => $('#strategy-id').val(e.currentTarget.dataset.strid))
+            .on('click', '.btn-edit-ap',    e => console.log(e.currentTarget.dataset.id))
+            .on('click', '.btn-add-kpi',    e => console.log(e.currentTarget.dataset.apid))
+            .on('click', '.btn-edit-kpi',   e => console.log(e.currentTarget.dataset.id))
+            .on('click', '.btn-add-output', e => console.log(e.currentTarget.dataset.kpiid))
+            .on('click', '.btn-edit-output',e => console.lgo(e.currentTarget.dataset.id))
 
           // initial load
           fetchAndRender();
