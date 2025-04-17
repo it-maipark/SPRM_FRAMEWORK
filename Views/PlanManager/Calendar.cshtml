@@ -1,0 +1,176 @@
+﻿@{
+    ViewBag.Title = "Calendar";
+}
+<style>
+	.swal2-popup.swal2-rounded {
+		border-radius: 1rem;
+	}
+
+	.swal2-popup.swal2-shadow {
+		box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+	}
+</style>
+
+<div class="page-inner">
+    <div class="page-header">
+        <h4 class="page-title">Calendar</h4>
+        <ul class="breadcrumbs">
+            <li class="nav-home">
+                <a href="#">
+                    <i class="flaticon-home"></i>
+                </a>
+            </li>
+            <li class="separator">
+                <i class="flaticon-right-arrow"></i>
+            </li>
+            <li class="nav-item">
+                <a href="#">Plan Manager</a>
+            </li>
+            <li class="separator">
+                <i class="flaticon-right-arrow"></i>
+            </li>
+            <li class="nav-item">
+                <a href="#">Calendar</a>
+            </li>
+        </ul>
+    </div>
+    <!-- Inner Page -->
+    <div class="card">
+        <div class="card-header">
+            <div class="card-title">Full Calendar</div>
+            <div class="card-category">Handcrafted by our friends from <a href="https://fullcalendar.io/">FullCalendar.io</a>. Please checkout their <a href="https://fullcalendar.io/docs/">full documentation</a>.</div>
+        </div>
+        <div class="card-body">
+            <div id="calendar">
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#navLink-3').addClass('nav-item active');
+
+            /* initialize the calendar
+            -----------------------------------------------------------------*/
+			var date = new Date();
+			var d = date.getDate();
+			var m = date.getMonth();
+			var y = date.getFullYear();
+			var className = Array('fc-primary', 'fc-danger', 'fc-black', 'fc-success', 'fc-info', 'fc-warning', 'fc-danger-solid', 'fc-warning-solid', 'fc-success-solid', 'fc-black-solid', 'fc-success-solid', 'fc-primary-solid');
+
+			$calendar = $('#calendar');
+			$calendar.fullCalendar({
+				header: {
+					left: 'prev,next today',
+					center: 'title',
+					right: 'month,agendaWeek,agendaDay,listWeek'
+				},
+				selectable : true,
+				selectHelper: true,
+				select: function(start, end) {
+					// on select we show the Sweet Alert modal with an input
+					Swal.fire({
+					  title: 'Create an Event',
+					  input: 'text',
+					  inputPlaceholder: 'Enter event title...',
+					  showCancelButton: true,
+					  confirmButtonText: 'Create',
+					  cancelButtonText: 'Cancel',
+					  customClass: {
+						popup: 'swal2-rounded swal2-shadow',
+						confirmButton: 'btn btn-primary mx-2',
+						cancelButton: 'btn btn-secondary'
+					  },
+					  buttonsStyling: false, // agar kita bisa pakai custom class Bootstrap
+					  preConfirm: (value) => {
+						if (!value) {
+						  Swal.showValidationMessage('Please enter an event title');
+						}
+						return value;
+					  }
+					}).then((result) => {
+					  if (result.isConfirmed) {
+						const classRandom = className[Math.floor(Math.random() * className.length)];
+						const event_title = result.value;
+						const eventData = {
+						  title: event_title,
+						  start: start,
+						  className: classRandom,
+						  end: end
+						};
+						$calendar.fullCalendar('renderEvent', eventData, true);
+						$calendar.fullCalendar('unselect');
+					  }
+					});
+				},
+				events: [
+				{
+					title: 'All Day Event',
+					start: new Date(y, m, 1),
+					className: 'fc-black'
+				},
+				{
+					id: 999,
+					title: 'Repeating Event',
+					start: new Date(y, m, d - 3, 16, 0),
+					allDay: false,
+					className: 'fc-warning'
+				},
+				{
+					id: 999,
+					title: 'Repeating Event',
+					start: new Date(y, m, d + 4, 16, 0),
+					allDay: false,
+					className: 'fc-info'
+				},
+				{
+					title: 'Meeting',
+					start: new Date(y, m, d, 10, 30),
+					allDay: false,
+					className: 'fc-danger'
+				},
+				{
+					title: 'Lunch',
+					start: new Date(y, m, d, 12, 0),
+					end: new Date(y, m, d, 14, 0),
+					allDay: false,
+					className: 'fc-primary',
+					description: 'Eat Bro'
+				},
+				{
+					title: 'Meeting',
+					start: new Date(y, m, d + 3, 13, 30),
+					allDay: false,
+					className: 'fc-primary-solid',
+					description: 'Meeting'
+				},
+				{
+					title: 'Birthday Party',
+					start: new Date(y, m, d + 1, 19, 0),
+					end: new Date(y, m, d + 1, 22, 30),
+					allDay: false,
+					className: 'fc-success',
+					description: 'Coba Googling dulu'
+				},
+				{
+					title: 'Lunch',
+					start: new Date(y, m, d + 6, 13, 30),
+					allDay: false,
+					className: 'fc-success-solid',
+					description: 'Lunch'
+				},
+				{
+					title: 'Click for Google',
+					start: new Date(y, m, 28),
+					end: new Date(y, m, 29),
+					allDay: false,
+					url: 'http://google.com/',
+					className: 'fc-info-solid',
+				}
+				],
+			});
+        });
+    </script>
+}

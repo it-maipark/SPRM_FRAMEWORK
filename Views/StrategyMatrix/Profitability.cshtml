@@ -4,7 +4,7 @@
 
 <div class="page-inner">
     <div class="page-header">
-        <h4 class="page-title">Strategy Matrix</h4>
+        <h4 class="page-title">Profitability</h4>
         <ul class="breadcrumbs">
             <li class="nav-home">
                 <a href="#">
@@ -235,6 +235,76 @@
                             <div class="select2-input">
                                 <select id="select-support-group" name="select-support-group[]" class="form-control" multiple="multiple">
                                 </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Add KPI Modal -->
+<div class="modal fade" id="addKPIModal" aria-labelledby="addKPIModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+            <form id="addKPIValidation" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <h2 class="modal-title font-weight-bold" id="addKPIModalLabel">New KPI</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="number" class="form-control" id="action-plan-id" name="action-plan-id" placeholder="Input action-plan-id here..." hidden>
+                    <div class="form-group form-show-validation row">
+                        <label for="title" class="col-4 mt-sm-2 text-left">Title <span class="required-label">*</span></label>
+                        <div class="col-8">
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" id="title" name="title" placeholder="Input title here..." required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group form-show-validation row">
+                        <label for="expense" class="col-4 mt-sm-2 text-left">Expense <span class="required-label">*</span></label>
+                        <div class="col-8">
+                            <div class="input-group mb-2">
+                                <input type="number" step="0.0001" class="form-control" id="expense" name="expense" placeholder="Input expense here..." required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Add Output Modal -->
+<div class="modal fade" id="addOutputModal" aria-labelledby="addOutputModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+            <form id="addOutputValidation" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <h2 class="modal-title font-weight-bold" id="addOutputModalLabel">New Output</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="number" class="form-control" id="kpi-id" name="kpi-id" placeholder="Input kpi-id here..." hidden>
+                    <div class="form-group form-show-validation row">
+                        <label for="title" class="col-4 mt-sm-2 text-left">Title <span class="required-label">*</span></label>
+                        <div class="col-8">
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" id="title" name="title" placeholder="Input title here..." required>
                             </div>
                         </div>
                     </div>
@@ -531,12 +601,136 @@
                     });
                 }
             });
+
+            // handle validation add kpi
+            $("#addKPIValidation").validate({
+                validClass: "success",
+                rules: {
+                    "title": {
+                        required: true,
+                    },
+                    "expense": {
+                        required: true
+                    },
+                },
+                messages: {
+                    "title": {
+                        required: "Please Input Title.",
+                    },
+                    "expense": {
+                        required: "Please Input Expense.",
+                    },
+                },
+                submitHandler: function (form) {
+                    var formData = new FormData(form);
+                    var rawData = Object.fromEntries(formData.entries());
+
+                    // Mapping ke camelCase
+                    var jsonData = {
+                      title: rawData['title'],
+                      expense: rawData['expense'],
+                      actionPlanId: rawData['action-plan-id'],
+                      createdBy: userMaipark
+                    };
+
+                    // Mengirim data menggunakan Ajax
+                    $.ajax({
+                        url: 'http://sql-mvt-03/sprm/api/StrategyMatrix/AddKPI',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        headers: { 'Authorization': 'Bearer ' + token },
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        data: JSON.stringify(jsonData),
+                        success: function (response) {
+                            // Show SweetAlert2 success message
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Added successfully!',
+                                text: 'New action plan has been added.',
+                            }).then(() => {
+                                // Refresh the user management page or perform any other actions
+                                location.reload();
+                            });
+                        },
+                        error: function (error) {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: "Something went wrong. Unable to added the action plan."
+                            }).then(() => {
+                                console.error('Unable to added the action plan', error);
+                            });
+                        }
+                    });
+                }
+            });
+
+            // handle validation add output
+            $("#addOutputValidation").validate({
+                validClass: "success",
+                rules: {
+                    "title": {
+                        required: true,
+                    },
+                },
+                messages: {
+                    "title": {
+                        required: "Please Input Title.",
+                    },
+                },
+                submitHandler: function (form) {
+                    var formData = new FormData(form);
+                    var rawData = Object.fromEntries(formData.entries());
+
+                    // Mapping ke camelCase
+                    var jsonData = {
+                      title: rawData['title'],
+                      kpiId: rawData['kpi-id'],
+                      createdBy: userMaipark
+                    };
+
+                    // Mengirim data menggunakan Ajax
+                    $.ajax({
+                        url: 'http://sql-mvt-03/sprm/api/StrategyMatrix/AddOutput',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        headers: { 'Authorization': 'Bearer ' + token },
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        data: JSON.stringify(jsonData),
+                        success: function (response) {
+                            // Show SweetAlert2 success message
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Added successfully!',
+                                text: 'New action plan has been added.',
+                            }).then(() => {
+                                // Refresh the user management page or perform any other actions
+                                location.reload();
+                            });
+                        },
+                        error: function (error) {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: "Something went wrong. Unable to added the action plan."
+                            }).then(() => {
+                                console.error('Unable to added the action plan', error);
+                            });
+                        }
+                    });
+                }
+            });
         });
 
         $(function() {
           const $tbody = $('#strategyTable tbody'),
                 apiUrl = 'http://sql-mvt-03/sprm/api/StrategyMatrix';
-
+          
+          // Create UI table strategy
           function fetchAndRender() {
             // tampilkan loading
             $tbody.html('<tr><td colspan="7" class="text-center py-5">Loading…</td></tr>');
@@ -649,7 +843,7 @@
                                 <td>
                                   ${
                                     kpi.expense
-                                      ? kpi.expense.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })
+                                      ? kpi.expense.toLocaleString('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 4, maximumFractionDigits: 4 })
                                       : ''
                                   }
                                 </td>
@@ -706,7 +900,7 @@
                               ${
                                 (strategy.createdBy === userMaipark || JSON.parse(userRole).roleName === "Administrator")
                                   ? `<td>
-                                        <button class="btn btn-sm btn-outline-primary btn-add-output" data-kpiid="${kpi.id}">+ Output</button>
+                                        <button class="btn btn-sm btn-outline-primary btn-add-output" data-toggle="modal" data-target="#addOutputModal" data-kpiid="${kpi.id}">+ Output</button>
                                       </td>`
                                   : '<td></td>'
                               }
@@ -714,7 +908,7 @@
                             $tr.append(`<td>${ap.leadGroup || ''}</td>`);
                             $tr.append(`<td>${ap.supportGroup || ''}</td>`);
                             $tr.append(`<td>${kpi.expense
-                              ? kpi.expense.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })
+                              ? kpi.expense.toLocaleString('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 4, maximumFractionDigits: 4 })
                               : ''}</td>`);
 
                             $tbody.append($tr);
@@ -756,7 +950,7 @@
                           ${
                             (strategy.createdBy === userMaipark || JSON.parse(userRole).roleName === "Administrator")
                                 ? `<td>
-                                     <button class="btn btn-sm btn-outline-primary btn-add-kpi" data-apid="${ap.id}">+ KPI</button>
+                                     <button class="btn btn-sm btn-outline-primary btn-add-kpi" data-toggle="modal" data-target="#addKPIModal" data-apid="${ap.id}">+ KPI</button>
                                    </td>`
                                 : '<td></td>'
                           }
@@ -807,10 +1001,10 @@
           $tbody
             .on('click', '.btn-add-ap',     e => $('#strategy-id').val(e.currentTarget.dataset.strid))
             .on('click', '.btn-edit-ap',    e => console.log(e.currentTarget.dataset.id))
-            .on('click', '.btn-add-kpi',    e => console.log(e.currentTarget.dataset.apid))
+            .on('click', '.btn-add-kpi',    e => $('#action-plan-id').val(e.currentTarget.dataset.apid))
             .on('click', '.btn-edit-kpi',   e => console.log(e.currentTarget.dataset.id))
-            .on('click', '.btn-add-output', e => console.log(e.currentTarget.dataset.kpiid))
-            .on('click', '.btn-edit-output',e => console.lgo(e.currentTarget.dataset.id))
+            .on('click', '.btn-add-output', e => $('#kpi-id').val(e.currentTarget.dataset.kpiid))
+            .on('click', '.btn-edit-output',e => console.log(e.currentTarget.dataset.id))
 
           // initial load
           fetchAndRender();
