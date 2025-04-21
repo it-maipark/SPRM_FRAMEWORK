@@ -2,6 +2,37 @@
     ViewBag.Title = "Profitability";
 }
 
+<style>
+    .strategy-cell {
+        position: relative;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .action-buttons {
+        display: none;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        gap: 8px;
+        z-index: 10;
+        background-color: rgba(255, 255, 255, 0.85);
+        padding: 6px 8px;
+        border-radius: 8px;
+        box-shadow: 0 0 8px rgba(0,0,0,0.1);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+    }
+
+    .strategy-cell:hover .action-buttons {
+        display: flex;
+        opacity: 1;
+        pointer-events: auto;
+    }
+</style>
+
 <div class="page-inner">
     <div class="page-header">
         <h4 class="page-title">Profitability</h4>
@@ -782,14 +813,26 @@
                               // Strategy cell sekali
                               if (!stratRendered) {
                                 $tr.append(`
-                                  <td rowspan="${stratRows}">
-                                    ${strategy.title}
-                                    ${
-                                      (strategy.createdBy === userMaipark || JSON.parse(userRole).roleName === "Administrator")
-                                        ? `<button class="btn btn-sm btn-link btn-edit-ap" data-id="${strategy.id}">✎</button>`
-                                        : ''
-                                    }
-                                  </td>
+                                    <td rowspan="${stratRows}" class="strategy-cell">
+                                      <p class="text-left">${strategy.title}</p>
+                                      ${
+                                        (strategy.createdBy === userMaipark || JSON.parse(userRole).roleName === "Administrator")
+                                          ? `
+                                              <div class="action-buttons">
+                                                <button class="btn btn-sm btn-outline-primary btn-edit-str" data-strid="${strategy.id}" data-toggle="modal" data-target="#editStrategyModal" data-placement="top" title="Edit Strategy">
+                                                  <i class="fa fa-edit"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-success btn-add-ap" data-strid="${strategy.id}" data-toggle="modal" data-target="#addActionPlanModal" data-placement="top" title="Add Action Plan">
+                                                    <i class="fa fa-plus"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-danger btn-delete-ap" data-strid="${strategy.id}" data-toggle="modal" data-target="#deleteStrategyModal" data-placement="top" title="Delete Strategy">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                              </div>
+                                            `
+                                          : ''
+                                      }
+                                    </td>
                                 `);
                                 stratRendered = true;
                               }
@@ -797,14 +840,26 @@
                               // Action Plan cell sekali
                               if (!apRendered) {
                                 $tr.append(`
-                                  <td rowspan="${apRows}">
-                                    ${ap.title}
-                                    ${
-                                      (strategy.createdBy === userMaipark || JSON.parse(userRole).roleName === "Administrator")
-                                        ? `<button class="btn btn-sm btn-link btn-edit-ap" data-id="${ap.id}">✎</button>`
-                                        : ''
-                                    }
-                                  </td>
+                                    <td rowspan="${apRows}" class="strategy-cell">
+                                      <p class="text-left">${ap.title}</p>
+                                      ${
+                                        (strategy.createdBy === userMaipark || JSON.parse(userRole).roleName === "Administrator")
+                                          ? `
+                                              <div class="action-buttons">
+                                                <button class="btn btn-sm btn-outline-primary btn-edit-ap" data-id="${ap.id}" data-toggle="modal" data-target="#editStrategyModal" data-placement="top" title="Edit Action Plan">
+                                                  <i class="fa fa-edit"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-success btn-add-kpi" data-apid="${ap.id}" data-toggle="modal" data-target="#addKPIModal" data-placement="top" title="Add KPI">
+                                                    <i class="fa fa-plus"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-danger btn-delete-ap" data-id="${ap.id}" data-toggle="modal" data-target="#deleteStrategyModal" data-placement="top" title="Delete Action Plan">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                              </div>
+                                            `
+                                          : ''
+                                      }
+                                    </td>
                                 `);
                                 apRendered = true;
                               }
@@ -812,13 +867,25 @@
                               // KPI cell sekali
                               if (!kpiRendered) {
                                 $tr.append(`
-                                  <td rowspan="${kpiRows}">
-                                    ${kpi.title}
-                                    ${
+                                  <td rowspan="${kpiRows}" class="strategy-cell">
+                                      <p class="text-left">${kpi.title}</p>
+                                      ${
                                       (strategy.createdBy === userMaipark || JSON.parse(userRole).roleName === "Administrator")
-                                        ? `<button class="btn btn-sm btn-link btn-edit-kpi" data-id="${kpi.id}">✎</button>`
-                                        : ''
-                                    }
+                                          ? `
+                                              <div class="action-buttons">
+                                              <button class="btn btn-sm btn-outline-primary btn-edit-str" data-id="${kpi.id}" data-toggle="modal" data-target="#editKPIModal"  data-placement="top" title="Edit KPI">
+                                                  <i class="fa fa-edit"></i>
+                                              </button>
+                                              <button class="btn btn-sm btn-outline-success btn-add-output" data-kpiid="${kpi.id}" data-toggle="modal" data-target="#addOutputModal" data-placement="top" title="Add Output">
+                                                  <i class="fa fa-plus"></i>
+                                              </button>
+                                              <button class="btn btn-sm btn-outline-danger btn-delete-ap" data-id="${kpi.id}" data-toggle="modal" data-target="#deleteKPIModal" data-placement="top" title="Delete KPI">
+                                                  <i class="fa fa-trash"></i>
+                                              </button>
+                                              </div>
+                                          `
+                                          : ''
+                                      }
                                   </td>
                                 `);
                                 kpiRendered = true;
@@ -826,11 +893,20 @@
 
                               // Output cell
                               $tr.append(`
-                                <td>
-                                  ${output.title}
+                                <td class="strategy-cell">
+                                  <p class="text-left">${output.title}</p>
                                   ${
-                                    (strategy.createdBy === userMaipark || JSON.parse(userRole).roleName === "Administrator")
-                                      ? `<button class="btn btn-sm btn-link btn-edit-ap" data-id="${output.id}">✎</button>`
+                                  (strategy.createdBy === userMaipark || JSON.parse(userRole).roleName === "Administrator")
+                                      ? `
+                                          <div class="action-buttons">
+                                          <button class="btn btn-sm btn-outline-primary btn-edit-output" data-id="${output.id}" data-toggle="modal" data-target="#editOutputModal"  data-placement="top" title="Edit Output">
+                                              <i class="fa fa-edit"></i>
+                                          </button>
+                                          <button class="btn btn-sm btn-outline-danger btn-delete-output" data-id="${output.id}" data-toggle="modal" data-target="#deleteOutputModal" data-placement="top" title="Delete Output">
+                                              <i class="fa fa-trash"></i>
+                                          </button>
+                                          </div>
+                                      `
                                       : ''
                                   }
                                 </td>
@@ -858,39 +934,75 @@
 
                             if (!stratRendered) {
                               $tr.append(`
-                                <td rowspan="${stratRows}">
-                                  ${strategy.title}
-                                  ${
-                                    (strategy.createdBy === userMaipark || JSON.parse(userRole).roleName === "Administrator")
-                                      ? `<button class="btn btn-sm btn-link btn-edit-ap" data-id="${strategy.id}">✎</button>`
-                                      : ''
-                                  }
-                                </td>
-                              `);
+                                    <td rowspan="${stratRows}" class="strategy-cell">
+                                      <p class="text-left">${strategy.title}</p>
+                                      ${
+                                        (strategy.createdBy === userMaipark || JSON.parse(userRole).roleName === "Administrator")
+                                          ? `
+                                              <div class="action-buttons">
+                                                <button class="btn btn-sm btn-outline-primary btn-edit-str" data-strid="${strategy.id}" data-toggle="modal" data-target="#editStrategyModal" data-placement="top" title="Edit Strategy">
+                                                  <i class="fa fa-edit"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-success btn-add-ap" data-strid="${strategy.id}" data-toggle="modal" data-target="#addActionPlanModal" data-placement="top" title="Add Action Plan">
+                                                    <i class="fa fa-plus"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-danger btn-delete-ap" data-strid="${strategy.id}" data-toggle="modal" data-target="#deleteStrategyModal" data-placement="top" title="Delete Strategy">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                              </div>
+                                            `
+                                          : ''
+                                      }
+                                    </td>
+                                `);
                               stratRendered = true;
                             }
                             if (!apRendered) {
                               $tr.append(`
-                                <td rowspan="${apRows}">
-                                  ${ap.title}
-                                  ${
-                                    (strategy.createdBy === userMaipark || JSON.parse(userRole).roleName === "Administrator")
-                                      ? `<button class="btn btn-sm btn-link btn-edit-ap" data-id="${ap.id}">✎</button>`
-                                      : ''
-                                  }
-                                </td>
-                              `);
+                                    <td rowspan="${apRows}" class="strategy-cell">
+                                      <p class="text-left">${ap.title}</p>
+                                      ${
+                                        (strategy.createdBy === userMaipark || JSON.parse(userRole).roleName === "Administrator")
+                                          ? `
+                                              <div class="action-buttons">
+                                                <button class="btn btn-sm btn-outline-primary btn-edit-ap" data-id="${ap.id}" data-toggle="modal" data-target="#editStrategyModal" data-placement="top" title="Edit Action Plan">
+                                                  <i class="fa fa-edit"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-success btn-add-kpi" data-apid="${ap.id}" data-toggle="modal" data-target="#addKPIModal" data-placement="top" title="Add KPI">
+                                                    <i class="fa fa-plus"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-danger btn-delete-ap" data-id="${ap.id}" data-toggle="modal" data-target="#deleteStrategyModal" data-placement="top" title="Delete Action Plan">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                              </div>
+                                            `
+                                          : ''
+                                      }
+                                    </td>
+                                `);
                               apRendered = true;
                             }
                             if (!kpiRendered) {
                               $tr.append(`
-                                <td rowspan="${kpiRows}">
-                                  ${kpi.title}
-                                  ${
+                                <td rowspan="${kpiRows}" class="strategy-cell">
+                                    <p class="text-left">${kpi.title}</p>
+                                    ${
                                     (strategy.createdBy === userMaipark || JSON.parse(userRole).roleName === "Administrator")
-                                      ? `<button class="btn btn-sm btn-link btn-edit-ap" data-id="${kpi.id}">✎</button>`
-                                      : ''
-                                  }
+                                        ? `
+                                            <div class="action-buttons">
+                                            <button class="btn btn-sm btn-outline-primary btn-edit-str" data-id="${kpi.id}" data-toggle="modal" data-target="#editKPIModal"  data-placement="top" title="Edit KPI">
+                                                <i class="fa fa-edit"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-success btn-add-output" data-kpiid="${kpi.id}" data-toggle="modal" data-target="#addOutputModal" data-placement="top" title="Add Output">
+                                                <i class="fa fa-plus"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-danger btn-delete-ap" data-id="${kpi.id}" data-toggle="modal" data-target="#deleteKPIModal" data-placement="top" title="Delete KPI">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                            </div>
+                                        `
+                                        : ''
+                                    }
                                 </td>
                               `);
                               kpiRendered = true;
@@ -921,28 +1033,52 @@
 
                         if (!stratRendered) {
                           $tr.append(`
-                          <td rowspan="${stratRows}">
-                            ${strategy.title}
-                            ${
-                              (strategy.createdBy === userMaipark || JSON.parse(userRole).roleName === "Administrator")
-                                ? `<button class="btn btn-sm btn-link btn-edit-ap" data-id="${strategy.id}">✎</button>`
-                                : ''
-                            }
-                          </td>
-                          `);
+                                <td rowspan="${stratRows}" class="strategy-cell">
+                                    <p class="text-left">${strategy.title}</p>
+                                    ${
+                                    (strategy.createdBy === userMaipark || JSON.parse(userRole).roleName === "Administrator")
+                                        ? `
+                                            <div class="action-buttons">
+                                            <button class="btn btn-sm btn-outline-primary btn-edit-str" data-strid="${strategy.id}" data-toggle="modal" data-target="#editStrategyModal"  data-placement="top" title="Edit Strategy">
+                                                <i class="fa fa-edit"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-success btn-add-ap" data-strid="${strategy.id}" data-toggle="modal" data-target="#addActionPlanModal" data-placement="top" title="Add Action Plan">
+                                                <i class="fa fa-plus"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-danger btn-delete-ap" data-strid="${strategy.id}" data-toggle="modal" data-target="#deleteStrategyModal" data-placement="top" title="Delete Strategy">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                            </div>
+                                        `
+                                        : ''
+                                    }
+                                </td>
+                            `);
                           stratRendered = true;
                         }
                         if (!apRendered) {
                           $tr.append(`
-                            <td rowspan="${apRows}">
-                              ${ap.title}
-                              ${
-                                (strategy.createdBy === userMaipark || JSON.parse(userRole).roleName === "Administrator")
-                                  ? `<button class="btn btn-sm btn-link btn-edit-ap" data-id="${ap.id}">✎</button>`
-                                  : ''
-                              }
-                            </td>
-                          `);
+                                <td rowspan="${apRows}" class="strategy-cell">
+                                    <p class="text-left">${ap.title}</p>
+                                    ${
+                                    (strategy.createdBy === userMaipark || JSON.parse(userRole).roleName === "Administrator")
+                                        ? `
+                                            <div class="action-buttons">
+                                            <button class="btn btn-sm btn-outline-primary btn-edit-ap" data-id="${ap.id}" data-toggle="modal" data-target="#editStrategyModal" data-placement="top" title="Edit Action Plan">
+                                                <i class="fa fa-edit"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-success btn-add-kpi" data-apid="${ap.id}" data-toggle="modal" data-target="#addKPIModal" data-placement="top" title="Add KPI">
+                                                <i class="fa fa-plus"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-danger btn-delete-ap" data-id="${ap.id}" data-toggle="modal" data-target="#deleteStrategyModal" data-placement="top" title="Delete Action Plan">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                            </div>
+                                        `
+                                        : ''
+                                    }
+                                </td>
+                            `);
                           apRendered = true;
                         }
 
@@ -968,14 +1104,26 @@
                     // strategy belum punya AP sama sekali
                     const $tr = $('<tr>');
                     $tr.append(`
-                      <td>
-                        ${strategy.title}
-                        ${
-                          (strategy.createdBy === userMaipark || JSON.parse(userRole).roleName === "Administrator")
-                            ? `<button class="btn btn-sm btn-link btn-edit-ap" data-id="${strategy.id}">✎</button>`
-                            : ''
-                        }
-                      </td>
+                        <td class="strategy-cell">
+                          <p class="text-left">${strategy.title}</p>
+                          ${
+                            (strategy.createdBy === userMaipark || JSON.parse(userRole).roleName === "Administrator")
+                              ? `
+                                  <div class="action-buttons">
+                                    <button class="btn btn-sm btn-outline-primary btn-edit-str" data-strid="${strategy.id}" data-toggle="modal" data-target="#editStrategyModal" data-placement="top" title="Edit Strategy">
+                                      <i class="fa fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-success btn-add-ap" data-strid="${strategy.id}" data-toggle="modal" data-target="#addActionPlanModal" data-placement="top" title="Add Action Plan">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger btn-delete-ap" data-strid="${strategy.id}" data-toggle="modal" data-target="#deleteStrategyModal" data-placement="top" title="Delete Strategy">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                  </div>
+                                `
+                              : ''
+                          }
+                        </td>
                     `);
                     $tr.append(`
                       ${
@@ -1008,6 +1156,7 @@
 
           // initial load
           fetchAndRender();
+          $('[data-toggle="tooltip"]').tooltip('dispose').tooltip();
         });
     </script>
 }
