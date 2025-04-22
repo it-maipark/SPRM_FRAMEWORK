@@ -349,6 +349,270 @@
     </div>
 </div>
 
+<!-- Edit Strategy Modal -->
+<div class="modal fade" id="editStrategyModal" aria-labelledby="editStrategyModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+            <form id="editStrategyValidation" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <h2 class="modal-title font-weight-bold" id="editStrategyModalLabel">Edit Strategy</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="number" class="form-control" id="edit-str-id" name="edit-str-id" hidden>
+                    <div class="form-group form-show-validation row">
+                        <label for="edit-str-title" class="col-4 mt-sm-2 text-left">Title <span class="required-label">*</span></label>
+                        <div class="col-8">
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" id="edit-str-title" name="edit-str-title" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group form-show-validation row">
+                        <label for="edit-str-desc" class="col-4 mt-sm-2 text-left">Description <span class="required-label">*</span></label>
+                        <div class="col-8">
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" id="edit-str-desc" name="edit-str-desc" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group form-show-validation row">
+                        <label for="edit-strategic-goals" class="col-4 mt-sm-2 text-left">Strategic Goals <span class="required-label">*</span></label>
+                        <div class="col-8">
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" id="edit-strategic-goals" name="edit-strategic-goals" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group form-show-validation row">
+                        <label for="edit-main-target" class="col-4 mt-sm-2 text-left">Main Target <span class="required-label">*</span></label>
+                        <div class="col-8">
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" id="edit-main-target" name="edit-main-target" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group form-show-validation row">
+                        <label for="edit-codification" class="col-4 mt-sm-2 text-left">Codification <span class="required-label">*</span></label>
+                        <div class="col-8">
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" id="edit-codification" name="edit-codification" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group form-show-validation row">
+                        <label for="edit-strategic-pilar" class="col-4 mt-sm-2 text-left">Strategic Pilar <span class="required-label">*</span></label>
+                        <div class="col-8">
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" id="edit-strategic-pilar" name="edit-strategic-pilar" value="Profitability" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group form-show-validation row">
+                        <label for="edit-tag" class="col-4 mt-sm-2 text-left">Tag <span class="required-label">*</span></label>
+                        <div class="col-8">
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" id="edit-tag" name="edit-tag" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group form-show-validation row">
+                        <label for="edit-version-tag" class="col-4 mt-sm-2 text-left">Version Tag <span class="required-label">*</span></label>
+                        <div class="col-8">
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" id="edit-version-tag" name="edit-version-tag" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group font-weight-bold mt-3">SWOT Analysis</div>
+                    <div class="form-group form-show-validation row">
+                        <label for="edit-strengths" class="col-4 mt-sm-2 text-left">Strengths <span class="required-label">*</span></label>
+                        <div class="col-8">
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" id="edit-strengths" name="edit-strengths" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group form-show-validation row">
+                        <label for="edit-weaknesses" class="col-4 mt-sm-2 text-left">Weaknesses <span class="required-label">*</span></label>
+                        <div class="col-8">
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" id="edit-weaknesses" name="edit-weaknesses" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group form-show-validation row">
+                        <label for="edit-opportunities" class="col-4 mt-sm-2 text-left">Opportunities <span class="required-label">*</span></label>
+                        <div class="col-8">
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" id="edit-opportunities" name="edit-opportunities" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group form-show-validation row">
+                        <label for="edit-threats" class="col-4 mt-sm-2 text-left">Threats <span class="required-label">*</span></label>
+                        <div class="col-8">
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" id="edit-threats" name="edit-threats" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group font-weight-bold mt-3">SSC Analysis</div>
+                    <div class="form-group form-show-validation row">
+                        <label for="edit-start" class="col-4 mt-sm-2 text-left">Start <span class="required-label">*</span></label>
+                        <div class="col-8">
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" id="edit-start" name="edit-start" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group form-show-validation row">
+                        <label for="edit-stop" class="col-4 mt-sm-2 text-left">Stop <span class="required-label">*</span></label>
+                        <div class="col-8">
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" id="edit-stop" name="edit-stop" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group form-show-validation row">
+                        <label for="edit-continue" class="col-4 mt-sm-2 text-left">Continue <span class="required-label">*</span></label>
+                        <div class="col-8">
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" id="edit-continue" name="edit-continue" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Action Plan Modal -->
+<div class="modal fade" id="editActionPlanModal" aria-labelledby="editActionPlanModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+            <form id="editActionPlanValidation" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <h2 class="modal-title font-weight-bold" id="editActionPlanModalLabel">Edit Action Plan</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="number" class="form-control" id="edit-ap-id" name="edit-ap-id" hidden>
+                    <div class="form-group form-show-validation row">
+                        <label for="edit-ap-title" class="col-4 mt-sm-2 text-left">Title <span class="required-label">*</span></label>
+                        <div class="col-8">
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" id="edit-ap-title" name="edit-ap-title" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group form-show-validation row">
+                        <label for="edit-select-lead-group" class="col-4 mt-sm-2 text-left">Lead Group <span class="required-label">*</span></label>
+                        <div class="col-8">
+                            <div class="select2-input">
+                                <select id="edit-select-lead-group" name="edit-select-lead-group" class="form-control">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group form-show-validation row">
+                        <label for="edit-select-support-group" class="col-4 mt-sm-2 text-left">Support Group <span class="required-label">*</span></label>
+                        <div class="col-8">
+                            <div class="select2-input">
+                                <select id="edit-select-support-group" name="edit-select-support-group[]" class="form-control" multiple="multiple">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Edit KPI Modal -->
+<div class="modal fade" id="editKPIModal" aria-labelledby="editKPIModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+            <form id="editKPIValidation" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <h2 class="modal-title font-weight-bold" id="editKPIModalLabel">Edit KPI</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="number" class="form-control" id="edit-kpi-id" name="edit-kpi-id" hidden>
+                    <div class="form-group form-show-validation row">
+                        <label for="edit-kpi-title" class="col-4 mt-sm-2 text-left">Title <span class="required-label">*</span></label>
+                        <div class="col-8">
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" id="edit-kpi-title" name="edit-kpi-title" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group form-show-validation row">
+                        <label for="edit-kpi-expense" class="col-4 mt-sm-2 text-left">Expense <span class="required-label">*</span></label>
+                        <div class="col-8">
+                            <div class="input-group mb-2">
+                                <input type="number" step="0.0001" class="form-control" id="edit-kpi-expense" name="edit-kpi-expense" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Output Modal -->
+<div class="modal fade" id="editOutputModal" aria-labelledby="editOutputModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+            <form id="editOutputValidation" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <h2 class="modal-title font-weight-bold" id="editOutputModalLabel">Edit Output</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="number" class="form-control" id="edit-output-id" name="edit-output-id" readonly>
+                    <div class="form-group form-show-validation row">
+                        <label for="edit-output-title" class="col-4 mt-sm-2 text-left">Title <span class="required-label">*</span></label>
+                        <div class="col-8">
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" id="edit-output-title" name="edit-output-title" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 @section Scripts {
     <script>
         var token = sessionStorage.getItem("AccessToken");
@@ -386,11 +650,14 @@
                     $('#select-support-group').empty();
                     $('#select-support-group').append('<option value="">Select Support Group..</option>');
                     $('#select-support-group').append('<option value="All Group">All Group</option>');
+                    $('#edit-select-support-group').append('<option value="All Group">All Group</option>');
 
                     // Feeding Data
                     $.each(response.data, function (index, item) {
                         $('#select-lead-group').append('<option value="' + item.initial + '"> ' + item.divName + '</option>');
                         $('#select-support-group').append('<option value="' + item.initial + '"> ' + item.divName + '</option>');
+                        $('#edit-select-lead-group').append('<option value="' + item.initial + '"> ' + item.divName + '</option>');
+                        $('#edit-select-support-group').append('<option value="' + item.initial + '"> ' + item.divName + '</option>');
                     });
 
                     // Inisialisasi select2 Lead Group setelah opsi ditambahkan
@@ -400,8 +667,21 @@
                         placeholder: "Select Lead Group...",
                     });
 
+                    $('#edit-select-lead-group').select2({
+                        theme: "bootstrap",
+                        width: '100%',
+                        placeholder: "Select Lead Group...",
+                    });
+
                     // Inisialisasi select2 Support Group setelah opsi ditambahkan
                     $('#select-support-group').select2({
+                        theme: "bootstrap",
+                        width: '100%',
+                        placeholder: "Select here...",
+                        tags: true,
+                    });
+
+                    $('#edit-select-support-group').select2({
                         theme: "bootstrap",
                         width: '100%',
                         placeholder: "Select here...",
@@ -567,10 +847,10 @@
                     "title": {
                         required: true,
                     },
-                    "lead-group": {
+                    "select-lead-group": {
                         required: true
                     },
-                    "support-group[]": {
+                    "select-support-group[]": {
                         required: true
                     },
                 },
@@ -578,10 +858,10 @@
                     "title": {
                         required: "Please Input Title.",
                     },
-                    "lead-group": {
+                    "select-lead-group": {
                         required: "Please Select Lead Group.",
                     },
-                    "support-group[]": {
+                    "select-support-group[]": {
                         required: "Please Select Support Group.",
                     },
                 },
@@ -755,6 +1035,352 @@
                     });
                 }
             });
+
+            // handle validation edit strategy
+            $("#editStrategyValidation").validate({
+                validClass: "success",
+                rules: {
+                    "edit-str-title": {
+                        required: true,
+                    },
+                    "edit-str-desc": {
+                        required: true
+                    },
+                    "edit-strategic-goals": {
+                        required: true
+                    },
+                    "edit-main-target": {
+                        required: true
+                    },
+                    "edit-codification": {
+                        required: true
+                    },
+                    "edit-tag": {
+                        required: true
+                    },
+                    "edit-version-tag": {
+                        required: true
+                    },
+                    "edit-strengths": {
+                        required: true
+                    },
+                    "edit-weaknesses": {
+                        required: true
+                    },
+                    "edit-opportunities": {
+                        required: true
+                    },
+                    "edit-threats": {
+                        required: true
+                    },
+                    "edit-start": {
+                        required: true
+                    },
+                    "edit-stop": {
+                        required: true
+                    },
+                    "edit-continue": {
+                        required: true
+                    },
+                },
+                messages: {
+                    "edit-str-title": {
+                        required: "Please Input Title.",
+                    },
+                    "edit-str-desc": {
+                        required: "Please Input Description.",
+                    },
+                    "edit-strategic-goals": {
+                        required: "Please Input Strategic Goals.",
+                    },
+                    "edit-main-target": {
+                        required: "Please Input Main Target.",
+                    },
+                    "edit-codification": {
+                        required: "Please Input Codification.",
+                    },
+                    "edit-tag": {
+                        required: "Please Input Tag.",
+                    },
+                    "edit-version-tag": {
+                        required: "Please Input Version Tag.",
+                    },
+                    "edit-strengths": {
+                        required: "Please Input Strengths.",
+                    },
+                    "edit-weaknesses": {
+                        required: "Please Input Weaknesses.",
+                    },
+                    "edit-opportunities": {
+                        required: "Please Input Opportunities.",
+                    },
+                    "edit-threats": {
+                        required: "Please Input Threats.",
+                    },
+                    "edit-start": {
+                        required: "Please Input Start.",
+                    },
+                    "edit-stop": {
+                        required: "Please Input Stop.",
+                    },
+                    "edit-continue": {
+                        required: "Please Input Continue.",
+                    },
+                },
+                submitHandler: function (form) {
+                    var formData = new FormData(form);
+                    var rawData = Object.fromEntries(formData.entries());
+
+                    // Mapping ke camelCase
+                    var jsonData = {
+                      id: rawData['edit-str-id'],
+                      title: rawData['edit-str-title'],
+                      description: rawData['edit-str-desc'],
+                      strategicGoals: rawData['edit-strategic-goals'],
+                      mainTarget: rawData['edit-main-target'],
+                      codification: rawData['edit-codification'],
+                      strategicPillar: rawData['edit-strategic-pilar'],
+                      tag: rawData['edit-tag'],
+                      versionTag: rawData['edit-version-tag'],
+                      strengths: rawData['edit-strengths'],
+                      weaknesses: rawData['edit-weaknesses'],
+                      opportunities: rawData['edit-opportunities'],
+                      threats: rawData['edit-threats'],
+                      stop: rawData['edit-stop'],
+                      start: rawData['edit-start'],
+                      continue: rawData['edit-continue'],
+                      lastUpdatedBy: userMaipark
+                    };
+
+                    // Mengirim data menggunakan Ajax
+                    $.ajax({
+                        url: 'http://sql-mvt-03/sprm/api/StrategyMatrix/UpdateStrategy',
+                        type: 'PUT',
+                        contentType: 'application/json',
+                        headers: { 'Authorization': 'Bearer ' + token },
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        data: JSON.stringify(jsonData),
+                        success: function (response) {
+                            // Show SweetAlert2 success message
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Update successfully!',
+                                text: 'The Strategy has been updated.',
+                            }).then(() => {
+                                // Refresh the user management page or perform any other actions
+                                location.reload();
+                            });
+                        },
+                        error: function (error) {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: "Something went wrong. Unable to update the strategy."
+                            }).then(() => {
+                                console.error('Unable to update the strategy', error);
+                            });
+                        }
+                    });
+                }
+            });
+
+            // handle validation edit action plan
+            $("#editActionPlanValidation").validate({
+                validClass: "success",
+                rules: {
+                    "edit-ap-title": {
+                        required: true,
+                    },
+                    "edit-select-lead-group": {
+                        required: true
+                    },
+                    "edit-select-support-group[]": {
+                        required: true
+                    },
+                },
+                messages: {
+                    "edit-ap-title": {
+                        required: "Please Input Title.",
+                    },
+                    "edit-select-lead-group": {
+                        required: "Please Select Lead Group.",
+                    },
+                    "edit-select-support-group[]": {
+                        required: "Please Select Support Group.",
+                    },
+                },
+                submitHandler: function (form) {
+                    var formData = new FormData(form);
+                    var rawData = Object.fromEntries(formData.entries());
+                    var supportGroupValues = $('#edit-select-support-group').val();
+
+                    // Mapping ke camelCase
+                    var jsonData = {
+                      id: rawData['edit-ap-id'],
+                      title: rawData['edit-ap-title'],
+                      leadGroup: rawData['edit-select-lead-group'],
+                      supportGroup: supportGroupValues.join(", "),
+                      lastUpdatedBy: userMaipark
+                    };
+
+                    // Mengirim data menggunakan Ajax
+                    $.ajax({
+                        url: 'http://sql-mvt-03/sprm/api/StrategyMatrix/UpdateActionPlan',
+                        type: 'PUT',
+                        contentType: 'application/json',
+                        headers: { 'Authorization': 'Bearer ' + token },
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        data: JSON.stringify(jsonData),
+                        success: function (response) {
+                            // Show SweetAlert2 success message
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Update successfully!',
+                                text: 'The action plan has been updated.',
+                            }).then(() => {
+                                // Refresh the user management page or perform any other actions
+                                location.reload();
+                            });
+                        },
+                        error: function (error) {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: "Something went wrong. Unable to update the action plan."
+                            }).then(() => {
+                                console.error('Unable to update the action plan', error);
+                            });
+                        }
+                    });
+                }
+            });
+
+            // handle validation edit kpi
+            $("#editKPIValidation").validate({
+                validClass: "success",
+                rules: {
+                    "edit-kpi-title": {
+                        required: true,
+                    },
+                    "edit-kpi-expense": {
+                        required: true
+                    },
+                },
+                messages: {
+                    "edit-kpi-title": {
+                        required: "Please Input Title.",
+                    },
+                    "edit-kpi-expense": {
+                        required: "Please Input Expense.",
+                    },
+                },
+                submitHandler: function (form) {
+                    var formData = new FormData(form);
+                    var rawData = Object.fromEntries(formData.entries());
+
+                    // Mapping ke camelCase
+                    var jsonData = {
+                      id: rawData['edit-kpi-id'],
+                      title: rawData['edit-kpi-title'],
+                      expense: rawData['edit-kpi-expense'],
+                      lastUpdatedBy: userMaipark
+                    };
+
+                    // Mengirim data menggunakan Ajax
+                    $.ajax({
+                        url: 'http://sql-mvt-03/sprm/api/StrategyMatrix/UpdateKPI',
+                        type: 'PUT',
+                        contentType: 'application/json',
+                        headers: { 'Authorization': 'Bearer ' + token },
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        data: JSON.stringify(jsonData),
+                        success: function (response) {
+                            // Show SweetAlert2 success message
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Update successfully!',
+                                text: 'The KPI has been updated.',
+                            }).then(() => {
+                                // Refresh the user management page or perform any other actions
+                                location.reload();
+                            });
+                        },
+                        error: function (error) {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: "Something went wrong. Unable to update the kpi."
+                            }).then(() => {
+                                console.error('Unable to update the kpi', error);
+                            });
+                        }
+                    });
+                }
+            });
+
+            // handle validation edit output
+            $("#editOutputValidation").validate({
+                validClass: "success",
+                rules: {
+                    "edit-output-title": {
+                        required: true,
+                    },
+                },
+                messages: {
+                    "edit-output-title": {
+                        required: "Please Input Title.",
+                    },
+                },
+                submitHandler: function (form) {
+                    var formData = new FormData(form);
+                    var rawData = Object.fromEntries(formData.entries());
+
+                    // Mapping ke camelCase
+                    var jsonData = {
+                      id: rawData['edit-output-id'],
+                      title: rawData['edit-output-title'],
+                      lastUpdatedBy: userMaipark
+                    };
+
+                    // Mengirim data menggunakan Ajax
+                    $.ajax({
+                        url: 'http://sql-mvt-03/sprm/api/StrategyMatrix/UpdateOutput',
+                        type: 'PUT',
+                        contentType: 'application/json',
+                        headers: { 'Authorization': 'Bearer ' + token },
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        data: JSON.stringify(jsonData),
+                        success: function (response) {
+                            // Show SweetAlert2 success message
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Update successfully!',
+                                text: 'The output has been updated.',
+                            }).then(() => {
+                                // Refresh the user management page or perform any other actions
+                                location.reload();
+                            });
+                        },
+                        error: function (error) {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: "Something went wrong. Unable to update the output."
+                            }).then(() => {
+                                console.error('Unable to update the output', error);
+                            });
+                        }
+                    });
+                }
+            });
         });
 
         $(function() {
@@ -804,6 +1430,7 @@
                           // hitung rowspan untuk this KPI
                           const kpiRows = Math.max(kpi.outputs.length, 1);
                           let kpiRendered = false;  // <<< flag untuk KPI
+                          let expenseRendered = false;
 
                           if (kpi.outputs.length) {
                             // ada Outputs
@@ -819,13 +1446,41 @@
                                         (strategy.createdBy === userMaipark || JSON.parse(userRole).roleName === "Administrator")
                                           ? `
                                               <div class="action-buttons">
-                                                <button class="btn btn-sm btn-outline-primary btn-edit-str" data-strid="${strategy.id}" data-toggle="modal" data-target="#editStrategyModal" data-placement="top" title="Edit Strategy">
+                                                <button 
+                                                    class="btn btn-sm btn-outline-primary btn-edit-str" 
+                                                    data-strid="${strategy.id}"
+                                                    data-str-title="${strategy.title}"
+                                                    data-str-desc="${strategy.description}"
+                                                    data-strategic-goals="${strategy.strategicGoals}"
+                                                    data-main-target="${strategy.mainTarget}"
+                                                    data-codification="${strategy.codification}"
+                                                    data-tag="${strategy.tag}"
+                                                    data-version-tag="${strategy.versionTag}"
+                                                    data-strengths="${strategy.strengths}"
+                                                    data-weaknesses="${strategy.weaknesses}"
+                                                    data-opportunities="${strategy.opportunities}"
+                                                    data-threats="${strategy.threats}"
+                                                    data-start="${strategy.start}"
+                                                    data-stop="${strategy.stop}"
+                                                    data-continue="${strategy.continue}"
+                                                    data-toggle="modal" 
+                                                    data-target="#editStrategyModal" 
+                                                    data-placement="top" 
+                                                    title="Edit Strategy"
+                                                >
                                                   <i class="fa fa-edit"></i>
                                                 </button>
                                                 <button class="btn btn-sm btn-outline-success btn-add-ap" data-strid="${strategy.id}" data-toggle="modal" data-target="#addActionPlanModal" data-placement="top" title="Add Action Plan">
                                                     <i class="fa fa-plus"></i>
                                                 </button>
-                                                <button class="btn btn-sm btn-outline-danger btn-delete-ap" data-strid="${strategy.id}" data-toggle="modal" data-target="#deleteStrategyModal" data-placement="top" title="Delete Strategy">
+                                                <button 
+                                                    class="btn btn-sm btn-outline-danger btn-delete-str" 
+                                                    data-strid="${strategy.id}"
+                                                    data-title="${strategy.title}"
+                                                    data-toggle="tooltip" 
+                                                    data-placement="top" 
+                                                    title="Delete Strategy"
+                                                >
                                                     <i class="fa fa-trash"></i>
                                                 </button>
                                               </div>
@@ -846,13 +1501,30 @@
                                         (strategy.createdBy === userMaipark || JSON.parse(userRole).roleName === "Administrator")
                                           ? `
                                               <div class="action-buttons">
-                                                <button class="btn btn-sm btn-outline-primary btn-edit-ap" data-id="${ap.id}" data-toggle="modal" data-target="#editStrategyModal" data-placement="top" title="Edit Action Plan">
+                                                <button 
+                                                    class="btn btn-sm btn-outline-primary btn-edit-ap" 
+                                                    data-id="${ap.id}"
+                                                    data-ap-title="${ap.title}"
+                                                    data-select-lead-group="${ap.leadGroup}"
+                                                    data-select-support-group="${ap.supportGroup}"
+                                                    data-toggle="modal" 
+                                                    data-target="#editActionPlanModal" 
+                                                    data-placement="top" 
+                                                    title="Edit Action Plan"
+                                                >
                                                   <i class="fa fa-edit"></i>
                                                 </button>
                                                 <button class="btn btn-sm btn-outline-success btn-add-kpi" data-apid="${ap.id}" data-toggle="modal" data-target="#addKPIModal" data-placement="top" title="Add KPI">
                                                     <i class="fa fa-plus"></i>
                                                 </button>
-                                                <button class="btn btn-sm btn-outline-danger btn-delete-ap" data-id="${ap.id}" data-toggle="modal" data-target="#deleteStrategyModal" data-placement="top" title="Delete Action Plan">
+                                                <button 
+                                                    class="btn btn-sm btn-outline-danger btn-delete-ap" 
+                                                    data-apid="${ap.id}"
+                                                    data-title="${ap.title}"
+                                                    data-toggle="tooltip" 
+                                                    data-placement="top" 
+                                                    title="Delete Action Plan"
+                                                >
                                                     <i class="fa fa-trash"></i>
                                                 </button>
                                               </div>
@@ -873,15 +1545,31 @@
                                       (strategy.createdBy === userMaipark || JSON.parse(userRole).roleName === "Administrator")
                                           ? `
                                               <div class="action-buttons">
-                                              <button class="btn btn-sm btn-outline-primary btn-edit-str" data-id="${kpi.id}" data-toggle="modal" data-target="#editKPIModal"  data-placement="top" title="Edit KPI">
-                                                  <i class="fa fa-edit"></i>
-                                              </button>
-                                              <button class="btn btn-sm btn-outline-success btn-add-output" data-kpiid="${kpi.id}" data-toggle="modal" data-target="#addOutputModal" data-placement="top" title="Add Output">
-                                                  <i class="fa fa-plus"></i>
-                                              </button>
-                                              <button class="btn btn-sm btn-outline-danger btn-delete-ap" data-id="${kpi.id}" data-toggle="modal" data-target="#deleteKPIModal" data-placement="top" title="Delete KPI">
-                                                  <i class="fa fa-trash"></i>
-                                              </button>
+                                                  <button 
+                                                    class="btn btn-sm btn-outline-primary btn-edit-kpi" 
+                                                    data-id="${kpi.id}"
+                                                    data-kpi-title="${kpi.title}"
+                                                    data-kpi-expense="${kpi.expense}"
+                                                    data-toggle="modal" 
+                                                    data-target="#editKPIModal" 
+                                                    data-placement="top" 
+                                                    title="Edit KPI"
+                                                  >
+                                                      <i class="fa fa-edit"></i>
+                                                  </button>
+                                                  <button class="btn btn-sm btn-outline-success btn-add-output" data-kpiid="${kpi.id}" data-toggle="modal" data-target="#addOutputModal" data-placement="top" title="Add Output">
+                                                      <i class="fa fa-plus"></i>
+                                                  </button>
+                                                  <button 
+                                                    class="btn btn-sm btn-outline-danger btn-delete-kpi" 
+                                                    data-kpiid="${kpi.id}"
+                                                    data-title="${kpi.title}"
+                                                    data-toggle="tooltip" 
+                                                    data-placement="top" 
+                                                    title="Delete KPI"
+                                                  >
+                                                      <i class="fa fa-trash"></i>
+                                                  </button>
                                               </div>
                                           `
                                           : ''
@@ -899,12 +1587,27 @@
                                   (strategy.createdBy === userMaipark || JSON.parse(userRole).roleName === "Administrator")
                                       ? `
                                           <div class="action-buttons">
-                                          <button class="btn btn-sm btn-outline-primary btn-edit-output" data-id="${output.id}" data-toggle="modal" data-target="#editOutputModal"  data-placement="top" title="Edit Output">
-                                              <i class="fa fa-edit"></i>
-                                          </button>
-                                          <button class="btn btn-sm btn-outline-danger btn-delete-output" data-id="${output.id}" data-toggle="modal" data-target="#deleteOutputModal" data-placement="top" title="Delete Output">
-                                              <i class="fa fa-trash"></i>
-                                          </button>
+                                              <button 
+                                                class="btn btn-sm btn-outline-primary btn-edit-output" 
+                                                data-id="${output.id}"
+                                                data-output-title="${output.title}"
+                                                data-toggle="modal" 
+                                                data-target="#editOutputModal" 
+                                                data-placement="top" 
+                                                title="Edit Output"
+                                              >
+                                                  <i class="fa fa-edit"></i>
+                                              </button>
+                                              <button 
+                                                class="btn btn-sm btn-outline-danger btn-delete-output" 
+                                                data-outputid="${output.id}"
+                                                data-title="${output.title}"
+                                                data-toggle="tooltip" 
+                                                data-placement="top" 
+                                                title="Delete Output"
+                                              >
+                                                  <i class="fa fa-trash"></i>
+                                              </button>
                                           </div>
                                       `
                                       : ''
@@ -915,16 +1618,18 @@
                               // Lead / Support / Expense
                               $tr.append(`<td>${ap.leadGroup || ''}</td>`);
                               $tr.append(`<td>${ap.supportGroup || ''}</td>`);
-                              $tr.append(`
-                                <td>
-                                  ${
-                                    kpi.expense
-                                      ? kpi.expense.toLocaleString('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 4, maximumFractionDigits: 4 })
-                                      : ''
-                                  }
-                                </td>
-                              `);
-
+                              if (!expenseRendered) {
+                                  $tr.append(`
+                                    <td rowspan="${kpiRows}">
+                                      ${
+                                        kpi.expense
+                                          ? kpi.expense.toLocaleString('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 4, maximumFractionDigits: 4 })
+                                          : ''
+                                      }
+                                    </td>
+                                  `);
+                                  expenseRendered = true;
+                              }
                               $tbody.append($tr);
                             });
 
@@ -940,13 +1645,41 @@
                                         (strategy.createdBy === userMaipark || JSON.parse(userRole).roleName === "Administrator")
                                           ? `
                                               <div class="action-buttons">
-                                                <button class="btn btn-sm btn-outline-primary btn-edit-str" data-strid="${strategy.id}" data-toggle="modal" data-target="#editStrategyModal" data-placement="top" title="Edit Strategy">
+                                                <button
+                                                    class="btn btn-sm btn-outline-primary btn-edit-str"
+                                                    data-strid="${strategy.id}"
+                                                    data-str-title="${strategy.title}"
+                                                    data-str-desc="${strategy.description}"
+                                                    data-strategic-goals="${strategy.strategicGoals}"
+                                                    data-main-target="${strategy.mainTarget}"
+                                                    data-codification="${strategy.codification}"
+                                                    data-tag="${strategy.tag}"
+                                                    data-version-tag="${strategy.versionTag}"
+                                                    data-strengths="${strategy.strengths}"
+                                                    data-weaknesses="${strategy.weaknesses}"
+                                                    data-opportunities="${strategy.opportunities}"
+                                                    data-threats="${strategy.threats}"
+                                                    data-start="${strategy.start}"
+                                                    data-stop="${strategy.stop}"
+                                                    data-continue="${strategy.continue}"
+                                                    data-toggle="modal"
+                                                    data-target="#editStrategyModal"
+                                                    data-placement="top"
+                                                    title="Edit Strategy"
+                                                >
                                                   <i class="fa fa-edit"></i>
                                                 </button>
                                                 <button class="btn btn-sm btn-outline-success btn-add-ap" data-strid="${strategy.id}" data-toggle="modal" data-target="#addActionPlanModal" data-placement="top" title="Add Action Plan">
                                                     <i class="fa fa-plus"></i>
                                                 </button>
-                                                <button class="btn btn-sm btn-outline-danger btn-delete-ap" data-strid="${strategy.id}" data-toggle="modal" data-target="#deleteStrategyModal" data-placement="top" title="Delete Strategy">
+                                                <button
+                                                    class="btn btn-sm btn-outline-danger btn-delete-str"
+                                                    data-strid="${strategy.id}"
+                                                    data-title="${strategy.title}"
+                                                    data-toggle="tooltip"
+                                                    data-placement="top"
+                                                    title="Delete Strategy"
+                                                >
                                                     <i class="fa fa-trash"></i>
                                                 </button>
                                               </div>
@@ -965,13 +1698,30 @@
                                         (strategy.createdBy === userMaipark || JSON.parse(userRole).roleName === "Administrator")
                                           ? `
                                               <div class="action-buttons">
-                                                <button class="btn btn-sm btn-outline-primary btn-edit-ap" data-id="${ap.id}" data-toggle="modal" data-target="#editStrategyModal" data-placement="top" title="Edit Action Plan">
+                                                <button
+                                                    class="btn btn-sm btn-outline-primary btn-edit-ap"
+                                                    data-id="${ap.id}"
+                                                    data-ap-title="${ap.title}"
+                                                    data-select-lead-group="${ap.leadGroup}"
+                                                    data-select-support-group="${ap.supportGroup}"
+                                                    data-toggle="modal"
+                                                    data-target="#editActionPlanModal"
+                                                    data-placement="top"
+                                                    title="Edit Action Plan"
+                                                >
                                                   <i class="fa fa-edit"></i>
                                                 </button>
                                                 <button class="btn btn-sm btn-outline-success btn-add-kpi" data-apid="${ap.id}" data-toggle="modal" data-target="#addKPIModal" data-placement="top" title="Add KPI">
                                                     <i class="fa fa-plus"></i>
                                                 </button>
-                                                <button class="btn btn-sm btn-outline-danger btn-delete-ap" data-id="${ap.id}" data-toggle="modal" data-target="#deleteStrategyModal" data-placement="top" title="Delete Action Plan">
+                                                <button
+                                                    class="btn btn-sm btn-outline-danger btn-delete-ap"
+                                                    data-apid="${ap.id}"
+                                                    data-title="${ap.title}"
+                                                    data-toggle="tooltip"
+                                                    data-placement="top"
+                                                    title="Delete Action Plan"
+                                                >
                                                     <i class="fa fa-trash"></i>
                                                 </button>
                                               </div>
@@ -990,15 +1740,31 @@
                                     (strategy.createdBy === userMaipark || JSON.parse(userRole).roleName === "Administrator")
                                         ? `
                                             <div class="action-buttons">
-                                            <button class="btn btn-sm btn-outline-primary btn-edit-str" data-id="${kpi.id}" data-toggle="modal" data-target="#editKPIModal"  data-placement="top" title="Edit KPI">
-                                                <i class="fa fa-edit"></i>
-                                            </button>
-                                            <button class="btn btn-sm btn-outline-success btn-add-output" data-kpiid="${kpi.id}" data-toggle="modal" data-target="#addOutputModal" data-placement="top" title="Add Output">
-                                                <i class="fa fa-plus"></i>
-                                            </button>
-                                            <button class="btn btn-sm btn-outline-danger btn-delete-ap" data-id="${kpi.id}" data-toggle="modal" data-target="#deleteKPIModal" data-placement="top" title="Delete KPI">
+                                              <button
+                                                class="btn btn-sm btn-outline-primary btn-edit-kpi"
+                                                data-id="${kpi.id}"
+                                                data-kpi-title="${kpi.title}"
+                                                data-kpi-expense="${kpi.expense}"
+                                                data-toggle="modal"
+                                                data-target="#editKPIModal"
+                                                data-placement="top"
+                                                title="Edit KPI"
+                                              >
+                                                  <i class="fa fa-edit"></i>
+                                              </button>
+                                              <button class="btn btn-sm btn-outline-success btn-add-output" data-kpiid="${kpi.id}" data-toggle="modal" data-target="#addOutputModal" data-placement="top" title="Add Output">
+                                                  <i class="fa fa-plus"></i>
+                                              </button>
+                                              <button
+                                                class="btn btn-sm btn-outline-danger btn-delete-kpi"
+                                                data-kpiid="${kpi.id}"
+                                                data-title="${kpi.title}"
+                                                data-toggle="tooltip"
+                                                data-placement="top"
+                                                title="Delete KPI"
+                                              >
                                                 <i class="fa fa-trash"></i>
-                                            </button>
+                                              </button>
                                             </div>
                                         `
                                         : ''
@@ -1039,15 +1805,43 @@
                                     (strategy.createdBy === userMaipark || JSON.parse(userRole).roleName === "Administrator")
                                         ? `
                                             <div class="action-buttons">
-                                            <button class="btn btn-sm btn-outline-primary btn-edit-str" data-strid="${strategy.id}" data-toggle="modal" data-target="#editStrategyModal"  data-placement="top" title="Edit Strategy">
-                                                <i class="fa fa-edit"></i>
-                                            </button>
-                                            <button class="btn btn-sm btn-outline-success btn-add-ap" data-strid="${strategy.id}" data-toggle="modal" data-target="#addActionPlanModal" data-placement="top" title="Add Action Plan">
-                                                <i class="fa fa-plus"></i>
-                                            </button>
-                                            <button class="btn btn-sm btn-outline-danger btn-delete-ap" data-strid="${strategy.id}" data-toggle="modal" data-target="#deleteStrategyModal" data-placement="top" title="Delete Strategy">
-                                                <i class="fa fa-trash"></i>
-                                            </button>
+                                                <button
+                                                    class="btn btn-sm btn-outline-primary btn-edit-str"
+                                                    data-strid="${strategy.id}"
+                                                    data-str-title="${strategy.title}"
+                                                    data-str-desc="${strategy.description}"
+                                                    data-strategic-goals="${strategy.strategicGoals}"
+                                                    data-main-target="${strategy.mainTarget}"
+                                                    data-codification="${strategy.codification}"
+                                                    data-tag="${strategy.tag}"
+                                                    data-version-tag="${strategy.versionTag}"
+                                                    data-strengths="${strategy.strengths}"
+                                                    data-weaknesses="${strategy.weaknesses}"
+                                                    data-opportunities="${strategy.opportunities}"
+                                                    data-threats="${strategy.threats}"
+                                                    data-start="${strategy.start}"
+                                                    data-stop="${strategy.stop}"
+                                                    data-continue="${strategy.continue}"
+                                                    data-toggle="modal"
+                                                    data-target="#editStrategyModal"
+                                                    data-placement="top"
+                                                    title="Edit Strategy"
+                                                >
+                                                    <i class="fa fa-edit"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-success btn-add-ap" data-strid="${strategy.id}" data-toggle="modal" data-target="#addActionPlanModal" data-placement="top" title="Add Action Plan">
+                                                    <i class="fa fa-plus"></i>
+                                                </button>
+                                                <button
+                                                    class="btn btn-sm btn-outline-danger btn-delete-str"
+                                                    data-strid="${strategy.id}"
+                                                    data-title="${strategy.title}"
+                                                    data-toggle="tooltip"
+                                                    data-placement="top"
+                                                    title="Delete Strategy"
+                                                >
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
                                             </div>
                                         `
                                         : ''
@@ -1064,15 +1858,32 @@
                                     (strategy.createdBy === userMaipark || JSON.parse(userRole).roleName === "Administrator")
                                         ? `
                                             <div class="action-buttons">
-                                            <button class="btn btn-sm btn-outline-primary btn-edit-ap" data-id="${ap.id}" data-toggle="modal" data-target="#editStrategyModal" data-placement="top" title="Edit Action Plan">
-                                                <i class="fa fa-edit"></i>
-                                            </button>
-                                            <button class="btn btn-sm btn-outline-success btn-add-kpi" data-apid="${ap.id}" data-toggle="modal" data-target="#addKPIModal" data-placement="top" title="Add KPI">
-                                                <i class="fa fa-plus"></i>
-                                            </button>
-                                            <button class="btn btn-sm btn-outline-danger btn-delete-ap" data-id="${ap.id}" data-toggle="modal" data-target="#deleteStrategyModal" data-placement="top" title="Delete Action Plan">
-                                                <i class="fa fa-trash"></i>
-                                            </button>
+                                                <button
+                                                    class="btn btn-sm btn-outline-primary btn-edit-ap"
+                                                    data-id="${ap.id}"
+                                                    data-ap-title="${ap.title}"
+                                                    data-select-lead-group="${ap.leadGroup}"
+                                                    data-select-support-group="${ap.supportGroup}"
+                                                    data-toggle="modal"
+                                                    data-target="#editActionPlanModal"
+                                                    data-placement="top"
+                                                    title="Edit Action Plan"
+                                                >
+                                                    <i class="fa fa-edit"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-success btn-add-kpi" data-apid="${ap.id}" data-toggle="modal" data-target="#addKPIModal" data-placement="top" title="Add KPI">
+                                                    <i class="fa fa-plus"></i>
+                                                </button>
+                                                <button
+                                                    class="btn btn-sm btn-outline-danger btn-delete-ap"
+                                                    data-apid="${ap.id}"
+                                                    data-title="${ap.title}"
+                                                    data-toggle="tooltip"
+                                                    data-placement="top"
+                                                    title="Delete Action Plan"
+                                                >
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
                                             </div>
                                         `
                                         : ''
@@ -1110,13 +1921,41 @@
                             (strategy.createdBy === userMaipark || JSON.parse(userRole).roleName === "Administrator")
                               ? `
                                   <div class="action-buttons">
-                                    <button class="btn btn-sm btn-outline-primary btn-edit-str" data-strid="${strategy.id}" data-toggle="modal" data-target="#editStrategyModal" data-placement="top" title="Edit Strategy">
-                                      <i class="fa fa-edit"></i>
+                                    <button
+                                        class="btn btn-sm btn-outline-primary btn-edit-str"
+                                        data-strid="${strategy.id}"
+                                        data-str-title="${strategy.title}"
+                                        data-str-desc="${strategy.description}"
+                                        data-strategic-goals="${strategy.strategicGoals}"
+                                        data-main-target="${strategy.mainTarget}"
+                                        data-codification="${strategy.codification}"
+                                        data-tag="${strategy.tag}"
+                                        data-version-tag="${strategy.versionTag}"
+                                        data-strengths="${strategy.strengths}"
+                                        data-weaknesses="${strategy.weaknesses}"
+                                        data-opportunities="${strategy.opportunities}"
+                                        data-threats="${strategy.threats}"
+                                        data-start="${strategy.start}"
+                                        data-stop="${strategy.stop}"
+                                        data-continue="${strategy.continue}"
+                                        data-toggle="modal"
+                                        data-target="#editStrategyModal"
+                                        data-placement="top"
+                                        title="Edit Strategy"
+                                    >
+                                        <i class="fa fa-edit"></i>
                                     </button>
                                     <button class="btn btn-sm btn-outline-success btn-add-ap" data-strid="${strategy.id}" data-toggle="modal" data-target="#addActionPlanModal" data-placement="top" title="Add Action Plan">
                                         <i class="fa fa-plus"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-outline-danger btn-delete-ap" data-strid="${strategy.id}" data-toggle="modal" data-target="#deleteStrategyModal" data-placement="top" title="Delete Strategy">
+                                    <button
+                                        class="btn btn-sm btn-outline-danger btn-delete-str"
+                                        data-strid="${strategy.id}"
+                                        data-title="${strategy.title}"
+                                        data-toggle="tooltip"
+                                        data-placement="top"
+                                        title="Delete Strategy"
+                                    >
                                         <i class="fa fa-trash"></i>
                                     </button>
                                   </div>
@@ -1145,14 +1984,241 @@
             });
           }
 
-          // event delegation untuk tombol edit/add
+          // event delegation untuk tombol edit/add/delete
           $tbody
-            .on('click', '.btn-add-ap',     e => $('#strategy-id').val(e.currentTarget.dataset.strid))
-            .on('click', '.btn-edit-ap',    e => console.log(e.currentTarget.dataset.id))
+            .on('click', '.btn-edit-str', e => {
+                const btn = e.currentTarget.dataset;
+                $('#edit-str-id').val(btn.strid);
+                $('#edit-str-title').val(btn.strTitle);
+                $('#edit-str-desc').val(btn.strDesc);
+                $('#edit-strategic-goals').val(btn.strategicGoals);
+                $('#edit-main-target').val(btn.mainTarget);
+                $('#edit-codification').val(btn.codification);
+                $('#edit-tag').val(btn.tag);
+                $('#edit-version-tag').val(btn.versionTag);
+                $('#edit-strengths').val(btn.strengths);
+                $('#edit-weaknesses').val(btn.weaknesses);
+                $('#edit-opportunities').val(btn.opportunities);
+                $('#edit-threats').val(btn.threats);
+                $('#edit-start').val(btn.start);
+                $('#edit-stop').val(btn.stop);
+                $('#edit-continue').val(btn.continue);
+            })
+            .on('click', '.btn-delete-str', e => {
+                const btn = e.currentTarget.dataset;
+                const strId = btn.strid,
+                      strTitle = btn.title;
+                
+                // Menampilkan sweet alert konfirmasi
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You want to Delete this Strategy? (" + strTitle + ")",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, Delete!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: 'http://sql-mvt-03/sprm/api/StrategyMatrix/DeleteStrategy?id=' + strId + '&deletedBy=' + userMaipark,
+                            type: 'DELETE',
+                            xhrFields: { withCredentials: true },
+                            headers: { 'Authorization': 'Bearer ' + token },
+                            success: function (response) {
+                                Swal.fire({
+                                    title: "Delete successful!",
+                                    text: "The strategy has been deleted.",
+                                    icon: "success"
+                                }).then(() => {
+                                    //console.log("Button Delete Clicked");
+                                    location.reload();
+                                });
+                            },
+                            error: function (error) {
+                                // Tampilkan sweet alert jika terjadi kesalahan
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Oops...",
+                                    text: "Something went wrong. Unable to delete the strategy."
+                                }).then(() => {
+                                    console.error('Delete strategy failed', error);
+                                });
+                            }
+                        });
+                    }
+                });
+            })
+            .on('click', '.btn-add-ap', e => $('#strategy-id').val(e.currentTarget.dataset.strid))
+            .on('click', '.btn-edit-ap', e => {
+                const btn = e.currentTarget.dataset;
+                $('#edit-ap-id').val(btn.id);
+                $('#edit-ap-title').val(btn.apTitle);
+                
+                // Lead Group
+                $('#edit-select-lead-group').val(btn.selectLeadGroup).trigger('change');
+
+                // Support Group
+                const supportGroups = btn.selectSupportGroup.split(',').map(s => s.trim());
+
+                // Tambahkan ke select2 jika belum ada opsinya
+                supportGroups.forEach(group => {
+                    if ($("#edit-select-support-group option[value='" + group + "']").length === 0) {
+                        $('#edit-select-support-group').append(`<option value="${group}">${group}</option>`);
+                    }
+                });
+
+                // Set value dan trigger change agar select2 nge-render ulang
+                $('#edit-select-support-group').val(supportGroups).trigger('change');
+            })
+            .on('click', '.btn-delete-ap', e => {
+                const btn = e.currentTarget.dataset;
+                const apId = btn.apid,
+                      apTitle = btn.title;
+
+                // Menampilkan sweet alert konfirmasi
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You want to Delete this Action Plan? (" + apTitle + ")",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, Delete!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: 'http://sql-mvt-03/sprm/api/StrategyMatrix/DeleteActionPlan?id=' + apId + '&deletedBy=' + userMaipark,
+                            type: 'DELETE',
+                            xhrFields: { withCredentials: true },
+                            headers: { 'Authorization': 'Bearer ' + token },
+                            success: function (response) {
+                                Swal.fire({
+                                    title: "Delete successful!",
+                                    text: "The Action Plan has been deleted.",
+                                    icon: "success"
+                                }).then(() => {
+                                    //console.log("Button Delete Clicked");
+                                    location.reload();
+                                });
+                            },
+                            error: function (error) {
+                                // Tampilkan sweet alert jika terjadi kesalahan
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Oops...",
+                                    text: "Something went wrong. Unable to delete the action plan."
+                                }).then(() => {
+                                    console.error('Delete action plan failed', error);
+                                });
+                            }
+                        });
+                    }
+                });
+            })
             .on('click', '.btn-add-kpi',    e => $('#action-plan-id').val(e.currentTarget.dataset.apid))
-            .on('click', '.btn-edit-kpi',   e => console.log(e.currentTarget.dataset.id))
+            .on('click', '.btn-edit-kpi',   e => {
+                const btn = e.currentTarget.dataset;
+                $('#edit-kpi-id').val(btn.id);
+                $('#edit-kpi-title').val(btn.kpiTitle);
+                $('#edit-kpi-expense').val(btn.kpiExpense);
+            })
+            .on('click', '.btn-delete-kpi', e => {
+                const btn = e.currentTarget.dataset;
+                const kpiId = btn.kpiid,
+                      kpiTitle = btn.title;
+
+                // Menampilkan sweet alert konfirmasi
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You want to Delete this KPI? (" + kpiTitle + ")",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, Delete!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: 'http://sql-mvt-03/sprm/api/StrategyMatrix/DeleteKPI?id=' + kpiId + '&deletedBy=' + userMaipark,
+                            type: 'DELETE',
+                            xhrFields: { withCredentials: true },
+                            headers: { 'Authorization': 'Bearer ' + token },
+                            success: function (response) {
+                                Swal.fire({
+                                    title: "Delete successful!",
+                                    text: "The KPI has been deleted.",
+                                    icon: "success"
+                                }).then(() => {
+                                    //console.log("Button Delete Clicked");
+                                    location.reload();
+                                });
+                            },
+                            error: function (error) {
+                                // Tampilkan sweet alert jika terjadi kesalahan
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Oops...",
+                                    text: "Something went wrong. Unable to delete the KPI."
+                                }).then(() => {
+                                    console.error('Delete KPI failed', error);
+                                });
+                            }
+                        });
+                    }
+                });
+            })
             .on('click', '.btn-add-output', e => $('#kpi-id').val(e.currentTarget.dataset.kpiid))
-            .on('click', '.btn-edit-output',e => console.log(e.currentTarget.dataset.id))
+            .on('click', '.btn-edit-output',e => {
+                const btn = e.currentTarget.dataset;
+                $('#edit-output-id').val(btn.id);
+                $('#edit-output-title').val(btn.outputTitle);
+            })
+            .on('click', '.btn-delete-output', e => {
+                const btn = e.currentTarget.dataset;
+                const outputId = btn.outputid,
+                      outputTitle = btn.title;
+
+                // Menampilkan sweet alert konfirmasi
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You want to Delete this Output? (" + outputTitle + ")",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, Delete!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: 'http://sql-mvt-03/sprm/api/StrategyMatrix/DeleteOutput?id=' + outputId + '&deletedBy=' + userMaipark,
+                            type: 'DELETE',
+                            xhrFields: { withCredentials: true },
+                            headers: { 'Authorization': 'Bearer ' + token },
+                            success: function (response) {
+                                Swal.fire({
+                                    title: "Delete successful!",
+                                    text: "The output has been deleted.",
+                                    icon: "success"
+                                }).then(() => {
+                                    //console.log("Button Delete Clicked");
+                                    location.reload();
+                                });
+                            },
+                            error: function (error) {
+                                // Tampilkan sweet alert jika terjadi kesalahan
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Oops...",
+                                    text: "Something went wrong. Unable to delete the output."
+                                }).then(() => {
+                                    console.error('Delete output failed', error);
+                                });
+                            }
+                        });
+                    }
+                });
+            })
 
           // initial load
           fetchAndRender();
