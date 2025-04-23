@@ -187,8 +187,15 @@
 
 	<!-- SideBar -->
 	<script>
+		function getAppBasePath() {
+			const pathParts = window.location.pathname.split('/').filter(p => p);
+			const basePath = pathParts.length > 0 ? '/' + pathParts[0] : '';
+			return window.location.origin + basePath;
+		}
+
 		// Fungsi untuk membuat elemen li untuk menu item, termasuk jika ada subMenus
 		function createMenuItem(menu) {
+			const baseUrl = '@Url.Content("~/")'.replace(/\/+$/, '');
 			var li = document.createElement("li");
 			li.classList.add("nav-item");
 			li.id = "navLink-" + (menu.actionName ? menu.actionName + "-" + menu.controllerName : menu.id);
@@ -234,7 +241,10 @@
 					// Buat link sub menu
 					var subA = document.createElement("a");
 					// Jika actionName ada, set href; jika tidak, set "#" (atau sesuaikan)
-					subA.href = sub.actionName ? "/" + sub.controllerName + "/" + sub.actionName : "#";
+					// subA.href = sub.actionName ? "/" + sub.controllerName + "/" + sub.actionName : "#";
+					subA.href = sub.actionName
+						? `${baseUrl}/${sub.controllerName}/${sub.actionName}`
+						: "#";
 					var spanSub = document.createElement("span");
 					spanSub.classList.add("sub-item");
 					spanSub.textContent = sub.menuText;
@@ -248,7 +258,10 @@
 			} else {
 				// Jika tidak ada subMenus, buat link biasa
 				var a = document.createElement("a");
-				a.href = menu.actionName ? "/" + menu.controllerName + "/" + menu.actionName : "#";
+				// a.href = menu.actionName ? "/" + menu.controllerName + "/" + menu.actionName : "#";
+				a.href = menu.actionName
+					? `${baseUrl}/${menu.controllerName}/${menu.actionName}`
+					: "#";
 				if (menu.icon) {
 					var icon = document.createElement("i");
 					icon.className = menu.icon;
