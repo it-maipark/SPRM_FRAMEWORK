@@ -28,7 +28,16 @@
     <!-- Inner Page -->
     <div class="card">
         <div class="card-body">
-            Welcome
+            <table id="apTable" class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Assignment</th>
+                        <th>Start date</th>
+                        <th>Due date</th>
+                    </tr>
+                </thead>
+            </table>
         </div>
     </div>
 </div>
@@ -37,6 +46,75 @@
     <script>
         $(document).ready(function () {
             $('#navLink-3').addClass('nav-item active');
+            const apData = [
+                {
+                id: 18,
+                title: "test ap",
+                leadGroup: "CCC",
+                supportGroup: "FA",
+                startDate: "2025-04-23T06:40:58.385",
+                dueDate: "2025-04-23T06:40:58.385",
+                assignment: [
+                  "izvio.prijaya",
+                  "gregorius.ardian",
+                  "elizabeth.husein"
+                ],
+                completedBy: null,
+                completedAt: null,
+                createdBy: "chandra",
+                createdAt: "2025-04-23T13:39:41.5901107",
+                lastUpdatedBy: "chandra",
+                updatedAt: "2025-04-23T13:42:05.2890762",
+                deletedAt: null,
+                deletedBy: null,
+                kpIs: []
+                }
+            ];
+
+            $('#apTable').DataTable({
+              data: apData, // <- ganti dengan array dari backend kamu
+              columns: [
+                { data: 'title' },
+                {
+                  data: 'assignment',
+                  render: function(data) {
+                    return data.map(username => `
+                      <div class="d-flex align-items-center mb-1">
+                        <div class="rounded-circle bg-primary text-white d-inline-flex justify-content-center align-items-center"
+                             style="width:28px;height:28px;font-size:0.75rem;">
+                          ${username[0].toUpperCase()}
+                        </div>
+                        <span class="ml-2">${username}</span>
+                      </div>
+                    `).join('');
+                  }
+                },
+                {
+                  data: 'startDate',
+                  render: data => moment(data).format('MM/DD/YYYY')
+                },
+                {
+                  data: 'dueDate',
+                  render: function (data) {
+                    const due = moment(data);
+                    const today = moment();
+                    const daysDiff = due.diff(today, 'days', true); // pakai true biar float
+
+                    let badgeClass = 'badge-secondary'; // default
+
+                    if (daysDiff <= 0) {
+                      badgeClass = 'badge-danger'; // merah
+                    } else if (daysDiff <= 5) {
+                      badgeClass = 'badge-warning'; // kuning
+                    } else if (daysDiff <= 14) {
+                      badgeClass = 'badge-success'; // hijau
+                    }
+                    
+                    return `<span class="badge ${badgeClass}">${due.format('MM/DD/YYYY')}</span>`;
+                  }
+                }
+              ]
+            });
         });
     </script>
 }
