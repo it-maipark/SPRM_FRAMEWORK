@@ -42,79 +42,469 @@
     </div>
 </div>
 
+<!-- Add Assignment Modal -->
+<div class="modal fade" id="addAssignmentModal" aria-labelledby="addAssignmentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+            <form id="addAssignmentValidation" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <h2 class="modal-title font-weight-bold" id="addAssignmentModalLabel">Assignment</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="number" class="form-control" id="ap-id" name="ap-id" placeholder="Input ap-id here..." hidden>
+                    <div class="form-group form-show-validation row">
+                        <label for="select-assignment" class="col-4 mt-sm-2 text-left">Assignment <span class="required-label">*</span></label>
+                        <div class="col-8">
+                            <div class="select2-input">
+                                <select id="select-assignment" name="select-assignment[]" class="form-control" multiple="multiple">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Add Start Date Modal -->
+<div class="modal fade" id="addStartDateModal" aria-labelledby="addStartDateModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <form id="addStartDateValidation" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <h2 class="modal-title font-weight-bold" id="addStartDateModalLabel">Add Start Date</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="number" class="form-control" id="add-sd-ap-id" name="add-sd-ap-id" placeholder="Input ap-id here..." hidden>
+                    <div class="form-group form-show-validation row">
+                        <label for="start-date" class="col-4 mt-sm-2 text-left">Start Date <span class="required-label">*</span></label>
+                        <div class="col-8">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="start-date" name="start-date" placeholder="Select date here..." required>
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="fa fa-calendar-o"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Add Due Date Modal -->
+<div class="modal fade" id="addDueDateModal" aria-labelledby="addDueDateModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <form id="addDueDateValidation" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <h2 class="modal-title font-weight-bold" id="addDueDateModalLabel">Add Due Date</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="number" class="form-control" id="add-dd-ap-id" name="add-dd-ap-id" placeholder="Input ap-id here..." hidden>
+                    <div class="form-group form-show-validation row">
+                        <label for="due-date" class="col-4 mt-sm-2 text-left">Due Date <span class="required-label">*</span></label>
+                        <div class="col-8">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="due-date" name="due-date" placeholder="Select date here..." required>
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="fa fa-calendar-o"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 @section Scripts {
     <script>
+        var token = sessionStorage.getItem("AccessToken");
+        var userMaipark = sessionStorage.getItem("Username");
+        var userRole = sessionStorage.getItem("UserRole");
+        var employeeData = sessionStorage.getItem("employeeData");
+
+        if (userRole) {
+            var roleObj = JSON.parse(userRole);
+            var roleName = roleObj.roleName;
+        }
+
+        if (employeeData) {
+            var employeeDataObj = JSON.parse(employeeData);
+        }
+
         $(document).ready(function () {
             $('#navLink-3').addClass('nav-item active');
-            const apData = [
-                {
-                id: 18,
-                title: "test ap",
-                leadGroup: "CCC",
-                supportGroup: "FA",
-                startDate: "2025-04-23T06:40:58.385",
-                dueDate: "2025-04-23T06:40:58.385",
-                assignment: [
-                  "izvio.prijaya",
-                  "gregorius.ardian",
-                  "elizabeth.husein"
-                ],
-                completedBy: null,
-                completedAt: null,
-                createdBy: "chandra",
-                createdAt: "2025-04-23T13:39:41.5901107",
-                lastUpdatedBy: "chandra",
-                updatedAt: "2025-04-23T13:42:05.2890762",
-                deletedAt: null,
-                deletedBy: null,
-                kpIs: []
-                }
-            ];
 
-            $('#apTable').DataTable({
-              data: apData, // <- ganti dengan array dari backend kamu
-              columns: [
-                { data: 'title' },
-                {
-                  data: 'assignment',
-                  render: function(data) {
-                    return data.map(username => `
-                      <div class="d-flex align-items-center mb-1">
-                        <div class="rounded-circle bg-primary text-white d-inline-flex justify-content-center align-items-center"
-                             style="width:28px;height:28px;font-size:0.75rem;">
-                          ${username[0].toUpperCase()}
-                        </div>
-                        <span class="ml-2">${username}</span>
-                      </div>
-                    `).join('');
-                  }
-                },
-                {
-                  data: 'startDate',
-                  render: data => moment(data).format('MM/DD/YYYY')
-                },
-                {
-                  data: 'dueDate',
-                  render: function (data) {
-                    const due = moment(data);
-                    const today = moment();
-                    const daysDiff = due.diff(today, 'days', true); // pakai true biar float
-
-                    let badgeClass = 'badge-secondary'; // default
-
-                    if (daysDiff <= 0) {
-                      badgeClass = 'badge-danger'; // merah
-                    } else if (daysDiff <= 5) {
-                      badgeClass = 'badge-warning'; // kuning
-                    } else if (daysDiff <= 14) {
-                      badgeClass = 'badge-success'; // hijau
-                    }
-                    
-                    return `<span class="badge ${badgeClass}">${due.format('MM/DD/YYYY')}</span>`;
-                  }
-                }
-              ]
+            // Inisialisasi datetimepicker
+            $('#start-date').datetimepicker({
+                format: 'DD/MM/YYYY'
             });
+
+            $('#due-date').datetimepicker({
+                format: 'DD/MM/YYYY'
+            });
+
+            // handle validation add assignment
+            $("#addAssignmentValidation").validate({
+                validClass: "success",
+                rules: {
+                    "select-assignment[]": {
+                        required: true,
+                    },
+                },
+                messages: {
+                    "select-assignment[]": {
+                        required: "Please Select Assignment.",
+                    },
+                },
+                submitHandler: function (form) {
+                    var formData = new FormData(form);
+                    var rawData = Object.fromEntries(formData.entries());
+                    var assignmentValues = $('#select-assignment').val();
+
+                    // Mapping ke camelCase
+                    var jsonData = {
+                      id: rawData['ap-id'],
+                      assignment: assignmentValues,
+                      lastUpdatedBy: userMaipark
+                    };
+
+                    // Mengirim data menggunakan Ajax
+                    $.ajax({
+                        url: 'http://sql-mvt-03/sprm/api/PlanManager/UpdateActionPlan',
+                        type: 'PUT',
+                        contentType: 'application/json',
+                        headers: { 'Authorization': 'Bearer ' + token },
+                        data: JSON.stringify(jsonData),
+                        success: function (response) {
+                            // Show SweetAlert2 success message
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Added successfully!',
+                                text: 'New assignment has been added.',
+                            }).then(() => {
+                                // Refresh the user management page or perform any other actions
+                                location.reload();
+                            });
+                        },
+                        error: function (error) {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: "Something went wrong. Unable to assign the action plan."
+                            }).then(() => {
+                                console.error('Unable to assign the action plan', error);
+                            });
+                        }
+                    });
+                }
+            });
+
+            // handle validation add start date
+            $("#addStartDateValidation").validate({
+                validClass: "success",
+                rules: {
+                    "start-date": {
+                        required: true,
+                    },
+                },
+                messages: {
+                    "start-date": {
+                        required: "Please input Start Date.",
+                    },
+                },
+                submitHandler: function (form) {
+                    var formData = new FormData(form);
+                    var rawData = Object.fromEntries(formData.entries());
+
+                    // Mapping ke camelCase
+                    var jsonData = {
+                      id: rawData['add-sd-ap-id'],
+                      startDate: moment(rawData['start-date'], 'DD/MM/YYYY').toISOString(),
+                      lastUpdatedBy: userMaipark
+                    };
+
+                    console.log(jsonData);
+
+                    // Mengirim data menggunakan Ajax
+                    $.ajax({
+                        url: 'http://sql-mvt-03/sprm/api/PlanManager/UpdateActionPlan',
+                        type: 'PUT',
+                        contentType: 'application/json',
+                        headers: { 'Authorization': 'Bearer ' + token },
+                        data: JSON.stringify(jsonData),
+                        success: function (response) {
+                            // Show SweetAlert2 success message
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Added successfully!',
+                                text: 'New start date has been added.',
+                            }).then(() => {
+                                // Refresh the user management page or perform any other actions
+                                location.reload();
+                            });
+                        },
+                        error: function (error) {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: "Something went wrong. Unable to add the start date."
+                            }).then(() => {
+                                console.error('Unable to add the start date', error);
+                            });
+                        }
+                    });
+                }
+            });
+
+            // handle validation add due date
+            $("#addDueDateValidation").validate({
+                validClass: "success",
+                rules: {
+                    "due-date": {
+                        required: true,
+                    },
+                },
+                messages: {
+                    "due-date": {
+                        required: "Please input Due Date.",
+                    },
+                },
+                submitHandler: function (form) {
+                    var formData = new FormData(form);
+                    var rawData = Object.fromEntries(formData.entries());
+
+                    // Mapping ke camelCase
+                    var jsonData = {
+                      id: rawData['add-dd-ap-id'],
+                      dueDate: moment(rawData['due-date'], 'DD/MM/YYYY').toISOString(),
+                      lastUpdatedBy: userMaipark
+                    };
+
+                    // Mengirim data menggunakan Ajax
+                    $.ajax({
+                        url: 'http://sql-mvt-03/sprm/api/PlanManager/UpdateActionPlan',
+                        type: 'PUT',
+                        contentType: 'application/json',
+                        headers: { 'Authorization': 'Bearer ' + token },
+                        data: JSON.stringify(jsonData),
+                        success: function (response) {
+                            // Show SweetAlert2 success message
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Added successfully!',
+                                text: 'New start date has been added.',
+                            }).then(() => {
+                                // Refresh the user management page or perform any other actions
+                                location.reload();
+                            });
+                        },
+                        error: function (error) {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: "Something went wrong. Unable to add the start date."
+                            }).then(() => {
+                                console.error('Unable to add the start date', error);
+                            });
+                        }
+                    });
+                }
+            });
+
+            // Generate datatable grid
+            $.ajax({
+              url: 'http://sql-mvt-03/sprm/api/PlanManager/GetGrid',
+              method: 'GET',
+              dataType: 'json',
+              headers: { 'Authorization': 'Bearer ' + token },
+              success: function(response) {
+                // Enrich data: tambahkan canEdit ke setiap item
+                const dataPromises = response.data.map(item => {
+                  return $.ajax({
+                    url: 'http://sql-mvt-03/sprm/api/Lookup/GetEmployeeByUserMaipark',
+                    method: 'GET',
+                    data: { username: item.createdBy },
+                    headers: { 'Authorization': 'Bearer ' + token }
+                  }).then(res => {
+                    return { ...item, canEdit: ((res.data.divId === employeeDataObj.divId && roleName == 'Dept Head') || roleName == 'Administrator') };
+                  }).catch(() => {
+                    return { ...item, canEdit: false };
+                  });
+                });
+
+                Promise.all(dataPromises).then(enrichedData => {
+                  $('#apTable').DataTable({
+                    data: enrichedData,
+                    columns: [
+                      { data: 'title' },
+                      {
+                        data: 'assignment',
+                        render: function(data, type, row) {
+                          if ((!data || data.length === 0) && row.canEdit) {
+                            return `
+                              <button 
+                                class="btn btn-sm btn-outline-primary btn-add-assignment" 
+                                data-toggle="modal" 
+                                data-placement="bottom"
+                                data-id="${row.id}"
+                                data-lead-group="${row.leadGroup}"
+                                data-support-group="${row.supportGroup}"
+                                data-toggle="modal"
+                                data-target="#addAssignmentModal"
+                                title="Add Assignment"
+                              >
+                                <i class="fas fa-plus"></i>
+                              </button>
+                            `;
+                          }
+                          return (data || []).map(username => `
+                            <div class="d-flex align-items-center mb-1">
+                              <div class="rounded-circle bg-primary text-white d-inline-flex justify-content-center align-items-center"
+                                   style="width:28px;height:28px;font-size:0.75rem;">
+                                ${username[0].toUpperCase()}
+                              </div>
+                              <span class="ml-2">${username}</span>
+                            </div>
+                          `).join('');
+                        }
+                      },
+                      {
+                        data: 'startDate',
+                        render: function(data, type, row) {
+                          if (!data && row.canEdit) {
+                            return `
+                              <button 
+                                class="btn btn-sm btn-outline-primary btn-add-start-date" 
+                                data-id="${row.id}"
+                                data-toggle="modal"
+                                data-target="#addStartDateModal"
+                                title="Add Start date"
+                              >
+                                <i class="fas fa-plus"></i>
+                              </button>
+                            `;
+                          }
+                          return data ? moment(data).format('MM/DD/YYYY') : '';
+                        }
+                      },
+                      {
+                        data: 'dueDate',
+                        render: function(data, type, row) {
+                          if (!data && row.canEdit) {
+                            return `
+                              <button 
+                                class="btn btn-sm btn-outline-primary btn-add-due-date" 
+                                data-id="${row.id}"
+                                data-toggle="modal"
+                                data-target="#addDueDateModal"
+                                title="Add Due date">
+                                <i class="fas fa-plus"></i>
+                              </button>
+                            `;
+                          }
+
+                          const due = moment(data);
+                          const today = moment();
+                          const daysDiff = due.diff(today, 'days', true);
+
+                          let badgeClass = 'badge-secondary';
+                          if (daysDiff <= 0) {
+                            badgeClass = 'badge-danger';
+                          } else if (daysDiff <= 5) {
+                            badgeClass = 'badge-warning';
+                          } else if (daysDiff <= 14) {
+                            badgeClass = 'badge-success';
+                          }
+
+                          return data ? `<span class="badge ${badgeClass}">${due.format('MM/DD/YYYY')}</span>` : '';
+                        }
+                      }
+                    ],
+                    drawCallback: function() {
+                      $('[data-toggle="tooltip"]').tooltip();
+                    }
+                  });
+                });
+              },
+              error: function(xhr, status, error) {
+                console.error('Gagal mengambil data:', error);
+              }
+            });
+
+            // event delegation
+            $('#apTable')
+                .on('click', '.btn-add-assignment', e => {
+                    const btn = e.currentTarget.dataset;
+                    $('#ap-id').val(btn.id);
+                    let actionPlanGroup = '';
+                    if (btn.supportGroup == 'All Group') {
+                        actionPlanGroup = btn.supportGroup;
+                    } else {
+                        actionPlanGroup = btn.leadGroup + ', ' + btn.supportGroup;
+                    }
+
+                    // Mengirim data menggunakan Ajax
+                    $.ajax({
+                        url: 'http://sql-mvt-03/sprm/api/Lookup/GetEmployeeByDivisions',
+                        type: 'GET',
+                        contentType: 'application/json',
+                        headers: { 'Authorization': 'Bearer ' + token },
+                        data: { divisions: actionPlanGroup },
+                        success: function (response) {
+                            // Initials Assignment
+                            $('#select-assignment').empty();
+                            $('#select-assignment').append('<option value="">Select Assignment..</option>');
+
+                            // Feeding Data
+                            $.each(response.data, function (index, item) {
+                                $('#select-assignment').append('<option value="' + item.userMaipark + '"> ' + item.name + '</option>');
+                            });
+
+                            // Inisialisasi select2 Assignment setelah opsi ditambahkan
+                            $('#select-assignment').select2({
+                                theme: "bootstrap",
+                                width: '100%',
+                                placeholder: "Select Assignment...",
+                            });
+                        },
+                        error: function (error) {
+                            console.log(error);
+                        }
+                    });
+                })
+                .on('click', '.btn-add-start-date', e => $('#add-sd-ap-id').val(e.currentTarget.dataset.id))
+                .on('click', '.btn-add-due-date', e => $('#add-dd-ap-id').val(e.currentTarget.dataset.id))
         });
     </script>
 }

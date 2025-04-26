@@ -139,7 +139,24 @@
                                 sessionStorage.setItem('SidebarMenus', JSON.stringify(response.data.sidebarMenus));
                                 sessionStorage.setItem('Username', formData.username);
                                 sessionStorage.setItem('AccessToken', response.data.accessToken);
-                                window.location.href = '@Url.Action("Index", "Dashboard")';
+
+                                $.ajax({
+                                    type: 'GET',
+                                    url: 'http://sql-mvt-03/sprm/api/Lookup/GetEmployeeByUserMaipark',
+                                    xhrFields: {
+                                        withCredentials: true
+                                    },
+                                    headers: { 'Authorization': 'Bearer ' + response.data.accessToken },
+                                    data: { username: formData.username },
+                                    contentType: 'application/json',
+                                    success: function (response) {
+                                        sessionStorage.setItem('employeeData', JSON.stringify(response.data));
+                                        window.location.href = '@Url.Action("Index", "Dashboard")';
+                                    },
+                                    error: function (error) {
+                                        console.error('Get Data Failed', error);
+                                    }
+                                });
                             }
                         },
                         error: function (jqXHR, textStatus, errorThrown) {

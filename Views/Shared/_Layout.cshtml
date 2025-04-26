@@ -287,29 +287,16 @@
 				sidebarList.appendChild(li);
 			});
 
-			var username = sessionStorage.getItem("Username");
-			var token = sessionStorage.getItem("AccessToken");
-			
-			$.ajax({
-				type: 'GET',
-				url: 'http://sql-mvt-03/sprm/api/Lookup/GetEmployeeByUserMaipark',
-				xhrFields: {
-					withCredentials: true
-				},
-				headers: { 'Authorization': 'Bearer ' + token },
-				data: { username: username },
-				contentType: 'application/json',
-				success: function (response) {
-					$('#name-display').text(response.data.name);
-					$('#name-display-dropdown').text(response.data.name);
-					$('#role-display-dropdown').text(response.data.jobPosition);
-					$('#profile-pict').attr('src', response.data.image);
-					$('#profile-pict-dropdown').attr('src', response.data.image);
-				},
-				error: function (error) {
-					console.error('Get Data Failed', error);
-				}
-			});
+			var employeeData =sessionStorage.getItem("employeeData");
+
+			if (employeeData) {
+				var employeeDataObj = JSON.parse(employeeData);
+				$('#name-display').text(employeeDataObj.name);
+				$('#name-display-dropdown').text(employeeDataObj.name);
+				$('#role-display-dropdown').text(employeeDataObj.jobPosition);
+				$('#profile-pict').attr('src', employeeDataObj.image);
+				$('#profile-pict-dropdown').attr('src', employeeDataObj.image);
+			}
 		});
 	</script>
 	<!--End Sidebar-->
