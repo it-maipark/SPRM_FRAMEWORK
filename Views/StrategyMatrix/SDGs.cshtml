@@ -67,6 +67,7 @@
                             <th>Action Plan</th>
                             <th>KPI</th>
                             <th>Output</th>
+                            <th>Timeline</th>
                             <th>Lead Group</th>
                             <th>Support Group</th>
                             <th>Expense</th>
@@ -75,8 +76,8 @@
                     <tbody></tbody>
                     <tfoot>
                         <tr>
-                            <td colspan="7" class="text-center">
-                                <a id="btnAddTools" class="btn btn-sm btn-success text-white" data-toggle="modal" data-target="#addStrategyModal">+ Add Strategy</a>
+                            <td colspan="8" class="text-center">
+                                <a class="btn btn-sm btn-success text-white btn-add-str" data-toggle="modal" data-target="#addStrategyModal">+ Add Strategy</a>
                             </td>
                         </tr>
                     </tfoot>
@@ -134,7 +135,7 @@
                         <label for="codification" class="col-4 mt-sm-2 text-left">Codification <span class="required-label">*</span></label>
                         <div class="col-8">
                             <div class="input-group mb-2">
-                                <input type="text" class="form-control" id="codification" name="codification" placeholder="Input codification here..." required>
+                                <input type="text" class="form-control" id="codification" name="codification" readonly>
                             </div>
                         </div>
                     </div>
@@ -252,6 +253,14 @@
                         </div>
                     </div>
                     <div class="form-group form-show-validation row">
+                        <label for="ap-codification" class="col-4 mt-sm-2 text-left">Codification <span class="required-label">*</span></label>
+                        <div class="col-8">
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" id="ap-codification" name="ap-codification" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group form-show-validation row">
                         <label for="select-lead-group" class="col-4 mt-sm-2 text-left">Lead Group <span class="required-label">*</span></label>
                         <div class="col-8">
                             <div class="select2-input">
@@ -266,6 +275,32 @@
                             <div class="select2-input">
                                 <select id="select-support-group" name="select-support-group[]" class="form-control" multiple="multiple">
                                 </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group form-show-validation row">
+                        <label for="start-date" class="col-4 mt-sm-2 text-left">Start Date <span class="required-label">*</span></label>
+                        <div class="col-8">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="start-date" name="start-date" placeholder="Select date here..." required>
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="fa fa-calendar-o"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group form-show-validation row">
+                        <label for="due-date" class="col-4 mt-sm-2 text-left">Due Date <span class="required-label">*</span></label>
+                        <div class="col-8">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="due-date" name="due-date" placeholder="Select date here..." required>
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="fa fa-calendar-o"></i>
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -398,7 +433,7 @@
                         <label for="edit-codification" class="col-4 mt-sm-2 text-left">Codification <span class="required-label">*</span></label>
                         <div class="col-8">
                             <div class="input-group mb-2">
-                                <input type="text" class="form-control" id="edit-codification" name="edit-codification" required>
+                                <input type="text" class="form-control" id="edit-codification" name="edit-codification" readonly>
                             </div>
                         </div>
                     </div>
@@ -516,6 +551,14 @@
                         </div>
                     </div>
                     <div class="form-group form-show-validation row">
+                        <label for="edit-ap-codification" class="col-4 mt-sm-2 text-left">Codification <span class="required-label">*</span></label>
+                        <div class="col-8">
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" id="edit-ap-codification" name="edit-ap-codification" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group form-show-validation row">
                         <label for="edit-select-lead-group" class="col-4 mt-sm-2 text-left">Lead Group <span class="required-label">*</span></label>
                         <div class="col-8">
                             <div class="select2-input">
@@ -530,6 +573,32 @@
                             <div class="select2-input">
                                 <select id="edit-select-support-group" name="edit-select-support-group[]" class="form-control" multiple="multiple">
                                 </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group form-show-validation row">
+                        <label for="edit-start-date" class="col-4 mt-sm-2 text-left">Start Date <span class="required-label">*</span></label>
+                        <div class="col-8">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="edit-start-date" name="edit-start-date" placeholder="Select date here..." required>
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="fa fa-calendar-o"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group form-show-validation row">
+                        <label for="edit-due-date" class="col-4 mt-sm-2 text-left">Due Date <span class="required-label">*</span></label>
+                        <div class="col-8">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="edit-due-date" name="edit-due-date" placeholder="Select date here..." required>
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="fa fa-calendar-o"></i>
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -622,6 +691,12 @@
         $(document).ready(function () {
             $('#navLink-2').addClass('nav-item active');
 
+            // Inisialisasi datetimepicker
+            $('#start-date, #due-date, #edit-start-date, #edit-due-date').datetimepicker({
+                format: 'MM/YYYY',
+                viewMode: 'months'
+            });
+
             // Hide button add strategy
             if (userRole) {
                 var roleObj = JSON.parse(userRole);
@@ -691,6 +766,13 @@
             });
 
             /* validate */
+            // Custom method
+            $.validator.addMethod("dueAfterStart", function(value, element, params) {
+                var start = moment($(params).val(), 'MM/YYYY');
+                var due = moment(value, 'MM/YYYY');
+                return this.optional(element) || due.isSameOrAfter(start);
+            }, "Due date must be the same or after start date.");
+
             // handle validation add strategy
             $("#addStrategyValidation").validate({
                 validClass: "success",
@@ -853,6 +935,13 @@
                     "select-support-group[]": {
                         required: true
                     },
+                    "start-date": {
+                        required: true
+                    },
+                    "due-date": {
+                        required: true,
+                        dueAfterStart: "#start-date"
+                    }
                 },
                 messages: {
                     "title": {
@@ -864,6 +953,13 @@
                     "select-support-group[]": {
                         required: "Please Select Support Group.",
                     },
+                    "start-date": {
+                        required: "Please Select Start Date",
+                    },
+                    "due-date": {
+                        required: "Please Select Due Date",
+                        dueAfterStart: "Due date must be the same or after start date."
+                    }
                 },
                 submitHandler: function (form) {
                     var formData = new FormData(form);
@@ -876,6 +972,9 @@
                       leadGroup: rawData['select-lead-group'],
                       supportGroup: supportGroupValues.join(", "),
                       strategyId: rawData['strategy-id'],
+                      codification: rawData['ap-codification'],
+                      strategicPilar: "SDGs",
+                      timeline: `${rawData['start-date']} - ${rawData['due-date']}`,
                       createdBy: userMaipark
                     };
 
@@ -1199,6 +1298,13 @@
                     "edit-select-support-group[]": {
                         required: true
                     },
+                    "edit-start-date": {
+                        required: true
+                    },
+                    "edit-due-date": {
+                        required: true,
+                        dueAfterStart: "#edit-start-date"
+                    }
                 },
                 messages: {
                     "edit-ap-title": {
@@ -1210,6 +1316,13 @@
                     "edit-select-support-group[]": {
                         required: "Please Select Support Group.",
                     },
+                    "edit-start-date": {
+                        required: "Please Select Start Date",
+                    },
+                    "edit-due-date": {
+                        required: "Please Select Due Date",
+                        dueAfterStart: "Due date must be the same or after start date."
+                    }
                 },
                 submitHandler: function (form) {
                     var formData = new FormData(form);
@@ -1222,7 +1335,8 @@
                       title: rawData['edit-ap-title'],
                       leadGroup: rawData['edit-select-lead-group'],
                       supportGroup: supportGroupValues.join(", "),
-                      lastUpdatedBy: userMaipark
+                      lastUpdatedBy: userMaipark,
+                      timeline: `${rawData['edit-start-date']} - ${rawData['edit-due-date']}`
                     };
 
                     // Mengirim data menggunakan Ajax
@@ -1423,7 +1537,9 @@
                         ? ap.kpIs.reduce((s, kpi) => s + Math.max(kpi.outputs.length, 1), 0)
                         : 1;
 
-                      let apRendered = false;  // <<< flag untuk AP
+                      let apRendered = false;
+                      let divisionRendered = false;
+                      let timelineRendered = false;
 
                       if (ap.kpIs.length) {
                         ap.kpIs.forEach(kpi => {
@@ -1507,6 +1623,8 @@
                                                     data-ap-title="${ap.title}"
                                                     data-select-lead-group="${ap.leadGroup}"
                                                     data-select-support-group="${ap.supportGroup}"
+                                                    data-timeline="${ap.timeline}"
+                                                    data-codification="${ap.codification}"
                                                     data-toggle="modal"
                                                     data-target="#editActionPlanModal"
                                                     data-placement="top"
@@ -1615,9 +1733,18 @@
                                 </td>
                               `);
 
+                              // Timeline
+                              if (!timelineRendered) {
+                                $tr.append(`<td rowspan="${apRows}"><span class="badge badge-primary">${ap.timeline || ''}</span></td>`)
+                                timelineRendered = true;
+                              }
+
                               // Lead / Support / Expense
-                              $tr.append(`<td>${ap.leadGroup || ''}</td>`);
-                              $tr.append(`<td>${ap.supportGroup || ''}</td>`);
+                              if (!divisionRendered) {
+                                $tr.append(`<td rowspan="${apRows}">${ap.leadGroup || ''}</td>`);
+                                $tr.append(`<td rowspan="${apRows}">${ap.supportGroup || ''}</td>`);
+                                divisionRendered = true;
+                              }
                               if (!expenseRendered) {
                                   $tr.append(`
                                     <td rowspan="${kpiRows}">
@@ -1704,6 +1831,8 @@
                                                     data-ap-title="${ap.title}"
                                                     data-select-lead-group="${ap.leadGroup}"
                                                     data-select-support-group="${ap.supportGroup}"
+                                                    data-timeline="${ap.timeline}"
+                                                    data-codification="${ap.codification}"
                                                     data-toggle="modal"
                                                     data-target="#editActionPlanModal"
                                                     data-placement="top"
@@ -1783,16 +1912,26 @@
                                   : '<td></td>'
                               }
                             `);
-                            $tr.append(`<td>${ap.leadGroup || ''}</td>`);
-                            $tr.append(`<td>${ap.supportGroup || ''}</td>`);
+
+                            // Timeline
+                            if (!timelineRendered) {
+                                $tr.append(`<td rowspan="${apRows}"><span class="badge badge-primary">${ap.timeline || ''}</span></td>`)
+                                timelineRendered = true;
+                            }
+
+                            if (!divisionRendered) {
+                              $tr.append(`<td rowspan="${apRows}">${ap.leadGroup || ''}</td>`);
+                              $tr.append(`<td rowspan="${apRows}">${ap.supportGroup || ''}</td>`);
+                              divisionRendered = true;
+                            }
                             $tr.append(`<td>${kpi.expense
                               ? kpi.expense.toLocaleString('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 4, maximumFractionDigits: 4 })
-                              : ''}</td>`);
+                              : ''
+                            }</td>`);
 
                             $tbody.append($tr);
                           }
                         });
-
                       } else {
                         // AP ada tapi no KPI
                         const $tr = $('<tr>');
@@ -1864,6 +2003,8 @@
                                                     data-ap-title="${ap.title}"
                                                     data-select-lead-group="${ap.leadGroup}"
                                                     data-select-support-group="${ap.supportGroup}"
+                                                    data-timeline="${ap.timeline}"
+                                                    data-codification="${ap.codification}"
                                                     data-toggle="modal"
                                                     data-target="#editActionPlanModal"
                                                     data-placement="top"
@@ -1903,8 +2044,16 @@
                           }
                         `);
                         $tr.append('<td></td>');
-                        $tr.append(`<td>${ap.leadGroup || ''}</td>`);
-                        $tr.append(`<td>${ap.supportGroup || ''}</td>`);
+                        // Timeline
+                        if (!timelineRendered) {
+                            $tr.append(`<td rowspan="${apRows}"><span class="badge badge-primary">${ap.timeline || ''}</span></td>`)
+                            timelineRendered = true;
+                        }
+                        if (!divisionRendered) {
+                            $tr.append(`<td rowspan="${apRows}">${ap.leadGroup || ''}</td>`);
+                            $tr.append(`<td rowspan="${apRows}">${ap.supportGroup || ''}</td>`);
+                            divisionRendered = true;
+                        }
                         $tr.append('<td></td>');
 
                         $tbody.append($tr);
@@ -1973,18 +2122,35 @@
                           : '<td></td>'
                       }
                     `);
-                    $tr.append('<td></td><td></td><td></td><td></td><td></td>');
+                    $tr.append('<td></td><td></td><td></td><td></td><td></td><td></td>');
                     $tbody.append($tr);
                   }
                 });
               },
               error() {
-                $tbody.html('<tr><td colspan="7" class="text-danger text-center">Error loading data</td></tr>');
+                $tbody.html('<tr><td colspan="8" class="text-danger text-center">Error loading data</td></tr>');
               }
             });
           }
 
           // event delegation untuk tombol edit/add/delete
+          $('#strategyTable tfoot')
+            .on('click', '.btn-add-str', e => {
+                $.ajax({
+                    url: 'http://sql-mvt-03/sprm/api/Lookup/GetCodification',
+                    type: 'GET',
+                    data: { type: 'STR', pilar: 'SDGS' },
+                    headers: { 'Authorization': 'Bearer ' + token },
+                    success: function (response) {
+                        $('#codification').val(response.data.no);
+                    },
+                    error: function (error) {
+                        // Tampilkan sweet alert jika terjadi kesalahan
+                        console.error('Failed to load the codification no', error);
+                    }
+                });
+            });
+
           $tbody
             .on('click', '.btn-edit-str', e => {
                 const btn = e.currentTarget.dataset;
@@ -2049,11 +2215,31 @@
                     }
                 });
             })
-            .on('click', '.btn-add-ap', e => $('#strategy-id').val(e.currentTarget.dataset.strid))
+            .on('click', '.btn-add-ap', e => {
+                $('#strategy-id').val(e.currentTarget.dataset.strid)
+                $.ajax({
+                    url: 'http://sql-mvt-03/sprm/api/Lookup/GetCodification',
+                    type: 'GET',
+                    data: { type: 'APN', pilar: 'SDGS' },
+                    headers: { 'Authorization': 'Bearer ' + token },
+                    success: function (response) {
+                        $('#ap-codification').val(response.data.no);
+                    },
+                    error: function (error) {
+                        // Tampilkan sweet alert jika terjadi kesalahan
+                        console.error('Failed to load the codification no', error);
+                    }
+                });
+            })
             .on('click', '.btn-edit-ap', e => {
                 const btn = e.currentTarget.dataset;
                 $('#edit-ap-id').val(btn.id);
                 $('#edit-ap-title').val(btn.apTitle);
+                $('#edit-ap-codification').val(btn.codification);
+
+                const [start, due] = btn.timeline.split(' - ');
+                $('#edit-start-date').datetimepicker('date', moment(start, 'MM/YYYY'));
+                $('#edit-due-date').datetimepicker('date', moment(due, 'MM/YYYY'));
 
                 // Lead Group
                 $('#edit-select-lead-group').val(btn.selectLeadGroup).trigger('change');
