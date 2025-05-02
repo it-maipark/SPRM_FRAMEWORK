@@ -32,6 +32,35 @@
     .btn-mark-as-complete.selected .check-icon {
       opacity: 1;
     }
+
+    .ap-cell {
+        position: relative;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .action-buttons {
+        display: none;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        gap: 8px;
+        z-index: 10;
+        background-color: rgba(255, 255, 255, 0.85);
+        padding: 6px 8px;
+        border-radius: 8px;
+        box-shadow: 0 0 8px rgba(0,0,0,0.1);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+    }
+
+    .ap-cell:hover .action-buttons {
+        display: flex;
+        opacity: 1;
+        pointer-events: auto;
+    }
 </style>
 
 <div class="page-inner">
@@ -60,17 +89,40 @@
     <!-- Inner Page -->
     <div class="card">
         <div class="card-body">
-            <table id="apTable" class="table table-bordered table-hover">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Title</th>
-                        <th>Assignment</th>
-                        <th>Start date</th>
-                        <th>Due date</th>
-                    </tr>
-                </thead>
-            </table>
+            <ul class="nav nav-pills nav-primary nav-pills-no-bd nav-pills-icons" id="pills-tab-with-icon" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="pills-active-tab-icon" data-toggle="pill" href="#pills-active-icon" role="tab" aria-controls="pills-active-icon" aria-selected="true">
+                        Active
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="pills-complete-tab-icon" data-toggle="pill" href="#pills-complete-icon" role="tab" aria-controls="pills-complete-icon" aria-selected="false">
+                        Complete
+                    </a>
+                </li>
+            </ul>
+            <div class="tab-content mt-2 mb-3" id="pills-with-icon-tabContent">
+                <div class="tab-pane fade show active" id="pills-active-icon" role="tabpanel" aria-labelledby="pills-active-tab-icon">
+                    <table id="apTable" class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Title</th>
+                                <th>Codification</th>
+                                <th>Assignment</th>
+                                <th>Start date</th>
+                                <th>Due date</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <div class="tab-pane fade" id="pills-complete-icon" role="tabpanel" aria-labelledby="pills-complete-tab-icon">
+                    <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</p>
+                    <p>
+                        The Big Oxmox advised her not to do so, because there were thousands of bad Commas, wild Question Marks and devious Semikoli, but the Little Blind Text didn’t listen. She packed her seven versalia, put her initial into the belt and made herself on the way.
+                    </p>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -169,6 +221,38 @@
                                         <i class="fa fa-calendar-o"></i>
                                     </span>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Assignment Modal -->
+<div class="modal fade" id="editAssignmentModal" aria-labelledby="editAssignmentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+            <form id="editAssignmentValidation" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <h2 class="modal-title font-weight-bold" id="editAssignmentModalLabel">Assignment</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="number" class="form-control" id="edit-ap-id" name="edit-ap-id" placeholder="Input ap-id here..." hidden>
+                    <div class="form-group form-show-validation row">
+                        <label for="edit-select-assignment" class="col-4 mt-sm-2 text-left">Assignment <span class="required-label">*</span></label>
+                        <div class="col-8">
+                            <div class="select2-input">
+                                <select id="edit-select-assignment" name="edit-select-assignment[]" class="form-control" multiple="multiple">
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -451,20 +535,24 @@
                         defaultContent: '',
                         className: 'text-center',
                         render: function (data, type, row) {
-                          return `
-                            <div
-                              class="btn-mark-as-complete"
-                              data-id="${row.id}"
-                              data-title="${row.title}"
-                              data-toggle="tooltip"
-                              title="Mark Complete"
-                            >
-                              <i class="fas fa-check check-icon"></i>
-                            </div>
-                          `;
+                          if (row.canEdit) {
+                            return `
+                              <div
+                                class="btn-mark-as-complete"
+                                data-id="${row.id}"
+                                data-title="${row.title}"
+                                data-toggle="tooltip"
+                                title="Mark Complete"
+                              >
+                                <i class="fas fa-check check-icon"></i>
+                              </div>
+                            `;
+                          }
+                          return '';
                         }
                       },
                       { data: 'title' },
+                      { data: 'codification' },
                       {
                         data: 'assignment',
                         render: function(data, type, row) {
@@ -493,7 +581,34 @@
                               </div>
                               <span class="ml-2">${username}</span>
                             </div>
-                          `).join('');
+                          `).join(`${
+                            (row.canEdit)
+                                ? `
+                                    <div class="action-buttons">
+                                      <button
+                                        class="btn btn-sm btn-outline-primary btn-edit-assignment"
+                                        data-toggle="modal"
+                                        data-id="${row.id}"
+                                        data-target="#editAssignmentModal"
+                                        data-placement="top"
+                                        title="Edit Assignment"
+                                      >
+                                        <i class="fa fa-edit"></i>
+                                      </button>
+                                      <button
+                                        class="btn btn-sm btn-outline-danger btn-delete-assignment"
+                                        data-placement="top"
+                                        title="Delete Assignment"
+                                      >
+                                        <i class="fa fa-trash"></i>
+                                      </button>
+                                    </div>
+                                  `
+                                : ''
+                          }`);
+                        },
+                        createdCell: function(td, cellData, rowData, row, col) {
+                          $(td).addClass('ap-cell');
                         }
                       },
                       {
@@ -513,7 +628,37 @@
                               </button>
                             `;
                           }
+                          if (data && row.canEdit) {
+                              return data 
+                                        ?
+                                          `
+                                            ${moment(data).format('DD/MM/YYYY')}
+                                            <div class="action-buttons">
+                                              <button
+                                                class="btn btn-sm btn-outline-primary btn-edit-start-date"
+                                                data-toggle="modal"
+                                                data-id="${row.id}"
+                                                data-target="#editStartDateModal"
+                                                data-placement="top"
+                                                title="Edit StartDate"
+                                              >
+                                                <i class="fa fa-edit"></i>
+                                              </button>
+                                              <button
+                                                class="btn btn-sm btn-outline-danger btn-delete-start-date"
+                                                data-placement="top"
+                                                title="Delete StartDate"
+                                              >
+                                                <i class="fa fa-trash"></i>
+                                              </button>
+                                            </div>
+                                          `
+                                        : '';
+                          }
                           return data ? moment(data).format('DD/MM/YYYY') : '';
+                        },
+                        createdCell: function(td, cellData, rowData, row, col) {
+                          $(td).addClass('ap-cell');
                         }
                       },
                       {
@@ -547,7 +692,36 @@
                             badgeClass = 'badge-success';
                           }
 
-                          return data ? `<span class="badge ${badgeClass}">${due.format('DD/MM/YYYY')}</span>` : '';
+                          if (data && row.canEdit) {
+                            return data 
+                                      ? `
+                                          <span class="badge ${badgeClass}">${due.format('DD/MM/YYYY')}</span>
+                                          <div class="action-buttons">
+                                            <button
+                                              class="btn btn-sm btn-outline-primary btn-edit-due-date"
+                                              data-toggle="modal"
+                                              data-id="${row.id}"
+                                              data-target="#editDueDateModal"
+                                              data-placement="top"
+                                              title="Edit DueDate"
+                                            >
+                                              <i class="fa fa-edit"></i>
+                                            </button>
+                                            <button
+                                              class="btn btn-sm btn-outline-danger btn-delete-due-date"
+                                              data-placement="top"
+                                              title="Delete DueDate"
+                                            >
+                                              <i class="fa fa-trash"></i>
+                                            </button>
+                                          </div>
+                                        ` 
+                                      : '';
+                          }
+                          return data ? `<span class="badge ${badgeClass}">${due.format('DD/MM/YYYY')}</span>` : ''
+                        },
+                        createdCell: function(td, cellData, rowData, row, col) {
+                          $(td).addClass('ap-cell');
                         }
                       }
                     ],
@@ -659,6 +833,10 @@
                             });
                         }
                     });
+                })
+                .on('click', '.btn-edit-assignment', e => {
+                    const btn = e.currentTarget.dataset;
+                    $('#edit-ap-id').val(btn.id);
                 })
         });
     </script>
