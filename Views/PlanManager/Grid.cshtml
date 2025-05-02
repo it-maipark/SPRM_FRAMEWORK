@@ -119,7 +119,8 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <input type="number" class="form-control" id="add-sd-ap-id" name="add-sd-ap-id" placeholder="Input ap-id here..." hidden>
+                    <input type="number" class="form-control" id="add-sd-ap-id" name="add-sd-ap-id" hidden />
+                    <input type="text" class="form-control" id="add-sd-ap-timeline" name="add-sd-ap-timeline" hidden />
                     <div class="form-group form-show-validation row">
                         <label for="start-date" class="col-4 mt-sm-2 text-left">Start Date <span class="required-label">*</span></label>
                         <div class="col-8">
@@ -155,7 +156,9 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <input type="number" class="form-control" id="add-dd-ap-id" name="add-dd-ap-id" placeholder="Input ap-id here..." hidden>
+                    <input type="number" class="form-control" id="add-dd-ap-id" name="add-dd-ap-id" hidden />
+                    <input type="text" class="form-control" id="add-dd-ap-timeline" name="add-dd-ap-timeline" hidden />
+                    <input type="text" class="form-control" id="add-dd-ap-start-date" name="add-dd-ap-start-date" hidden />
                     <div class="form-group form-show-validation row">
                         <label for="due-date" class="col-4 mt-sm-2 text-left">Due Date <span class="required-label">*</span></label>
                         <div class="col-8">
@@ -199,12 +202,49 @@
             $('#navLink-3').addClass('nav-item active');
 
             // Inisialisasi datetimepicker
-            $('#start-date').datetimepicker({
+            $('#start-date, #due-date').datetimepicker({
                 format: 'DD/MM/YYYY'
             });
+            
+            // rule validation
+            // start date rule
+            $.validator.addMethod("dateWithinTimeline", function(value, element, params) {
+                const timeline = $(params).val(); // format: "MM/YYYY - MM/YYYY"
+                const [startStr, endStr] = timeline.split(" - ");
 
-            $('#due-date').datetimepicker({
-                format: 'DD/MM/YYYY'
+                const inputDate = moment(value, 'DD/MM/YYYY');
+                const timelineStart = moment("01/" + startStr, 'DD/MM/YYYY');
+                const timelineEnd = moment("01/" + endStr, 'DD/MM/YYYY').endOf('month');
+
+                const isValid = inputDate.isBetween(timelineStart, timelineEnd, undefined, '[]');
+
+                if (!isValid) {
+                    const errorMsg = `Date must be within the timeline range, Timeline: ${timeline}`;
+                    element.setAttribute("data-error-msg", errorMsg);
+                }
+
+                return isValid;
+            }, function (_, element) {
+                return $(element).data("error-msg") || "Date must be within the timeline range.";
+            });
+
+            // due date rule
+            $.validator.addMethod("validDueDate", function (value, element, param) {
+                const start = moment($(param).val(), "DD/MM/YYYY"); // param langsung adalah selector
+                const due = moment(value, "DD/MM/YYYY");
+
+                if (!start.isValid() || !due.isValid()) return false;
+
+                const isValid = due.isSameOrAfter(start);
+
+                if (!isValid) {
+                    const errorMsg = `Due date must be the same or after start date. Start Date: ${start.format("DD/MM/YYYY")}`;
+                    element.setAttribute("data-error-msg", errorMsg);
+                }
+
+                return isValid;
+            }, function (_, element) {
+                return $(element).data("error-msg") || "Due date must be the same or after start date.";
             });
 
             // handle validation add assignment
@@ -269,6 +309,7 @@
                 rules: {
                     "start-date": {
                         required: true,
+                        dateWithinTimeline: "#add-sd-ap-timeline",
                     },
                 },
                 messages: {
@@ -283,7 +324,7 @@
                     // Mapping ke camelCase
                     var jsonData = {
                       id: rawData['add-sd-ap-id'],
-                      startDate: moment(rawData['start-date'], 'DD/MM/YYYY').toISOString(),
+                      startDate: moment.utc(rawData['start-date'], 'DD/MM/YYYY').toISOString(),
                       lastUpdatedBy: userMaipark
                     };
 
@@ -326,6 +367,8 @@
                 rules: {
                     "due-date": {
                         required: true,
+                        dateWithinTimeline: "#add-dd-ap-timeline",
+                        validDueDate: "#add-dd-ap-start-date",
                     },
                 },
                 messages: {
@@ -340,7 +383,7 @@
                     // Mapping ke camelCase
                     var jsonData = {
                       id: rawData['add-dd-ap-id'],
-                      dueDate: moment(rawData['due-date'], 'DD/MM/YYYY').toISOString(),
+                      dueDate: moment.utc(rawData['due-date'], 'DD/MM/YYYY').toISOString(),
                       lastUpdatedBy: userMaipark
                     };
 
@@ -390,7 +433,7 @@
                     data: { username: item.createdBy },
                     headers: { 'Authorization': 'Bearer ' + token }
                   }).then(res => {
-                    return { ...item, canEdit: ((res.data.divId === employeeDataObj.divId && roleName == 'Dept Head') || roleName == 'Administrator') };
+                    return { ...item, canEdit: ((res.data.divId === employeeDataObj.divId && roleName == 'Dept Head') || (res.data.divId === employeeDataObj.divId && roleName == "Group Head") || roleName == 'Administrator') };
                   }).catch(() => {
                     return { ...item, canEdit: false };
                   });
@@ -461,6 +504,7 @@
                               <button 
                                 class="btn btn-sm btn-outline-primary btn-add-start-date" 
                                 data-id="${row.id}"
+                                data-timeline="${row.timeline}"
                                 data-toggle="modal"
                                 data-target="#addStartDateModal"
                                 title="Add Start date"
@@ -469,17 +513,19 @@
                               </button>
                             `;
                           }
-                          return data ? moment(data).format('MM/DD/YYYY') : '';
+                          return data ? moment(data).format('DD/MM/YYYY') : '';
                         }
                       },
                       {
                         data: 'dueDate',
                         render: function(data, type, row) {
-                          if (!data && row.canEdit) {
+                          if (!data && row.canEdit && row.startDate) {
                             return `
                               <button 
                                 class="btn btn-sm btn-outline-primary btn-add-due-date" 
                                 data-id="${row.id}"
+                                data-start-date="${row.startDate}"
+                                data-timeline="${row.timeline}"
                                 data-toggle="modal"
                                 data-target="#addDueDateModal"
                                 title="Add Due date">
@@ -501,7 +547,7 @@
                             badgeClass = 'badge-success';
                           }
 
-                          return data ? `<span class="badge ${badgeClass}">${due.format('MM/DD/YYYY')}</span>` : '';
+                          return data ? `<span class="badge ${badgeClass}">${due.format('DD/MM/YYYY')}</span>` : '';
                         }
                       }
                     ],
@@ -557,8 +603,18 @@
                         }
                     });
                 })
-                .on('click', '.btn-add-start-date', e => $('#add-sd-ap-id').val(e.currentTarget.dataset.id))
-                .on('click', '.btn-add-due-date', e => $('#add-dd-ap-id').val(e.currentTarget.dataset.id))
+                .on('click', '.btn-add-start-date', e => {
+                    const btn = e.currentTarget.dataset;
+                    $('#add-sd-ap-id').val(btn.id);
+                    $('#add-sd-ap-timeline').val(btn.timeline);
+                })
+                .on('click', '.btn-add-due-date', e => {
+                    const btn = e.currentTarget.dataset;
+                    const startDate = moment(btn.startDate).format("DD/MM/YYYY")
+                    $('#add-dd-ap-id').val(btn.id);
+                    $('#add-dd-ap-timeline').val(btn.timeline);
+                    $('#add-dd-ap-start-date').val(startDate)
+                })
                 .on('click', '.btn-mark-as-complete', e => {
                     $(this).toggleClass('selected');
                     const btn = e.currentTarget.dataset;
