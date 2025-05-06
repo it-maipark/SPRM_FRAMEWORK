@@ -1,34 +1,43 @@
 ﻿@{
     ViewBag.Title = "Dashboard";
 }
+<div class="page-navs py-3 align-items-center d-md-flex d-md-block bg-white">
+    <div class="col-12 col-md-6 font-weight-bold" style="font-size: 24px;">
+        @ViewBag.Title
+    </div>
+    <div class="col-12 col-md-6 text-md-right">
+        <h4 id="dateToday">@DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss")</h4>
+        <a class="icon-refresh" style="font-size: 18px; cursor: pointer" id="updateData"></a>
+        <a id="time" style="font-size: 18px;">60</a>
+    </div>
+</div>
 
 <div class="page-inner">
-    <div class="page-header">
-        <h4 class="page-title">Dashboard</h4>
-        <ul class="breadcrumbs">
-            <li class="nav-home">
-                <a href="#">
-                    <i class="flaticon-home"></i>
-                </a>
-            </li>
-            <li class="separator">
-                <i class="flaticon-right-arrow"></i>
-            </li>
-            <li class="nav-item">
-                <a href="#">Dashboard</a>
-            </li>
-            <li class="separator">
-                <i class="flaticon-right-arrow"></i>
-            </li>
-            <li class="nav-item">
-                <a href="#">Index</a>
-            </li>
-        </ul>
-    </div>
     <!-- Inner Page -->
-    <div class="card">
-        <div class="card-body">
-            Welcome
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Multiple Bar Chart</div>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <canvas id="multipleBarChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Pie Chart</div>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <canvas id="pieChart" style="width: 50%; height: 50%"></canvas>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -37,6 +46,120 @@
     <script>
         $(document).ready(function () {
             $('#navLink-Index-Dashboard').addClass('nav-item active');
+
+            var multipleBarChart = document.getElementById('multipleBarChart').getContext('2d'),
+                pieChart = document.getElementById('pieChart').getContext('2d');
+
+            var myMultipleBarChart = new Chart(multipleBarChart, {
+                type: 'bar',
+                data: {
+                    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                    datasets : [{
+                        label: "First time visitors",
+                        backgroundColor: '#59d05d',
+                        borderColor: '#59d05d',
+                        data: [95, 100, 112, 101, 144, 159, 178, 156, 188, 190, 210, 245],
+                    },{
+                        label: "Visitors",
+                        backgroundColor: '#fdaf4b',
+                        borderColor: '#fdaf4b',
+                        data: [145, 256, 244, 233, 210, 279, 287, 253, 287, 299, 312,356],
+                    }, {
+                        label: "Pageview",
+                        backgroundColor: '#177dff',
+                        borderColor: '#177dff',
+                        data: [185, 279, 273, 287, 234, 312, 322, 286, 301, 320, 346, 399],
+                    }],
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    legend: {
+                        position : 'bottom'
+                    },
+                    title: {
+                        display: true,
+                        text: 'Traffic Stats'
+                    },
+                    tooltips: {
+                        mode: 'index',
+                        intersect: false
+                    },
+                    responsive: true,
+                    scales: {
+                        xAxes: [{
+                            stacked: true,
+                        }],
+                        yAxes: [{
+                            stacked: true
+                        }]
+                    }
+                }
+            });
+
+            var myPieChart = new Chart(pieChart, {
+                type: 'pie',
+                data: {
+                    datasets: [{
+                        data: [50, 35, 15],
+                        backgroundColor :["#1d7af3","#f3545d","#fdaf4b"],
+                        borderWidth: 0
+                    }],
+                    labels: ['New Visitors', 'Subscribers', 'Active Users']
+                },
+                options : {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    legend: {
+                        position : 'bottom',
+                        labels : {
+                            fontColor: 'rgb(154, 154, 154)',
+                            fontSize: 11,
+                            usePointStyle : true,
+                            padding: 20
+                        }
+                    },
+                    pieceLabel: {
+                        render: 'percentage',
+                        fontColor: 'white',
+                        fontSize: 14,
+                    },
+                    tooltips: false,
+                    layout: {
+                        padding: {
+                            left: 20,
+                            right: 20,
+                            top: 20,
+                            bottom: 20
+                        }
+                    }
+                }
+            })
+
+            // Update Data Every 1 Minutes
+            updateTime('#time');
+
+            // Refresh data when the refresh button is clicked
+            $("#updateData").click(function () {
+                $('#time').text(60);
+                // Fill the function below to refresh
+                $('#dateToday').text(moment().format('DD/MM/YYYY HH:mm:ss'));
+            })
+
+            // Refresh data every 1 Minute
+            function updateTime(time) {
+                let new_time = parseInt($(time).text());
+                if (new_time <= 0) {
+                    $(time).text(60)
+                    // Fill the function below to refresh
+                    $('#dateToday').text(moment().format('DD/MM/YYYY HH:mm:ss'));
+                    setTimeout(function () { updateTime(time) }, 1000)
+                } else {
+                    new_time--;
+                    $(time).text(new_time);
+                    setTimeout(function () { updateTime(time) }, 1000)
+                }
+            }
         });
     </script>
 }
