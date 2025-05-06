@@ -1,13 +1,22 @@
 ﻿@{
     ViewBag.Title = "Calendar";
 }
+
 <style>
-	.swal2-popup.swal2-rounded {
-		border-radius: 1rem;
+	.status-circle {
+		display: inline-block;
+		width: 10px;
+		height: 10px;
+		border-radius: 50%;
+		margin-right: 5px;
 	}
 
-	.swal2-popup.swal2-shadow {
-		box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+	.status-active {
+		background-color: #31CE36;
+	}
+
+	.status-complete {
+		background-color: #1572E8;
 	}
 </style>
 
@@ -37,29 +46,34 @@
     <!-- Inner Page -->
     <div class="card">
         <div class="card-header">
-            <div class="card-title">Full Calendar</div>
-            <div class="card-category">Handcrafted by our friends from <a href="https://fullcalendar.io/">FullCalendar.io</a>. Please checkout their <a href="https://fullcalendar.io/docs/">full documentation</a>.</div>
+            <div class="card-title">Action Plan Calendar</div>
+            <div class="card-category">
+				<div class="d-flex align-content-center align-items-center mt-3">
+					<span class="status-circle status-active"></span> Active
+					<span class="status-circle status-complete ml-3"></span> Complete
+				</div>
+			</div>
         </div>
         <div class="card-body">
-            <div id="calendar">
-            </div>
+            <div id="calendar"></div>
         </div>
     </div>
 </div>
 
 @section Scripts {
     <script>
+		var token = sessionStorage.getItem("AccessToken");
+		var userMaipark = sessionStorage.getItem("Username");
+
         $(document).ready(function () {
             $('#navLink-3').addClass('nav-item active');
 
+			$(function () {
+				$('[data-toggle="tooltip"]').tooltip();
+			});
+
             /* initialize the calendar
             -----------------------------------------------------------------*/
-			var date = new Date();
-			var d = date.getDate();
-			var m = date.getMonth();
-			var y = date.getFullYear();
-			var className = Array('fc-primary', 'fc-danger', 'fc-black', 'fc-success', 'fc-info', 'fc-warning', 'fc-danger-solid', 'fc-warning-solid', 'fc-success-solid', 'fc-black-solid', 'fc-success-solid', 'fc-primary-solid');
-
 			$calendar = $('#calendar');
 			$calendar.fullCalendar({
 				header: {
@@ -67,109 +81,73 @@
 					center: 'title',
 					right: 'month,agendaWeek,agendaDay,listWeek'
 				},
-				selectable : true,
-				selectHelper: true,
-				select: function(start, end) {
-					// on select we show the Sweet Alert modal with an input
-					Swal.fire({
-					  title: 'Create an Event',
-					  input: 'text',
-					  inputPlaceholder: 'Enter event title...',
-					  showCancelButton: true,
-					  confirmButtonText: 'Create',
-					  cancelButtonText: 'Cancel',
-					  customClass: {
-						popup: 'swal2-rounded swal2-shadow',
-						confirmButton: 'btn btn-primary mx-2',
-						cancelButton: 'btn btn-secondary'
-					  },
-					  buttonsStyling: false, // agar kita bisa pakai custom class Bootstrap
-					  preConfirm: (value) => {
-						if (!value) {
-						  Swal.showValidationMessage('Please enter an event title');
-						}
-						return value;
-					  }
-					}).then((result) => {
-					  if (result.isConfirmed) {
-						const classRandom = className[Math.floor(Math.random() * className.length)];
-						const event_title = result.value;
-						const eventData = {
-						  title: event_title,
-						  start: start,
-						  className: classRandom,
-						  end: end
-						};
-						$calendar.fullCalendar('renderEvent', eventData, true);
-						$calendar.fullCalendar('unselect');
-					  }
-					});
+				selectable : false,
+				events: function(start, end, timezone, callback) {
+                    // Mendapatkan data data menggunakan Ajax
+                    $.ajax({
+                        url: 'http://sql-mvt-03/sprm/api/PlanManager/GetCalendar',
+                        type: 'GET',
+                        contentType: 'application/json',
+                        headers: { 'Authorization': 'Bearer ' + token },
+                        success: function (response) {
+							if (response.success) {
+								var events = response.data.map(function(item) {
+									let fcClass = 'fc-primary';
+									if (item.completedAt) {
+										fcClass = 'fc-success';
+									} 
+
+									return {
+										id: item.id,
+										title: item.codification,
+										start: item.startDate,
+										end: item.dueDate,
+										allDay: true,
+										className: fcClass,
+										description: item.codification,
+										meta: {
+											completedBy: item.completedBy,
+											completedAt: item.completedAt,
+											codification: item.codification,
+											title: item.title,
+										}
+									};
+								});
+								callback(events);
+
+								// Re-initialize tooltip after events rendered
+								setTimeout(function () {
+									$('[data-toggle="tooltip"]').tooltip();
+								}, 0);
+							}
+                        },
+                        error: function (error) {
+                            console.error('Unable to load the action plan', error);
+                        }
+                    });
 				},
-				events: [
-				{
-					title: 'All Day Event',
-					start: new Date(y, m, 1),
-					className: 'fc-black'
-				},
-				{
-					id: 999,
-					title: 'Repeating Event',
-					start: new Date(y, m, d - 3, 16, 0),
-					allDay: false,
-					className: 'fc-warning'
-				},
-				{
-					id: 999,
-					title: 'Repeating Event',
-					start: new Date(y, m, d + 4, 16, 0),
-					allDay: false,
-					className: 'fc-info'
-				},
-				{
-					title: 'Meeting',
-					start: new Date(y, m, d, 10, 30),
-					allDay: false,
-					className: 'fc-danger'
-				},
-				{
-					title: 'Lunch',
-					start: new Date(y, m, d, 12, 0),
-					end: new Date(y, m, d, 14, 0),
-					allDay: false,
-					className: 'fc-primary',
-					description: 'Eat Bro'
-				},
-				{
-					title: 'Meeting',
-					start: new Date(y, m, d + 3, 13, 30),
-					allDay: false,
-					className: 'fc-primary-solid',
-					description: 'Meeting'
-				},
-				{
-					title: 'Birthday Party',
-					start: new Date(y, m, d + 1, 19, 0),
-					end: new Date(y, m, d + 1, 22, 30),
-					allDay: false,
-					className: 'fc-success',
-					description: 'Coba Googling dulu'
-				},
-				{
-					title: 'Lunch',
-					start: new Date(y, m, d + 6, 13, 30),
-					allDay: false,
-					className: 'fc-success-solid',
-					description: 'Lunch'
-				},
-				{
-					title: 'Click for Google',
-					start: new Date(y, m, 28),
-					end: new Date(y, m, 29),
-					allDay: false,
-					url: 'http://google.com/',
-					className: 'fc-info-solid',
+				eventRender: function(event, element) {
+					if (event.meta) {
+						const tooltipContent = `
+							<b>Title:</b><br/> ${event.meta.title}<br/>
+							<br/><b>Codification:</b><br/> ${event.meta.codification}<br/>
+							<br/><b>Completed By:</b><br/> ${event.meta.completedBy ?? '-'}<br/>
+							<br/><b>Completed At:</b><br/> ${
+								event.meta.completedAt
+									? moment(event.meta.completedAt).format('YYYY-MM-DD HH:mm')
+									: '-'
+							}
+						`;
+
+						element.tooltip({
+							title: tooltipContent,
+							html: true,
+							placement: 'bottom',
+							trigger: 'hover',
+							container: 'body'
+						});
+					}
 				}
-				],
 			});
         });
     </script>
