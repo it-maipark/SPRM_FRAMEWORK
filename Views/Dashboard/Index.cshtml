@@ -30,7 +30,7 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title">Pie Chart</div>
+                    <div class="card-title">Action Plan Status (Pie Chart)</div>
                 </div>
                 <div class="card-body">
                     <div class="chart-container">
@@ -44,6 +44,8 @@
 
 @section Scripts {
     <script>
+        var token = sessionStorage.getItem("AccessToken");
+
         $(document).ready(function () {
             $('#navLink-Index-Dashboard').addClass('nav-item active');
 
@@ -101,8 +103,8 @@
                 type: 'pie',
                 data: {
                     datasets: [{
-                        data: [50, 35, 15],
-                        backgroundColor :["#1d7af3","#f3545d","#fdaf4b"],
+                        data: [], // [50, 35, 15],
+                        backgroundColor : [], // ["#1d7af3","#f3545d","#fdaf4b"],
                         borderWidth: 0
                     }],
                     labels: ['New Visitors', 'Subscribers', 'Active Users']
@@ -124,7 +126,10 @@
                         fontColor: 'white',
                         fontSize: 14,
                     },
-                    tooltips: false,
+                    tooltips: {
+                        mode: 'index',
+                        intersect: false
+                    },
                     layout: {
                         padding: {
                             left: 20,
@@ -136,14 +141,37 @@
                 }
             })
 
-            // Update Data Every 1 Minutes
+            // Get Pie Chart from SQL Server
+            function refreshPieChart(){
+                $.ajax({
+                    url: 'http://sql-mvt-03/sprm/api/Dashboard/GetPieChart',
+                    type: 'GET',
+                    contentType: 'application/json',
+                    headers: { 'Authorization': 'Bearer ' + token },
+                    success: function (response) {
+                        if (response.success) {
+                            myPieChart.data.labels = response.data.labels;
+                            myPieChart.data.datasets[0].data = response.data.data;
+                            myPieChart.data.datasets[0].backgroundColor = response.data.backgroundColor;
+                            myPieChart.update();
+                        }
+                    },
+                    error: function (error) {
+                        console.error('Unable to Get Pie Chart from API', error);
+                    }
+                });
+            }
+
+            // First Call
             updateTime('#time');
+            refreshPieChart();
 
             // Refresh data when the refresh button is clicked
             $("#updateData").click(function () {
                 $('#time').text(60);
                 // Fill the function below to refresh
                 $('#dateToday').text(moment().format('DD/MM/YYYY HH:mm:ss'));
+                refreshPieChart();
             })
 
             // Refresh data every 1 Minute
@@ -153,6 +181,7 @@
                     $(time).text(60)
                     // Fill the function below to refresh
                     $('#dateToday').text(moment().format('DD/MM/YYYY HH:mm:ss'));
+                    refreshPieChart();
                     setTimeout(function () { updateTime(time) }, 1000)
                 } else {
                     new_time--;
