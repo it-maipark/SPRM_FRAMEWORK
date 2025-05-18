@@ -8,7 +8,7 @@
     <div class="col-12 col-md-6 text-md-right">
         <h4 id="dateToday">@DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss")</h4>
         <a class="icon-refresh" style="font-size: 18px; cursor: pointer" id="updateData"></a>
-        <a id="time" style="font-size: 18px;">60</a>
+        <a id="time" style="font-size: 18px;">300</a>
     </div>
 </div>
 
@@ -269,11 +269,11 @@
                             myMultipleBarChart.update();
 
                             // Refresh Action Plan Status Count
-                            const Profitability = response.data.datasets[0].data[0] + response.data.datasets[1].data[0] + response.data.datasets[2].data[0];
-                            const Sustainability = response.data.datasets[0].data[1] + response.data.datasets[1].data[1] + response.data.datasets[2].data[1];
-                            const SDGs = response.data.datasets[0].data[2] + response.data.datasets[1].data[2] + response.data.datasets[2].data[2];
-                            const HCR = response.data.datasets[0].data[3] + response.data.datasets[1].data[3] + response.data.datasets[2].data[3];
-                            const Improvement = response.data.datasets[0].data[4] + response.data.datasets[1].data[4] + response.data.datasets[2].data[4];;
+                            const Profitability = response.data.datasets[0].data[0] + response.data.datasets[1].data[0] + response.data.datasets[2].data[0] + response.data.datasets[3].data[0];
+                            const Sustainability = response.data.datasets[0].data[1] + response.data.datasets[1].data[1] + response.data.datasets[2].data[1] + response.data.datasets[3].data[1];
+                            const SDGs = response.data.datasets[0].data[2] + response.data.datasets[1].data[2] + response.data.datasets[2].data[2] + response.data.datasets[3].data[2];
+                            const HCR = response.data.datasets[0].data[3] + response.data.datasets[1].data[3] + response.data.datasets[2].data[3] + response.data.datasets[3].data[3];
+                            const Improvement = response.data.datasets[0].data[4] + response.data.datasets[1].data[4] + response.data.datasets[2].data[4] + response.data.datasets[3].data[4];
                             
                             // Send count value to ui card
                             $('#countPRFT').text(Profitability);
@@ -296,7 +296,7 @@
 
             // Refresh data when the refresh button is clicked
             $("#updateData").click(function () {
-                $('#time').text(60);
+                $('#time').text(300);
                 // Fill the function below to refresh
                 $('#dateToday').text(moment().format('DD/MM/YYYY HH:mm:ss'));
                 refreshPieChart();
@@ -307,7 +307,7 @@
             function updateTime(time) {
                 let new_time = parseInt($(time).text());
                 if (new_time <= 0) {
-                    $(time).text(60)
+                    $(time).text(300)
                     // Fill the function below to refresh
                     $('#dateToday').text(moment().format('DD/MM/YYYY HH:mm:ss'));
                     refreshPieChart();
