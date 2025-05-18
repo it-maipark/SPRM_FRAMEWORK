@@ -2,6 +2,49 @@
     ViewBag.Title = "Kanban";
 }
 
+<style>
+    .avatar-stack {
+        display: flex;
+        margin-top: 12px;
+    }
+
+    .avatar-small {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background-color: #007bff;
+        color: white;
+        font-size: 10px;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-left: -8px;
+        border: 1px solid white;
+        position: relative;
+        cursor: default;
+    }
+
+    .avatar-small:first-child {
+        margin-left: 0;
+    }
+
+    .avatar-small:hover::after {
+        content: attr(data-name);
+        position: absolute;
+        top: 110%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #333;
+        color: white;
+        padding: 4px 6px;
+        border-radius: 4px;
+        font-size: 10px;
+        white-space: nowrap;
+        z-index: 999;
+    }
+</style>
+
 <div class="page-navs bg-white py-3 pr-2">
     <div class="card-title fw-bold">Kanban</div>
 </div>
@@ -12,38 +55,7 @@
                 <div class="kanban-title-board">Profitability</div>
             </header>
             <main>
-                <div class="kanban-item">
-                    <a href="#" class="kanban-title">Action_Plan_Test_Case01</a>
-                    <div class="kanban-badges">
-                        <div class="kanban-badge bg-danger">
-                            <i class="far fa-clock"></i>
-                            <span class="badge-text">May 16, 2025</span>
-                        </div>
-                        <div class="kanban-badge">
-                            <i class="far fa-check-square"></i>
-                            <span class="badge-text">0/1</span>
-                        </div>
-                    </div>
-                    <div class="kanban-edit">
-                        <i class="fa fa-pencil-alt"></i>
-                    </div>
-                </div>
-                <div class="kanban-item">
-                    <a href="#" class="kanban-title">AP 02 Test_Case01 01</a>
-                    <div class="kanban-badges">
-                        <div class="kanban-badge bg-danger">
-                            <i class="far fa-clock"></i>
-                            <span class="badge-text">To Be Determined</span>
-                        </div>
-                        <div class="kanban-badge">
-                            <i class="far fa-check-square"></i>
-                            <span class="badge-text">0/0</span>
-                        </div>
-                    </div>
-                    <div class="kanban-edit">
-                        <i class="fa fa-pencil-alt"></i>
-                    </div>
-                </div>
+                
             </main>
         </div>
         <div id="kanban-stnb" class="kanban-board">
@@ -83,28 +95,105 @@
 
 @section Scripts {
     <script>
+        var token = sessionStorage.getItem("AccessToken");
+
         $(document).ready(function () {
             $('#navLink-3').addClass('nav-item active');
+            loadKanbanData();
         });
 
-        'use strict';
+        function loadKanbanData() {
+            $.ajax({
+                url: "http://sql-mvt-03/sprm/api/PlanManager/GetKanban",
+                method: "GET",
+                contentType: 'application/json',
+                headers: { 'Authorization': 'Bearer ' + token },
+                success: function (response) {
+                    if (response.success && response.data) {
+                        response.data.forEach(function (item) {
+                            // Ambil kode bagian ke-2 dari codification
+                            const code = item.codification?.split("/")[1];
 
-        // Kanban Board Demo
-        // =============================================================
+                            // Tentukan target board berdasarkan code
+                            let targetBoard = '';
+                            switch (code) {
+                                case 'PRFT': targetBoard = '#kanban-prft'; break;
+                                case 'STNB': targetBoard = '#kanban-stnb'; break;
+                                case 'SDGS': targetBoard = '#kanban-sdgs'; break;
+                                case 'HCR':  targetBoard = '#kanban-hcr'; break;
+                                case 'IMPV': targetBoard = '#kanban-impv'; break;
+                                default: return; // Skip jika tidak cocok
+                            }
 
+                            // Hitung checklist
+                            const totalChecklist = item.actionPlanChecklists.length;
+                            const completedChecklist = item.actionPlanChecklists.filter(c => c.isCompleted).length;
+
+                            // Format tanggal
+                            let dueDateText = "To Be Determined";
+                            if (item.dueDate) {
+                                const dueDate = new Date(item.dueDate);
+                                dueDateText = dueDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+                            }
+
+                            // Buat HTML untuk avatar stack
+                            let avatarStackHtml = "";
+                            if (item.assignment && item.assignment.length > 0) {
+                                avatarStackHtml = `<div class="avatar-stack">`;
+                                item.assignment.forEach(person => {
+                                    const initials = person.split('.').map(n => n[0].toUpperCase()).join('');
+                                    avatarStackHtml += `
+                                        <div class="avatar-small" data-name="${person}">
+                                            ${initials}
+                                        </div>`;
+                                });
+                                avatarStackHtml += `</div>`;
+                            }
+
+                            // Buat elemen kanban-item
+                            const kanbanItem = `
+                                <div class="kanban-item">
+                                    <a href="#" class="kanban-title">${item.title}</a>
+                                    <div class="kanban-badges">
+                                        <div class="kanban-badge bg-danger">
+                                            <i class="far fa-clock"></i>
+                                            <span class="badge-text">${dueDateText}</span>
+                                        </div>
+                                        <div class="kanban-badge">
+                                            <i class="far fa-check-square"></i>
+                                            <span class="badge-text">${completedChecklist}/${totalChecklist}</span>
+                                        </div>
+                                    </div>
+                                    ${avatarStackHtml}
+                                    <div class="kanban-edit">
+                                        <i class="fa fa-pencil-alt"></i>
+                                    </div>
+                                </div>
+                            `;
+
+                            // Masukkan ke dalam main dari board yang sesuai
+                            $(targetBoard).find('main').append(kanbanItem);
+                        });
+                    } else {
+                        alert("Gagal mengambil data Kanban.");
+                    }
+                },
+                error: function (err) {
+                    console.error("AJAX error:", err);
+                    alert("Terjadi kesalahan saat mengambil data Kanban.");
+                }
+            });
+        }
+
+        // Hover handler tetap dipertahankan
         var boardDemo = {
-            init: function init() {
-
+            init: function () {
                 this.bindUIActions();
             },
-            bindUIActions: function bindUIActions() {
-                // event handlers
+            bindUIActions: function () {
                 this.handleBoardStyle();
             },
-            byId: function byId(id) {
-                return document.getElementById(id);
-            },
-            handleBoardStyle: function handleBoardStyle() {
+            handleBoardStyle: function () {
                 $(document).on('mouseenter mouseleave', '.kanban-board-header', function (e) {
                     var isHover = e.type === 'mouseenter';
                     $(this).parent().toggleClass('hover', isHover);
