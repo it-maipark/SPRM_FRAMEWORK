@@ -54,41 +54,31 @@
             <header class="kanban-board-header mb-3">
                 <div class="kanban-title-board">Profitability</div>
             </header>
-            <main>
-                
-            </main>
+            <main></main>
         </div>
         <div id="kanban-stnb" class="kanban-board">
             <header class="kanban-board-header mb-3">
                 <div class="kanban-title-board">Sustainability</div>
             </header>
-            <main>
-                
-            </main>
+            <main></main>
         </div>
         <div id="kanban-sdgs" class="kanban-board">
             <header class="kanban-board-header mb-3">
                 <div class="kanban-title-board">Sustainable Development Goals</div>
             </header>
-            <main>
-
-            </main>
+            <main></main>
         </div>
         <div id="kanban-hcr" class="kanban-board">
             <header class="kanban-board-header mb-3">
                 <div class="kanban-title-board">Human Capital and Retention</div>
             </header>
-            <main>
-
-            </main>
+            <main></main>
         </div>
         <div id="kanban-impv" class="kanban-board">
             <header class="kanban-board-header mb-3">
                 <div class="kanban-title-board">Improvement</div>
             </header>
-            <main>
-
-            </main>
+            <main></main>
         </div>
     </div>
 </div>
@@ -105,12 +95,12 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <input type="number" class="form-control" id="edit-output-id" name="edit-output-id" readonly>
+                    <input type="number" class="form-control" id="edit-apcl-id" name="edit-apcl-id" readonly>
                     <div class="form-group form-show-validation row">
-                        <label for="edit-output-title" class="col-4 mt-sm-2 text-left">Title <span class="required-label">*</span></label>
+                        <label for="edit-description" class="col-4 mt-sm-2 text-left">Description <span class="required-label">*</span></label>
                         <div class="col-8">
                             <div class="input-group mb-2">
-                                <input type="text" class="form-control" id="edit-output-title" name="edit-output-title" required>
+                                <input type="text" class="form-control" id="edit-description" name="edit-description" required>
                             </div>
                         </div>
                     </div>
@@ -196,9 +186,15 @@
                                         </div>
                                     </div>
                                     ${avatarStackHtml}
-                                    <div class="kanban-edit">
+                                    <button
+                                        class="btn btn-sm btn-edit-kanban kanban-edit"
+                                        data-toggle="modal"
+                                        data-target="#editKanbanModal"
+                                        data-placement="top"
+                                        title="Edit Action Plan"
+                                    >
                                         <i class="fa fa-pencil-alt"></i>
-                                    </div>
+                                    </button>
                                 </div>
                             `;
 
