@@ -43,6 +43,14 @@
         white-space: nowrap;
         z-index: 999;
     }
+
+    .checklist-checkbox {
+        width: 1.25rem;
+        height: 1.25rem;
+        margin-top: 0.3rem;
+        margin-left: 0.5rem;
+        cursor: pointer;
+    }
 </style>
 
 <div class="page-navs bg-white py-3 pr-2">
@@ -95,13 +103,16 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <input type="number" class="form-control" id="edit-apcl-id" name="edit-apcl-id" readonly>
-                    <div class="form-group form-show-validation row">
-                        <label for="edit-description" class="col-4 mt-sm-2 text-left">Description <span class="required-label">*</span></label>
-                        <div class="col-8">
-                            <div class="input-group mb-2">
-                                <input type="text" class="form-control" id="edit-description" name="edit-description" required>
-                            </div>
+                    <input type="number" class="form-control" id="edit-ap-id" name="edit-ap-id" hidden>
+                    <div class="form-group row">
+                        <label class="col-12 font-weight-bold">To Do Checklist</label>
+                    </div>
+                    <div id="checklist-container"></div>
+                    <div class="form-group row">
+                        <div class="col-12">
+                            <button type="button" class="btn btn-sm btn-success" id="btn-add-checklist">
+                                <i class="fa fa-plus mr-2"></i>Add To Do Checklist
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -116,11 +127,141 @@
 
 @section Scripts {
     <script>
+        // Get from session
         var token = sessionStorage.getItem("AccessToken");
+        var userMaipark = sessionStorage.getItem("Username");
+
+        // Define Checklist Data
+        let initialChecklistData = []
 
         $(document).ready(function () {
             $('#navLink-3').addClass('nav-item active');
             loadKanbanData();
+
+            // Event delegation untuk tombol edit
+            $('#myKanban').on('click', '.btn-edit-kanban', e => {
+                const btn = e.currentTarget.dataset;
+                $('#edit-ap-id').val(btn.apid);
+
+                // Simpan data checklist awal
+                const checklist = JSON.parse(btn.checklist || '[]');
+                initialChecklistData = checklist; // untuk nanti dibandingkan saat submit
+
+                $('#checklist-container').html('');
+                checklist.forEach(item => {
+                    appendChecklistRow(item.description, item.isCompleted, item.id);
+                });
+            });
+
+            function appendChecklistRow(description = '', isCompleted = false, id = null) {
+                const html = `
+                    <div class="form-group row align-items-center checklist-row" data-id="${id || ''}">
+                        <div class="col-1 text-center">
+                            <input type="checkbox" class="form-check-input checklist-checkbox" ${isCompleted ? 'checked' : ''}>
+                        </div>
+                        <div class="col-10">
+                            <input type="text" class="form-control checklist-input" value="${description}" placeholder="Checklist description">
+                        </div>
+                        <div class="col-1 text-right">
+                            <button type="button" class="btn btn-danger btn-sm btn-remove-checklist">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                $('#checklist-container').append(html);
+            }
+
+            $('#btn-add-checklist').on('click', () => {
+                appendChecklistRow();
+            });
+
+            $('#checklist-container').on('click', '.btn-remove-checklist', function () {
+                $(this).closest('.checklist-row').remove();
+            });
+
+            $('#editKanbanValidation').on('submit', function (e) {
+                e.preventDefault();
+
+                const actionPlanId = $('#edit-ap-id').val();
+                const currentChecklist = [];
+
+                $('#checklist-container .checklist-row').each(function () {
+                    const id = $(this).data('id');
+                    const description = $(this).find('.checklist-input').val();
+                    const isCompleted = $(this).find('.checklist-checkbox').prop('checked');
+                    currentChecklist.push({ id, description, isCompleted });
+                });
+
+                // Grouping logic
+                const added = currentChecklist.filter(x => !x.id);
+                const updated = currentChecklist.filter(x => {
+                    const original = initialChecklistData.find(y => y.id === x.id);
+                    return original && (original.description !== x.description || original.isCompleted !== x.isCompleted);
+                });
+                const deleted = initialChecklistData.filter(x => !currentChecklist.find(y => y.id === x.id));
+
+                // Create array of promises
+                const addRequests = added.map(x =>
+                    $.ajax({
+                        url: 'http://sql-mvt-03/sprm/api/PlanManager/AddActionPlanChecklist',
+                        method: 'POST',
+                        contentType: 'application/json',
+                        headers: { 'Authorization': 'Bearer ' + token },
+                        data: JSON.stringify({
+                            description: x.description,
+                            isCompleted: x.isCompleted,
+                            actionPlanId: parseInt(actionPlanId),
+                            createdBy: userMaipark
+                        })
+                    })
+                );
+
+                const updateRequests = updated.map(x =>
+                    $.ajax({
+                        url: 'http://sql-mvt-03/sprm/api/PlanManager/UpdateActionPlanChecklist',
+                        method: 'PUT',
+                        contentType: 'application/json',
+                        headers: { 'Authorization': 'Bearer ' + token },
+                        data: JSON.stringify({
+                            id: x.id,
+                            description: x.description,
+                            isCompleted: x.isCompleted,
+                            lastUpdatedBy: userMaipark
+                        })
+                    })
+                );
+
+                const deleteRequests = deleted.map(x =>
+                    $.ajax({
+                        url: `http://sql-mvt-03/sprm/api/PlanManager/DeleteActionPlanChecklist?id=${x.id}&deletedBy=${userMaipark}`,
+                        method: 'DELETE',
+                        headers: { 'Authorization': 'Bearer ' + token }
+                    })
+                );
+
+                // Wait until all requests are completed
+                Promise.all([...addRequests, ...updateRequests, ...deleteRequests])
+                    .then(() => {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: 'All checklist changes have been successfully saved.',
+                            confirmButtonText: 'OK'
+                        }).then(() => {
+                            $('#editKanbanModal').modal('hide');
+                            location.reload();
+                        });
+                    })
+                    .catch(error => {
+                        console.error(error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'An error occurred while saving the checklist changes.'
+                        });
+                    });
+            });
         });
 
         function loadKanbanData() {
@@ -157,6 +298,19 @@
                                 dueDateText = dueDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
                             }
 
+                            const due = moment(item.dueDate);
+                            const today = moment();
+                            const daysDiff = due.diff(today, 'days', true);
+
+                            let bgClass = 'bg-secondary';
+                            if (daysDiff <= 0) {
+                                bgClass = 'bg-danger';
+                            } else if (daysDiff <= 5) {
+                                bgClass = 'bg-warning';
+                            } else if (daysDiff <= 14) {
+                                bgClass = 'bg-success';
+                            }
+
                             // Buat HTML untuk avatar stack
                             let avatarStackHtml = "";
                             if (item.assignment && item.assignment.length > 0) {
@@ -176,7 +330,7 @@
                                 <div class="kanban-item">
                                     <a href="#" class="kanban-title">${item.title}</a>
                                     <div class="kanban-badges">
-                                        <div class="kanban-badge bg-danger">
+                                        <div class="kanban-badge ${bgClass} text-white">
                                             <i class="far fa-clock"></i>
                                             <span class="badge-text">${dueDateText}</span>
                                         </div>
@@ -188,6 +342,8 @@
                                     ${avatarStackHtml}
                                     <button
                                         class="btn btn-sm btn-edit-kanban kanban-edit"
+                                        data-apid="${item.id}"
+                                        data-checklist='${JSON.stringify(item.actionPlanChecklists)}'
                                         data-toggle="modal"
                                         data-target="#editKanbanModal"
                                         data-placement="top"
@@ -212,7 +368,7 @@
             });
         }
 
-        // Hover handler tetap dipertahankan
+        // Hover handler
         var boardDemo = {
             init: function () {
                 this.bindUIActions();
