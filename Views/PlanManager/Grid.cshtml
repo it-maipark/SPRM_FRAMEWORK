@@ -362,10 +362,10 @@
 
 @section Scripts {
     <script>
-        var token = sessionStorage.getItem("AccessToken");
-        var userMaipark = sessionStorage.getItem("Username");
-        var userRole = sessionStorage.getItem("UserRole");
-        var employeeData = sessionStorage.getItem("employeeData");
+        var token = localStorage.getItem("AccessToken");
+        var userMaipark = localStorage.getItem("Username");
+        var userRole = localStorage.getItem("UserRole");
+        var employeeData = localStorage.getItem("employeeData");
 
         if (userRole) {
             var roleObj = JSON.parse(userRole);

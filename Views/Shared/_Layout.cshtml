@@ -185,8 +185,47 @@
 	<!-- Atlantis JS -->
 	<script src="~/atlantis/assets/js/atlantis.min.js"></script>
 
-	<!-- SideBar -->
 	<script>
+		// Handle token Expired
+		$(document).ready(function () {
+			var token = localStorage.getItem('AccessToken');
+			if (!token) {
+				let returnUrl = window.location.pathname + window.location.search;
+
+				Swal.fire({
+					icon: 'warning',
+					title: 'Please login first.',
+					confirmButtonText: 'Go to Login'
+				}).then((result) => {
+					if (result.isConfirmed) {
+						window.location.href = '@Url.Action("Login", "Auth")' + '?returnUrl=' + encodeURIComponent(returnUrl);
+					}
+				});
+			}
+		});
+
+		// Bootstrap Notify
+		if (sessionStorage.getItem("LoginSuccess") === "true") {
+			// Tampilkan notifikasi
+			$.notify({
+				message: 'Welcome back, ' + localStorage.getItem("Username") + '!',
+				title: 'Login Success',
+				icon: 'fa fa-check-circle'
+			}, {
+				type: 'success',
+				placement: {
+					from: 'bottom',
+					align: 'right'
+				},
+				delay: 3000,
+				timer: 500,
+			});
+
+			// Hapus flag agar tidak muncul lagi kalau refresh
+			sessionStorage.removeItem("LoginSuccess");
+		}
+
+		// Sidebar
 		function getAppBasePath() {
 			const pathParts = window.location.pathname.split('/').filter(p => p);
 			const basePath = pathParts.length > 0 ? '/' + pathParts[0] : '';
@@ -277,8 +316,8 @@
 
 		// Setelah DOM siap, lakukan looping untuk generate sidebar menu
 		document.addEventListener("DOMContentLoaded", function () {
-			// Ambil data dari sessionStorage (misalnya, disimpan sebelumnya)
-			var sidebarMenusJson = sessionStorage.getItem("SidebarMenus");
+			// Ambil data dari localStorage (misalnya, disimpan sebelumnya)
+			var sidebarMenusJson = localStorage.getItem("SidebarMenus");
 			var sidebarMenus = sidebarMenusJson ? JSON.parse(sidebarMenusJson) : [];
 			var sidebarList = document.getElementById("sidebar-menu");
 			// Looping setiap menu dan append ke sidebar
@@ -287,7 +326,7 @@
 				sidebarList.appendChild(li);
 			});
 
-			var employeeData =sessionStorage.getItem("employeeData");
+			var employeeData = localStorage.getItem("employeeData");
 
 			if (employeeData) {
 				var employeeDataObj = JSON.parse(employeeData);
@@ -299,7 +338,6 @@
 			}
 		});
 	</script>
-	<!--End Sidebar-->
 
 	<!-- Logout -->
 	<script>
@@ -331,7 +369,11 @@
 									text: "See you again soon!",
 									icon: "success"
 								}).then(() => {
-									sessionStorage.clear();
+									localStorage.removeItem('AccessToken');
+									localStorage.removeItem('UserRole');
+									localStorage.removeItem('SidebarMenus');
+									localStorage.removeItem('Username');
+									localStorage.removeItem('employeeData');
 									window.location.href = '@Url.Action("Login", "Auth")';
 								});
 							},

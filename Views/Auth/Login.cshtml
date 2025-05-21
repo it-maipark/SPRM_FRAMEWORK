@@ -59,6 +59,7 @@
                 @* <p class="mb-0">Testing</p> *@
             </div>
             <form id="loginValidation" enctype="multipart/form-data">
+                <input type="hidden" id="ReturnUrl" name="ReturnUrl" value="@ViewBag.ReturnUrl" />
                 <div class="form-group form-floating-label">
                     <input id="username" name="username" type="text" class="form-control input-border-bottom" required>
                     <label for="username" class="placeholder">Username</label>
@@ -135,10 +136,10 @@
                         data: JSON.stringify(formData),
                         success: function (response) {
                             if (response.success) {
-                                sessionStorage.setItem('UserRole', JSON.stringify(response.data.role));
-                                sessionStorage.setItem('SidebarMenus', JSON.stringify(response.data.sidebarMenus));
-                                sessionStorage.setItem('Username', formData.username);
-                                sessionStorage.setItem('AccessToken', response.data.accessToken);
+                                localStorage.setItem('UserRole', JSON.stringify(response.data.role));
+                                localStorage.setItem('SidebarMenus', JSON.stringify(response.data.sidebarMenus));
+                                localStorage.setItem('Username', formData.username);
+                                localStorage.setItem('AccessToken', response.data.accessToken);
 
                                 $.ajax({
                                     type: 'GET',
@@ -150,8 +151,16 @@
                                     data: { username: formData.username },
                                     contentType: 'application/json',
                                     success: function (response) {
-                                        sessionStorage.setItem('employeeData', JSON.stringify(response.data));
-                                        window.location.href = '@Url.Action("Index", "Dashboard")';
+                                        localStorage.setItem('employeeData', JSON.stringify(response.data));
+                                        sessionStorage.setItem("LoginSuccess", "true");
+                                        
+                                        // Redirect ke returnUrl jika ada
+                                        var returnUrl = $('#ReturnUrl').val();
+                                        if (returnUrl && returnUrl !== "") {
+                                            window.location.href = returnUrl;
+                                        } else {
+                                            window.location.href = '@Url.Action("Index", "Dashboard")';
+                                        }
                                     },
                                     error: function (error) {
                                         console.error('Get Data Failed', error);

@@ -76,7 +76,7 @@
             google.charts.setOnLoadCallback(loadData);
 
             function loadData() {
-                const token = sessionStorage.getItem("AccessToken");
+                const token = localStorage.getItem("AccessToken");
 
                 $.ajax({
                     url: 'http://sql-mvt-03/sprm/api/PlanManager/GetKanban',

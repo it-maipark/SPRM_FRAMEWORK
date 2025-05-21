@@ -684,9 +684,9 @@
 
 @section Scripts {
     <script>
-        var token = sessionStorage.getItem("AccessToken");
-        var userMaipark = sessionStorage.getItem("Username");
-        var userRole = sessionStorage.getItem("UserRole");
+        var token = localStorage.getItem("AccessToken");
+        var userMaipark = localStorage.getItem("Username");
+        var userRole = localStorage.getItem("UserRole");
 
         $(document).ready(function () {
             $('#navLink-2').addClass('nav-item active');
