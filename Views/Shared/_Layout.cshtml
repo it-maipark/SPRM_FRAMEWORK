@@ -204,27 +204,6 @@
 			}
 		});
 
-		// Bootstrap Notify
-		if (sessionStorage.getItem("LoginSuccess") === "true") {
-			// Tampilkan notifikasi
-			$.notify({
-				message: 'Welcome back, ' + localStorage.getItem("Username") + '!',
-				title: 'Login Success',
-				icon: 'fa fa-check-circle'
-			}, {
-				type: 'success',
-				placement: {
-					from: 'bottom',
-					align: 'right'
-				},
-				delay: 3000,
-				timer: 500,
-			});
-
-			// Hapus flag agar tidak muncul lagi kalau refresh
-			sessionStorage.removeItem("LoginSuccess");
-		}
-
 		// Sidebar
 		function getAppBasePath() {
 			const pathParts = window.location.pathname.split('/').filter(p => p);
@@ -335,6 +314,27 @@
 				$('#role-display-dropdown').text(employeeDataObj.jobPosition);
 				$('#profile-pict').attr('src', employeeDataObj.image);
 				$('#profile-pict-dropdown').attr('src', employeeDataObj.image);
+
+				// Bootstrap Notify
+				if (sessionStorage.getItem("LoginSuccess") === "true") {
+					// Tampilkan notifikasi
+					$.notify({
+						message: 'Welcome back, ' + employeeDataObj.name + '!',
+						title: 'Login Success',
+						icon: 'fa fa-check-circle'
+					}, {
+						type: 'success',
+						placement: {
+							from: 'bottom',
+							align: 'right'
+						},
+						delay: 3000,
+						timer: 500,
+					});
+
+					// Hapus flag agar tidak muncul lagi kalau refresh
+					sessionStorage.removeItem("LoginSuccess");
+				}
 			}
 		});
 	</script>
