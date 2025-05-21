@@ -157,6 +157,10 @@
 
                 var chart = new google.visualization.Gantt(document.getElementById('chart_div'));
                 chart.draw(data, options);
+
+                $(window).resize(function() {
+                    if (chart) chart.draw(data, options);
+                });
             }
 
             function calculatePercentComplete(checklists) {
@@ -164,10 +168,6 @@
                 const completed = checklists.filter(c => c.isCompleted).length;
                 return Math.round((completed / checklists.length) * 100);
             }
-
-            $(window).resize(function() {
-                if (chart) chart.draw(data, options);
-            });
         });
     </script>
 }
