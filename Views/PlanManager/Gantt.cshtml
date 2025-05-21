@@ -2,6 +2,37 @@
     ViewBag.Title = "Gantt";
 }
 
+<style>
+    /* Perbaikan tooltip */
+    .google-visualization-tooltip {
+        z-index: 1000 !important;
+        position: relative !important;
+        padding: 10px !important;
+        border-radius: 5px !important;
+        box-shadow: 0 0 10px rgba(0,0,0,0.2) !important;
+        max-width: 300px !important;
+        background: white !important;
+        color: #333 !important;
+    }
+
+    /* Perbaikan container chart */
+    #chart_div {
+        overflow: visible !important;
+        min-height: 600px;
+    }
+
+    /* Perbaikan hover */
+    .google-visualization-gantt-bar {
+        transition: all 0.3s ease;
+        fill: #4285F4 !important;
+        stroke: #3367D6 !important;
+    }
+
+    .google-visualization-gantt-bar:hover {
+        fill: #3367D6 !important;
+    }
+</style>
+
 <div class="page-inner">
     <div class="page-header">
         <h4 class="page-title">Gantt</h4>
@@ -28,15 +59,115 @@
     <!-- Inner Page -->
     <div class="card">
         <div class="card-body">
-            Welcome
+            <div id="chart_div" style="width: 100%; height: 600px;"></div>
         </div>
     </div>
 </div>
 
 @section Scripts {
+    <!-- Google Chart Gantt Loader -->
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+
     <script>
         $(document).ready(function () {
             $('#navLink-3').addClass('nav-item active');
+
+            google.charts.load('current', { 'packages': ['gantt'] });
+            google.charts.setOnLoadCallback(loadData);
+
+            function loadData() {
+                const token = sessionStorage.getItem("AccessToken");
+
+                $.ajax({
+                    url: 'http://sql-mvt-03/sprm/api/PlanManager/GetKanban',
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    },
+                    success: function (result) {
+                        if (result.success && result.data) {
+                            drawChart(result.data);
+                        } else {
+                            console.warn("Data kosong atau tidak berhasil dimuat");
+                        }
+                    },
+                    error: function () {
+                        console.error("Gagal mengambil data dari API");
+                    }
+                });
+            }
+
+            function drawChart(dataFromApi) {
+                var data = new google.visualization.DataTable();
+                data.addColumn('string', 'Task ID');
+                data.addColumn('string', 'Task Name');
+                data.addColumn('string', 'Resource');
+                data.addColumn('date', 'Start Date');
+                data.addColumn('date', 'End Date');
+                data.addColumn('number', 'Duration');
+                data.addColumn('number', 'Percent Complete');
+                data.addColumn('string', 'Dependencies');
+
+                dataFromApi.forEach(item => {
+                    if (item.startDate && item.dueDate) {
+                        const percent = calculatePercentComplete(item.actionPlanChecklists);
+                        data.addRow([
+                            String(item.id),
+                            item.codification,
+                            item.leadGroup || '',
+                            new Date(item.startDate),
+                            new Date(item.dueDate),
+                            null,
+                            percent,
+                            null
+                        ]);
+                    }
+                });
+
+                var options = {
+                    height: Math.max(dataFromApi.length * 50, 600), // Minimum height 600px
+                    gantt: {
+                        trackHeight: 40, // Sedikit lebih tinggi
+                        barHeight: 20,
+                        labelStyle: {
+                            fontName: 'Arial',
+                            fontSize: 14,
+                            color: '#333'
+                        },
+                        bar: {
+                            color: '#4285F4', // Biru utama
+                            hoverColor: '#3367D6', // Biru hover
+                            strokeColor: '#3367D6', // Outline
+                            shadowColor: 'transparent', // Nonaktifkan shadow
+                            cornerRadius: 3
+                        },
+                        arrow: {
+                            color: '#666',
+                            radius: 6
+                        },
+                        percentEnabled: true, // Pastikan persentase ditampilkan
+                        shadowEnabled: false,
+                        criticalPathEnabled: false,
+                    },
+                    tooltip: {
+                        isHtml: true,
+                        trigger: 'hover'
+                    }
+                };
+
+                var chart = new google.visualization.Gantt(document.getElementById('chart_div'));
+                chart.draw(data, options);
+            }
+
+            function calculatePercentComplete(checklists) {
+                if (!checklists || checklists.length === 0) return 0;
+                const completed = checklists.filter(c => c.isCompleted).length;
+                return Math.round((completed / checklists.length) * 100);
+            }
+
+            $(window).resize(function() {
+                if (chart) chart.draw(data, options);
+            });
         });
     </script>
 }
