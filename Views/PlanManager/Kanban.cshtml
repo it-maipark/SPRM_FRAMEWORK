@@ -97,7 +97,7 @@
         <div class="modal-content">
             <form id="editKanbanValidation" enctype="multipart/form-data">
                 <div class="modal-header">
-                    <h2 class="modal-title font-weight-bold" id="editKanbanModalLabel">Edit Kanban</h2>
+                    <h2 class="modal-title font-weight-bold" id="editKanbanModalLabel">Kanban Details</h2>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -130,6 +130,17 @@
         // Get from session
         var token = localStorage.getItem("AccessToken");
         var userMaipark = localStorage.getItem("Username");
+        var userRole = localStorage.getItem("UserRole");
+        var employeeData = localStorage.getItem("employeeData");
+
+        if (userRole) {
+            var roleObj = JSON.parse(userRole);
+            var roleName = roleObj.roleName;
+        }
+
+        if (employeeData) {
+            var employeeDataObj = JSON.parse(employeeData);
+        }
 
         // Define Checklist Data
         let initialChecklistData = []
@@ -138,18 +149,37 @@
             $('#navLink-3').addClass('nav-item active');
             loadKanbanData();
 
-            // Event delegation untuk tombol edit
             $('#myKanban').on('click', '.btn-edit-kanban', e => {
                 const btn = e.currentTarget.dataset;
                 $('#edit-ap-id').val(btn.apid);
 
-                // Simpan data checklist awal
                 const checklist = JSON.parse(btn.checklist || '[]');
-                initialChecklistData = checklist; // untuk nanti dibandingkan saat submit
+                initialChecklistData = checklist;
 
                 $('#checklist-container').html('');
                 checklist.forEach(item => {
                     appendChecklistRow(item.description, item.isCompleted, item.id);
+                });
+
+                const canEdit = btn.canEdit;
+                const isEditable = canEdit === "true";
+
+                $('#editKanbanModal .modal-footer').toggle(isEditable);
+                $('#btn-add-checklist').toggle(isEditable);
+                $('.btn-remove-checklist').toggle(isEditable);
+
+                $('#editKanbanModal').find('input, select, textarea, button').each(function () {
+                    const $el = $(this);
+                    if ($el.attr('data-dismiss') === 'modal') return;
+
+                    if ($el.is('input') || $el.is('textarea') || $el.is('select')) {
+                        $el.prop('readonly', !isEditable);
+                        $el.prop('disabled', !isEditable);
+                    }
+
+                    if ($el.is('button')) {
+                        $el.prop('disabled', !isEditable);
+                    }
                 });
             });
 
@@ -272,90 +302,107 @@
                 headers: { 'Authorization': 'Bearer ' + token },
                 success: function (response) {
                     if (response.success && response.data) {
-                        response.data.forEach(function (item) {
-                            // Ambil kode bagian ke-2 dari codification
-                            const code = item.codification?.split("/")[1];
+                        // Enrich data: tambahkan canEdit ke setiap item
+                        const dataPromises = response.data.map(item => {
+                          return $.ajax({
+                            url: 'http://sql-mvt-03/sprm/api/Lookup/GetEmployeeByUserMaipark',
+                            method: 'GET',
+                            data: { username: item.createdBy },
+                            headers: { 'Authorization': 'Bearer ' + token }
+                          }).then(res => {
+                            return { ...item, canEdit: ((res.data.divId === employeeDataObj.divId && roleName == 'Dept Head') || (res.data.divId === employeeDataObj.divId && roleName == "Group Head") || roleName == 'Administrator' || item.assignment.includes(userMaipark)) };
+                          }).catch(() => {
+                            return { ...item, canEdit: false };
+                          });
+                        });
 
-                            // Tentukan target board berdasarkan code
-                            let targetBoard = '';
-                            switch (code) {
-                                case 'PRFT': targetBoard = '#kanban-prft'; break;
-                                case 'STNB': targetBoard = '#kanban-stnb'; break;
-                                case 'SDGS': targetBoard = '#kanban-sdgs'; break;
-                                case 'HCR':  targetBoard = '#kanban-hcr'; break;
-                                case 'IMPV': targetBoard = '#kanban-impv'; break;
-                                default: return; // Skip jika tidak cocok
-                            }
+                        Promise.all(dataPromises).then(enrichedData => {
+                            enrichedData.forEach(function (item) {
+                                // Ambil kode bagian ke-2 dari codification
+                                const code = item.codification?.split("/")[1];
 
-                            // Hitung checklist
-                            const totalChecklist = item.actionPlanChecklists.length;
-                            const completedChecklist = item.actionPlanChecklists.filter(c => c.isCompleted).length;
+                                // Tentukan target board berdasarkan code
+                                let targetBoard = '';
+                                switch (code) {
+                                    case 'PRFT': targetBoard = '#kanban-prft'; break;
+                                    case 'STNB': targetBoard = '#kanban-stnb'; break;
+                                    case 'SDGS': targetBoard = '#kanban-sdgs'; break;
+                                    case 'HCR':  targetBoard = '#kanban-hcr'; break;
+                                    case 'IMPV': targetBoard = '#kanban-impv'; break;
+                                    default: return; // Skip jika tidak cocok
+                                }
 
-                            // Format tanggal
-                            let dueDateText = "To Be Determined";
-                            if (item.dueDate) {
-                                const dueDate = new Date(item.dueDate);
-                                dueDateText = dueDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-                            }
+                                // Hitung checklist
+                                const totalChecklist = item.actionPlanChecklists.length;
+                                const completedChecklist = item.actionPlanChecklists.filter(c => c.isCompleted).length;
 
-                            const due = moment(item.dueDate);
-                            const today = moment();
-                            const daysDiff = due.diff(today, 'days', true);
+                                // Format tanggal
+                                let dueDateText = "To Be Determined";
+                                if (item.dueDate) {
+                                    const dueDate = new Date(item.dueDate);
+                                    dueDateText = dueDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+                                }
 
-                            let bgClass = 'bg-secondary';
-                            if (daysDiff <= 0) {
-                                bgClass = 'bg-danger';
-                            } else if (daysDiff <= 5) {
-                                bgClass = 'bg-warning';
-                            } else if (daysDiff <= 14) {
-                                bgClass = 'bg-success';
-                            }
+                                const due = moment(item.dueDate);
+                                const today = moment();
+                                const daysDiff = due.diff(today, 'days', true);
 
-                            // Buat HTML untuk avatar stack
-                            let avatarStackHtml = "";
-                            if (item.assignment && item.assignment.length > 0) {
-                                avatarStackHtml = `<div class="avatar-stack">`;
-                                item.assignment.forEach(person => {
-                                    const initials = person.split('.').map(n => n[0].toUpperCase()).join('');
-                                    avatarStackHtml += `
-                                        <div class="avatar-small" data-name="${person}">
-                                            ${initials}
-                                        </div>`;
-                                });
-                                avatarStackHtml += `</div>`;
-                            }
+                                let bgClass = 'bg-secondary';
+                                if (daysDiff <= 0) {
+                                    bgClass = 'bg-danger';
+                                } else if (daysDiff <= 5) {
+                                    bgClass = 'bg-warning';
+                                } else if (daysDiff <= 14) {
+                                    bgClass = 'bg-success';
+                                }
 
-                            // Buat elemen kanban-item
-                            const kanbanItem = `
-                                <div class="kanban-item">
-                                    <a href="#" class="kanban-title">${item.title}</a>
-                                    <div class="kanban-badges">
-                                        <div class="kanban-badge ${bgClass} text-white">
-                                            <i class="far fa-clock"></i>
-                                            <span class="badge-text">${dueDateText}</span>
+                                // Buat HTML untuk avatar stack
+                                let avatarStackHtml = "";
+                                if (item.assignment && item.assignment.length > 0) {
+                                    avatarStackHtml = `<div class="avatar-stack">`;
+                                    item.assignment.forEach(person => {
+                                        const initials = person.split('.').map(n => n[0].toUpperCase()).join('');
+                                        avatarStackHtml += `
+                                            <div class="avatar-small" data-name="${person}">
+                                                ${initials}
+                                            </div>`;
+                                    });
+                                    avatarStackHtml += `</div>`;
+                                }
+
+                                // Buat elemen kanban-item
+                                const kanbanItem = `
+                                    <div class="kanban-item">
+                                        <a href="#" class="kanban-title">${item.title}</a>
+                                        <div class="kanban-badges">
+                                            <div class="kanban-badge ${bgClass} text-white">
+                                                <i class="far fa-clock"></i>
+                                                <span class="badge-text">${dueDateText}</span>
+                                            </div>
+                                            <div class="kanban-badge">
+                                                <i class="far fa-check-square"></i>
+                                                <span class="badge-text">${completedChecklist}/${totalChecklist}</span>
+                                            </div>
                                         </div>
-                                        <div class="kanban-badge">
-                                            <i class="far fa-check-square"></i>
-                                            <span class="badge-text">${completedChecklist}/${totalChecklist}</span>
-                                        </div>
+                                        ${avatarStackHtml}
+                                        <button
+                                            class="btn btn-sm btn-edit-kanban kanban-edit"
+                                            data-apid="${item.id}"
+                                            data-checklist='${JSON.stringify(item.actionPlanChecklists)}'
+                                            data-can-edit="${item.canEdit}"
+                                            data-toggle="modal"
+                                            data-target="#editKanbanModal"
+                                            data-placement="top"
+                                            title="Show Action Plan Detail"
+                                        >
+                                            <i class="fas fa-search"></i>
+                                        </button>
                                     </div>
-                                    ${avatarStackHtml}
-                                    <button
-                                        class="btn btn-sm btn-edit-kanban kanban-edit"
-                                        data-apid="${item.id}"
-                                        data-checklist='${JSON.stringify(item.actionPlanChecklists)}'
-                                        data-toggle="modal"
-                                        data-target="#editKanbanModal"
-                                        data-placement="top"
-                                        title="Edit Action Plan"
-                                    >
-                                        <i class="fa fa-pencil-alt"></i>
-                                    </button>
-                                </div>
-                            `;
+                                `;
 
-                            // Masukkan ke dalam main dari board yang sesuai
-                            $(targetBoard).find('main').append(kanbanItem);
+                                // Masukkan ke dalam main dari board yang sesuai
+                                $(targetBoard).find('main').append(kanbanItem);
+                            });
                         });
                     } else {
                         alert("Gagal mengambil data Kanban.");
