@@ -4,33 +4,33 @@
 
 <style>
     .btn-mark-as-complete {
-      width: 22px;
-      height: 22px;
-      border: 1px solid #aaa;
-      border-radius: 50%;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      background-color: white;
-      transition: background-color 0.2s, border-color 0.2s;
-      position: relative;
+        width: 22px;
+        height: 22px;
+        border: 1px solid #aaa;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        background-color: white;
+        transition: background-color 0.2s, border-color 0.2s;
+        position: relative;
     }
 
     .btn-mark-as-complete:hover {
-      border-color: #0056b3;
-      background-color: #e6f0ff;
+        border-color: #0056b3;
+        background-color: #e6f0ff;
     }
 
     .btn-mark-as-complete .check-icon {
-      font-size: 0.7rem;
-      color: #0056b3;
-      opacity: 0;
-      transition: opacity 0.2s;
+        font-size: 0.7rem;
+        color: #0056b3;
+        opacity: 0;
+        transition: opacity 0.2s;
     }
 
     .btn-mark-as-complete.selected .check-icon {
-      opacity: 1;
+        opacity: 1;
     }
 
     .ap-cell {
@@ -60,6 +60,15 @@
         display: flex;
         opacity: 1;
         pointer-events: auto;
+    }
+
+    label.error {
+        display: block;
+        margin-top: 5px;
+        color: #e74c3c;
+        font-size: 0.85rem;
+        white-space: normal;
+        word-break: break-word;
     }
 </style>
 
@@ -193,7 +202,7 @@
                     <input type="text" class="form-control" id="add-sd-ap-timeline" name="add-sd-ap-timeline" hidden />
                     <div class="form-group form-show-validation row">
                         <label for="start-date" class="col-4 mt-sm-2 text-left">Start Date <span class="required-label">*</span></label>
-                        <div class="col-8">
+                        <div class="col-8" style="min-height: 65px;">
                             <div class="input-group">
                                 <input type="text" class="form-control" id="start-date" name="start-date" placeholder="Select date here..." required>
                                 <div class="input-group-append">
@@ -231,7 +240,7 @@
                     <input type="text" class="form-control" id="add-dd-ap-start-date" name="add-dd-ap-start-date" hidden />
                     <div class="form-group form-show-validation row">
                         <label for="due-date" class="col-4 mt-sm-2 text-left">Due Date <span class="required-label">*</span></label>
-                        <div class="col-8">
+                        <div class="col-8" style="min-height: 65px;">
                             <div class="input-group">
                                 <input type="text" class="form-control" id="due-date" name="due-date" placeholder="Select date here..." required>
                                 <div class="input-group-append">
@@ -301,7 +310,7 @@
                     <input type="text" class="form-control" id="edit-sd-ap-due-date" name="edit-sd-ap-due-date" hidden />
                     <div class="form-group form-show-validation row">
                         <label for="edit-start-date" class="col-4 mt-sm-2 text-left">Start Date <span class="required-label">*</span></label>
-                        <div class="col-8">
+                        <div class="col-8" style="min-height: 65px;">
                             <div class="input-group">
                                 <input type="text" class="form-control" id="edit-start-date" name="edit-start-date" placeholder="Select date here..." required>
                                 <div class="input-group-append">
@@ -339,7 +348,7 @@
                     <input type="text" class="form-control" id="edit-dd-ap-start-date" name="edit-dd-ap-start-date" hidden />
                     <div class="form-group form-show-validation row">
                         <label for="edit-due-date" class="col-4 mt-sm-2 text-left">Due Date <span class="required-label">*</span></label>
-                        <div class="col-8">
+                        <div class="col-8" style="min-height: 65px;">
                             <div class="input-group">
                                 <input type="text" class="form-control" id="edit-due-date" name="edit-due-date" placeholder="Select date here..." required>
                                 <div class="input-group-append">
@@ -514,6 +523,10 @@
                         required: "Please input Start Date.",
                     },
                 },
+                errorPlacement: function (error, element) {
+                    error.addClass("mt-1"); // kasih jarak atas
+                    error.insertAfter(element.closest('.input-group')); // taruh setelah input group
+                },
                 submitHandler: function (form) {
                     var formData = new FormData(form);
                     var rawData = Object.fromEntries(formData.entries());
@@ -571,6 +584,10 @@
                         required: "Please input Due Date.",
                     },
                 },
+                errorPlacement: function (error, element) {
+                    error.addClass("mt-1"); // kasih jarak atas
+                    error.insertAfter(element.closest('.input-group')); // taruh setelah input group
+                },
                 submitHandler: function (form) {
                     var formData = new FormData(form);
                     var rawData = Object.fromEntries(formData.entries());
@@ -594,7 +611,7 @@
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Added successfully!',
-                                text: 'New start date has been added.',
+                                text: 'New due date has been added.',
                             }).then(() => {
                                 // Refresh the user management page or perform any other actions
                                 location.reload();
@@ -604,9 +621,9 @@
                             Swal.fire({
                                 icon: "error",
                                 title: "Oops...",
-                                text: "Something went wrong. Unable to add the start date."
+                                text: "Something went wrong. Unable to add the due date."
                             }).then(() => {
-                                console.error('Unable to add the start date', error);
+                                console.error('Unable to add the due date', error);
                             });
                         }
                     });
@@ -684,6 +701,10 @@
                         required: "Please input Start Date.",
                     },
                 },
+                errorPlacement: function (error, element) {
+                    error.addClass("mt-1"); // kasih jarak atas
+                    error.insertAfter(element.closest('.input-group')); // taruh setelah input group
+                },
                 submitHandler: function (form) {
                     var formData = new FormData(form);
                     var rawData = Object.fromEntries(formData.entries());
@@ -694,8 +715,6 @@
                       startDate: moment.utc(rawData['edit-start-date'], 'DD/MM/YYYY').toISOString(),
                       lastUpdatedBy: userMaipark
                     };
-
-                    console.log(jsonData);
 
                     // Mengirim data menggunakan Ajax
                     $.ajax({
@@ -743,6 +762,10 @@
                         required: "Please input Due Date.",
                     },
                 },
+                errorPlacement: function (error, element) {
+                    error.addClass("mt-1"); // kasih jarak atas
+                    error.insertAfter(element.closest('.input-group')); // taruh setelah input group
+                },
                 submitHandler: function (form) {
                     var formData = new FormData(form);
                     var rawData = Object.fromEntries(formData.entries());
@@ -766,7 +789,7 @@
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Update successfully!',
-                                text: 'The start date has been updated.',
+                                text: 'The Due date has been updated.',
                             }).then(() => {
                                 // Refresh the user management page or perform any other actions
                                 location.reload();
@@ -776,9 +799,9 @@
                             Swal.fire({
                                 icon: "error",
                                 title: "Oops...",
-                                text: "Something went wrong. Unable to update the start date."
+                                text: "Something went wrong. Unable to update the due date."
                             }).then(() => {
-                                console.error('Unable to update the start date', error);
+                                console.error('Unable to update the due date', error);
                             });
                         }
                     });
@@ -952,17 +975,17 @@
                             `;
                           }
 
-                          const due = moment(data);
-                          const today = moment();
-                          const daysDiff = due.diff(today, 'days', true);
+                          const due = moment(data).startOf('day');
+                          const today = moment().startOf('day');
+                          const daysDiff = due.diff(today, 'days'); // tidak perlu pakai true
 
                           let badgeClass = 'badge-secondary';
-                          if (daysDiff <= 0) {
-                            badgeClass = 'badge-danger';
+                          if (daysDiff < 0) {
+                            badgeClass = 'badge-danger';    // lewat deadline
                           } else if (daysDiff <= 5) {
-                            badgeClass = 'badge-warning';
+                            badgeClass = 'badge-warning';   // dekat deadline
                           } else if (daysDiff <= 14) {
-                            badgeClass = 'badge-success';
+                            badgeClass = 'badge-success';   // masih aman
                           }
 
                           if (data && row.canEdit) {

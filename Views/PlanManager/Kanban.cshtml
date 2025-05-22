@@ -345,10 +345,10 @@
 
                                 const due = moment(item.dueDate);
                                 const today = moment();
-                                const daysDiff = due.diff(today, 'days', true);
+                                const daysDiff = due.diff(today, 'days');
 
                                 let bgClass = 'bg-secondary';
-                                if (daysDiff <= 0) {
+                                if (daysDiff < 0) {
                                     bgClass = 'bg-danger';
                                 } else if (daysDiff <= 5) {
                                     bgClass = 'bg-warning';
