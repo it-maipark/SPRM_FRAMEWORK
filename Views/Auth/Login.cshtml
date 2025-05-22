@@ -89,6 +89,12 @@
     <script src="~/atlantis/assets/js/plugin/jquery.validate/jquery.validate.min.js"></script>
 
     <script>
+        // API Base URL
+        const apiBaseUrl = "@ViewBag.ApiBaseUrl";
+        function apiUrl(endpoint) {
+            return apiBaseUrl + endpoint;
+        }
+
         $(document).ready(function () {
             $('#loginValidation').validate({
                 rules: {
@@ -128,9 +134,9 @@
                         username: $('#username').val(),
                         password: $('#password').val()
                     };
-
+                    
                     $.ajax({
-                        url: 'http://sql-mvt-03/sprm/api/Auth/Login',
+                        url: apiUrl('/Auth/Login'),
                         type: 'POST',
                         contentType: 'application/json',
                         data: JSON.stringify(formData),
@@ -143,7 +149,7 @@
 
                                 $.ajax({
                                     type: 'GET',
-                                    url: 'http://sql-mvt-03/sprm/api/Lookup/GetEmployeeByUserMaipark',
+                                    url: apiUrl('/Lookup/GetEmployeeByUserMaipark'),
                                     xhrFields: {
                                         withCredentials: true
                                     },

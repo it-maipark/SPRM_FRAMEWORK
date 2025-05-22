@@ -140,7 +140,7 @@
             // Get Doughnut Chart from SQL Server
             function refreshDoughnutChart(){
                 $.ajax({
-                    url: 'http://sql-mvt-03/sprm/api/Dashboard/GetPieChart',
+                    url: apiUrl('/Dashboard/GetPieChart'),
                     type: 'GET',
                     contentType: 'application/json',
                     headers: { 'Authorization': 'Bearer ' + token },
@@ -161,7 +161,7 @@
             // Get Multiple Bar Chart from SQL Server
             function refreshMultipleBarChart(){
                 $.ajax({
-                    url: 'http://sql-mvt-03/sprm/api/Dashboard/GetMultipleBarChart',
+                    url: apiUrl('/Dashboard/GetMultipleBarChart'),
                     type: 'GET',
                     contentType: 'application/json',
                     headers: { 'Authorization': 'Bearer ' + token },

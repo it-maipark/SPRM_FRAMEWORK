@@ -79,7 +79,7 @@
                 const token = localStorage.getItem("AccessToken");
 
                 $.ajax({
-                    url: 'http://sql-mvt-03/sprm/api/PlanManager/GetKanban',
+                    url: apiUrl('/PlanManager/GetKanban'),
                     method: 'GET',
                     headers: {
                         'Authorization': 'Bearer ' + token

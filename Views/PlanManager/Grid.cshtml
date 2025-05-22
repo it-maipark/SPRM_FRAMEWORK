@@ -480,7 +480,7 @@
 
                     // Mengirim data menggunakan Ajax
                     $.ajax({
-                        url: 'http://sql-mvt-03/sprm/api/PlanManager/UpdateActionPlan',
+                        url: apiUrl('/PlanManager/UpdateActionPlan'),
                         type: 'PUT',
                         contentType: 'application/json',
                         headers: { 'Authorization': 'Bearer ' + token },
@@ -540,7 +540,7 @@
 
                     // Mengirim data menggunakan Ajax
                     $.ajax({
-                        url: 'http://sql-mvt-03/sprm/api/PlanManager/UpdateActionPlan',
+                        url: apiUrl('/PlanManager/UpdateActionPlan'),
                         type: 'PUT',
                         contentType: 'application/json',
                         headers: { 'Authorization': 'Bearer ' + token },
@@ -601,7 +601,7 @@
 
                     // Mengirim data menggunakan Ajax
                     $.ajax({
-                        url: 'http://sql-mvt-03/sprm/api/PlanManager/UpdateActionPlan',
+                        url: apiUrl('/PlanManager/UpdateActionPlan'),
                         type: 'PUT',
                         contentType: 'application/json',
                         headers: { 'Authorization': 'Bearer ' + token },
@@ -657,7 +657,7 @@
 
                     // Mengirim data menggunakan Ajax
                     $.ajax({
-                        url: 'http://sql-mvt-03/sprm/api/PlanManager/UpdateActionPlan',
+                        url: apiUrl('/PlanManager/UpdateActionPlan'),
                         type: 'PUT',
                         contentType: 'application/json',
                         headers: { 'Authorization': 'Bearer ' + token },
@@ -718,7 +718,7 @@
 
                     // Mengirim data menggunakan Ajax
                     $.ajax({
-                        url: 'http://sql-mvt-03/sprm/api/PlanManager/UpdateActionPlan',
+                        url: apiUrl('/PlanManager/UpdateActionPlan'),
                         type: 'PUT',
                         contentType: 'application/json',
                         headers: { 'Authorization': 'Bearer ' + token },
@@ -779,7 +779,7 @@
 
                     // Mengirim data menggunakan Ajax
                     $.ajax({
-                        url: 'http://sql-mvt-03/sprm/api/PlanManager/UpdateActionPlan',
+                        url: apiUrl('/PlanManager/UpdateActionPlan'),
                         type: 'PUT',
                         contentType: 'application/json',
                         headers: { 'Authorization': 'Bearer ' + token },
@@ -810,7 +810,7 @@
 
             // Generate datatable grid
             $.ajax({
-              url: 'http://sql-mvt-03/sprm/api/PlanManager/GetGrid',
+              url: apiUrl('/PlanManager/GetGrid'),
               method: 'GET',
               dataType: 'json',
               headers: { 'Authorization': 'Bearer ' + token },
@@ -818,7 +818,7 @@
                 // Enrich data: tambahkan canEdit ke setiap item
                 const dataPromises = response.data.map(item => {
                   return $.ajax({
-                    url: 'http://sql-mvt-03/sprm/api/Lookup/GetEmployeeByUserMaipark',
+                    url: apiUrl('/Lookup/GetEmployeeByUserMaipark'),
                     method: 'GET',
                     data: { username: item.createdBy },
                     headers: { 'Authorization': 'Bearer ' + token }
@@ -1030,7 +1030,7 @@
 
             // Generate datatable grid complete
             $.ajax({
-              url: 'http://sql-mvt-03/sprm/api/PlanManager/GetGridComplete',
+              url: apiUrl('/PlanManager/GetGridComplete'),
               method: 'GET',
               dataType: 'json',
               headers: { 'Authorization': 'Bearer ' + token },
@@ -1100,7 +1100,7 @@
 
                     // Mengirim data menggunakan Ajax
                     $.ajax({
-                        url: 'http://sql-mvt-03/sprm/api/Lookup/GetEmployeeByDivisions',
+                        url: apiUrl('/Lookup/GetEmployeeByDivisions'),
                         type: 'GET',
                         contentType: 'application/json',
                         headers: { 'Authorization': 'Bearer ' + token },
@@ -1157,7 +1157,7 @@
                     }).then((result) => {
                         if (result.isConfirmed) {
                             $.ajax({
-                                url: 'http://sql-mvt-03/sprm/api/PlanManager/UpdateActionPlanMarkAsCompleted?id=' + apId + '&completedBy=' + userMaipark,
+                                url: apiUrl('/PlanManager/UpdateActionPlanMarkAsCompleted?id=' + apId + '&completedBy=' + userMaipark),
                                 type: 'PUT',
                                 xhrFields: { withCredentials: true },
                                 headers: { 'Authorization': 'Bearer ' + token },
@@ -1196,7 +1196,7 @@
 
                     // Mengirim data menggunakan Ajax
                     $.ajax({
-                        url: 'http://sql-mvt-03/sprm/api/Lookup/GetEmployeeByDivisions',
+                        url: apiUrl('/Lookup/GetEmployeeByDivisions'),
                         type: 'GET',
                         contentType: 'application/json',
                         headers: { 'Authorization': 'Bearer ' + token },

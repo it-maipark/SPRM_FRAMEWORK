@@ -85,7 +85,7 @@
 				events: function(start, end, timezone, callback) {
                     // Mendapatkan data data menggunakan Ajax
                     $.ajax({
-                        url: 'http://sql-mvt-03/sprm/api/PlanManager/GetCalendar',
+						url: apiUrl('/PlanManager/GetCalendar'),
                         type: 'GET',
                         contentType: 'application/json',
                         headers: { 'Authorization': 'Bearer ' + token },

@@ -186,6 +186,12 @@
 	<script src="~/atlantis/assets/js/atlantis.min.js"></script>
 
 	<script>
+		// API Base URL
+		const apiBaseUrl = "@ViewBag.ApiBaseUrl";
+		function apiUrl(endpoint) {
+			return apiBaseUrl + endpoint;
+		}
+
 		// Handle token Expired
 		$(document).ready(function () {
 			var token = localStorage.getItem('AccessToken');
@@ -328,7 +334,7 @@
 							from: 'bottom',
 							align: 'right'
 						},
-						delay: 3000,
+						delay: 4000,
 						timer: 500,
 					});
 
@@ -358,7 +364,7 @@
 					if (result.isConfirmed) {
 						$.ajax({
 							type: 'POST',
-							url: 'http://sql-mvt-03/sprm/api/Auth/Logout',
+							url: apiUrl('/Auth/Logout'),
 							contentType: 'application/json',
 							xhrFields: {
 								withCredentials: true

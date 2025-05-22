@@ -2,8 +2,9 @@
 
 namespace SPRM_FRAMEWORK.Controllers
 {
-    public class PlanManagerController : Controller
+    public class PlanManagerController : BaseController
     {
+        public PlanManagerController(IConfiguration config) : base(config) { }
         public IActionResult Grid()
         {
             return View();

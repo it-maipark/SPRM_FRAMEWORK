@@ -234,7 +234,7 @@
                 // Create array of promises
                 const addRequests = added.map(x =>
                     $.ajax({
-                        url: 'http://sql-mvt-03/sprm/api/PlanManager/AddActionPlanChecklist',
+                        url: apiUrl('/PlanManager/AddActionPlanChecklist'),
                         method: 'POST',
                         contentType: 'application/json',
                         headers: { 'Authorization': 'Bearer ' + token },
@@ -249,7 +249,7 @@
 
                 const updateRequests = updated.map(x =>
                     $.ajax({
-                        url: 'http://sql-mvt-03/sprm/api/PlanManager/UpdateActionPlanChecklist',
+                        url: apiUrl('/PlanManager/UpdateActionPlanChecklist'),
                         method: 'PUT',
                         contentType: 'application/json',
                         headers: { 'Authorization': 'Bearer ' + token },
@@ -264,7 +264,7 @@
 
                 const deleteRequests = deleted.map(x =>
                     $.ajax({
-                        url: `http://sql-mvt-03/sprm/api/PlanManager/DeleteActionPlanChecklist?id=${x.id}&deletedBy=${userMaipark}`,
+                        url: apiUrl(`/PlanManager/DeleteActionPlanChecklist?id=${x.id}&deletedBy=${userMaipark}`),
                         method: 'DELETE',
                         headers: { 'Authorization': 'Bearer ' + token }
                     })
@@ -296,7 +296,7 @@
 
         function loadKanbanData() {
             $.ajax({
-                url: "http://sql-mvt-03/sprm/api/PlanManager/GetKanban",
+                url: apiUrl("/PlanManager/GetKanban"),
                 method: "GET",
                 contentType: 'application/json',
                 headers: { 'Authorization': 'Bearer ' + token },
@@ -305,7 +305,7 @@
                         // Enrich data: tambahkan canEdit ke setiap item
                         const dataPromises = response.data.map(item => {
                           return $.ajax({
-                            url: 'http://sql-mvt-03/sprm/api/Lookup/GetEmployeeByUserMaipark',
+                            url: apiUrl('/Lookup/GetEmployeeByUserMaipark'),
                             method: 'GET',
                             data: { username: item.createdBy },
                             headers: { 'Authorization': 'Bearer ' + token }

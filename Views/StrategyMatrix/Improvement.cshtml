@@ -713,7 +713,7 @@
             // GET Lead Group & Support Group Data (GET Divisions)
             $.ajax({
                 type: 'GET',
-                url: 'http://sql-mvt-03/sprm/api/Lookup/GetDivisions',
+                url: apiUrl('/Lookup/GetDivisions'),
                 headers: { 'Authorization': 'Bearer ' + token },
                 dataType: 'json',
                 success: function (response) {
@@ -890,7 +890,7 @@
 
                     // Mengirim data menggunakan Ajax
                     $.ajax({
-                        url: 'http://sql-mvt-03/sprm/api/StrategyMatrix/AddStrategy',
+                        url: apiUrl('/StrategyMatrix/AddStrategy'),
                         type: 'POST',
                         contentType: 'application/json',
                         headers: { 'Authorization': 'Bearer ' + token },
@@ -980,7 +980,7 @@
 
                     // Mengirim data menggunakan Ajax
                     $.ajax({
-                        url: 'http://sql-mvt-03/sprm/api/StrategyMatrix/AddActionPlan',
+                        url: apiUrl('/StrategyMatrix/AddActionPlan'),
                         type: 'POST',
                         contentType: 'application/json',
                         headers: { 'Authorization': 'Bearer ' + token },
@@ -1045,7 +1045,7 @@
 
                     // Mengirim data menggunakan Ajax
                     $.ajax({
-                        url: 'http://sql-mvt-03/sprm/api/StrategyMatrix/AddKPI',
+                        url: apiUrl('/StrategyMatrix/AddKPI'),
                         type: 'POST',
                         contentType: 'application/json',
                         headers: { 'Authorization': 'Bearer ' + token },
@@ -1103,7 +1103,7 @@
 
                     // Mengirim data menggunakan Ajax
                     $.ajax({
-                        url: 'http://sql-mvt-03/sprm/api/StrategyMatrix/AddOutput',
+                        url: apiUrl('/StrategyMatrix/AddOutput'),
                         type: 'POST',
                         contentType: 'application/json',
                         headers: { 'Authorization': 'Bearer ' + token },
@@ -1253,7 +1253,7 @@
 
                     // Mengirim data menggunakan Ajax
                     $.ajax({
-                        url: 'http://sql-mvt-03/sprm/api/StrategyMatrix/UpdateStrategy',
+                        url: apiUrl('/StrategyMatrix/UpdateStrategy'),
                         type: 'PUT',
                         contentType: 'application/json',
                         headers: { 'Authorization': 'Bearer ' + token },
@@ -1341,7 +1341,7 @@
 
                     // Mengirim data menggunakan Ajax
                     $.ajax({
-                        url: 'http://sql-mvt-03/sprm/api/StrategyMatrix/UpdateActionPlan',
+                        url: apiUrl('/StrategyMatrix/UpdateActionPlan'),
                         type: 'PUT',
                         contentType: 'application/json',
                         headers: { 'Authorization': 'Bearer ' + token },
@@ -1406,7 +1406,7 @@
 
                     // Mengirim data menggunakan Ajax
                     $.ajax({
-                        url: 'http://sql-mvt-03/sprm/api/StrategyMatrix/UpdateKPI',
+                        url: apiUrl('/StrategyMatrix/UpdateKPI'),
                         type: 'PUT',
                         contentType: 'application/json',
                         headers: { 'Authorization': 'Bearer ' + token },
@@ -1464,7 +1464,7 @@
 
                     // Mengirim data menggunakan Ajax
                     $.ajax({
-                        url: 'http://sql-mvt-03/sprm/api/StrategyMatrix/UpdateOutput',
+                        url: apiUrl('/StrategyMatrix/UpdateOutput'),
                         type: 'PUT',
                         contentType: 'application/json',
                         headers: { 'Authorization': 'Bearer ' + token },
@@ -1498,8 +1498,7 @@
         });
 
         $(function() {
-          const $tbody = $('#strategyTable tbody'),
-                apiUrl = 'http://sql-mvt-03/sprm/api/StrategyMatrix';
+          const $tbody = $('#strategyTable tbody');
 
           // Create UI table strategy
           function fetchAndRender() {
@@ -1507,7 +1506,7 @@
             $tbody.html('<tr><td colspan="7" class="text-center py-5">Loading…</td></tr>');
 
             $.ajax({
-              url: apiUrl,
+              url: apiUrl('/StrategyMatrix'),
               method: 'GET',
               dataType: 'json',
               xhrFields: { withCredentials: true },
@@ -2137,7 +2136,7 @@
           $('#strategyTable tfoot')
             .on('click', '.btn-add-str', e => {
                 $.ajax({
-                    url: 'http://sql-mvt-03/sprm/api/Lookup/GetCodification',
+                    url: apiUrl('/Lookup/GetCodification'),
                     type: 'GET',
                     data: { type: 'STR', pilar: 'IMPV' },
                     headers: { 'Authorization': 'Bearer ' + token },
@@ -2187,7 +2186,7 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
-                            url: 'http://sql-mvt-03/sprm/api/StrategyMatrix/DeleteStrategy?id=' + strId + '&deletedBy=' + userMaipark,
+                            url: apiUrl('/StrategyMatrix/DeleteStrategy?id=' + strId + '&deletedBy=' + userMaipark),
                             type: 'DELETE',
                             xhrFields: { withCredentials: true },
                             headers: { 'Authorization': 'Bearer ' + token },
@@ -2218,7 +2217,7 @@
             .on('click', '.btn-add-ap', e => {
                 $('#strategy-id').val(e.currentTarget.dataset.strid)
                 $.ajax({
-                    url: 'http://sql-mvt-03/sprm/api/Lookup/GetCodification',
+                    url: apiUrl('/Lookup/GetCodification'),
                     type: 'GET',
                     data: { type: 'APN', pilar: 'IMPV' },
                     headers: { 'Authorization': 'Bearer ' + token },
@@ -2274,7 +2273,7 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
-                            url: 'http://sql-mvt-03/sprm/api/StrategyMatrix/DeleteActionPlan?id=' + apId + '&deletedBy=' + userMaipark,
+                            url: apiUrl('/StrategyMatrix/DeleteActionPlan?id=' + apId + '&deletedBy=' + userMaipark),
                             type: 'DELETE',
                             xhrFields: { withCredentials: true },
                             headers: { 'Authorization': 'Bearer ' + token },
@@ -2326,7 +2325,7 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
-                            url: 'http://sql-mvt-03/sprm/api/StrategyMatrix/DeleteKPI?id=' + kpiId + '&deletedBy=' + userMaipark,
+                            url: apiUrl('/StrategyMatrix/DeleteKPI?id=' + kpiId + '&deletedBy=' + userMaipark),
                             type: 'DELETE',
                             xhrFields: { withCredentials: true },
                             headers: { 'Authorization': 'Bearer ' + token },
@@ -2377,7 +2376,7 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
-                            url: 'http://sql-mvt-03/sprm/api/StrategyMatrix/DeleteOutput?id=' + outputId + '&deletedBy=' + userMaipark,
+                            url: apiUrl('/StrategyMatrix/DeleteOutput?id=' + outputId + '&deletedBy=' + userMaipark),
                             type: 'DELETE',
                             xhrFields: { withCredentials: true },
                             headers: { 'Authorization': 'Bearer ' + token },

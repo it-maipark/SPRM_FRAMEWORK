@@ -2,8 +2,9 @@
 
 namespace SPRM_FRAMEWORK.Controllers
 {
-    public class StrategyMatrixController : Controller
+    public class StrategyMatrixController : BaseController
     {
+        public StrategyMatrixController(IConfiguration config) : base(config) { }
         public IActionResult Profitability()
         {
             return View();
