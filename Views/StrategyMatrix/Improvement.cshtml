@@ -132,14 +132,6 @@
                         </div>
                     </div>
                     <div class="form-group form-show-validation row">
-                        <label for="codification" class="col-4 mt-sm-2 text-left">Codification <span class="required-label">*</span></label>
-                        <div class="col-8">
-                            <div class="input-group mb-2">
-                                <input type="text" class="form-control" id="codification" name="codification" readonly>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group form-show-validation row">
                         <label for="strategic-pilar" class="col-4 mt-sm-2 text-left">Strategic Pilar <span class="required-label">*</span></label>
                         <div class="col-8">
                             <div class="input-group mb-2">
@@ -249,14 +241,6 @@
                         <div class="col-8">
                             <div class="input-group mb-2">
                                 <input type="text" class="form-control" id="title" name="title" placeholder="Input title here..." required>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group form-show-validation row">
-                        <label for="ap-codification" class="col-4 mt-sm-2 text-left">Codification <span class="required-label">*</span></label>
-                        <div class="col-8">
-                            <div class="input-group mb-2">
-                                <input type="text" class="form-control" id="ap-codification" name="ap-codification" readonly>
                             </div>
                         </div>
                     </div>
@@ -789,9 +773,6 @@
                     "main-target": {
                         required: true
                     },
-                    "codification": {
-                        required: true
-                    },
                     "tag": {
                         required: true
                     },
@@ -833,9 +814,6 @@
                     "main-target": {
                         required: "Please Input Main Target.",
                     },
-                    "codification": {
-                        required: "Please Input Codification.",
-                    },
                     "tag": {
                         required: "Please Input Tag.",
                     },
@@ -874,7 +852,6 @@
                       description: rawData['description'],
                       strategicGoals: rawData['strategic-goals'],
                       mainTarget: rawData['main-target'],
-                      codification: rawData['codification'],
                       strategicPillar: rawData['strategic-pilar'],
                       tag: rawData['tag'],
                       versionTag: rawData['version-tag'],
@@ -972,7 +949,6 @@
                       leadGroup: rawData['select-lead-group'],
                       supportGroup: supportGroupValues.join(", "),
                       strategyId: rawData['strategy-id'],
-                      codification: rawData['ap-codification'],
                       strategicPilar: "Improvement",
                       timeline: `${rawData['start-date']} - ${rawData['due-date']}`,
                       createdBy: userMaipark
@@ -2133,23 +2109,6 @@
           }
 
           // event delegation untuk tombol edit/add/delete
-          $('#strategyTable tfoot')
-            .on('click', '.btn-add-str', e => {
-                $.ajax({
-                    url: apiUrl('/Lookup/GetCodification'),
-                    type: 'GET',
-                    data: { type: 'STR', pilar: 'IMPV' },
-                    headers: { 'Authorization': 'Bearer ' + token },
-                    success: function (response) {
-                        $('#codification').val(response.data.no);
-                    },
-                    error: function (error) {
-                        // Tampilkan sweet alert jika terjadi kesalahan
-                        console.error('Failed to load the codification no', error);
-                    }
-                });
-            });
-
           $tbody
             .on('click', '.btn-edit-str', e => {
                 const btn = e.currentTarget.dataset;
@@ -2216,19 +2175,6 @@
             })
             .on('click', '.btn-add-ap', e => {
                 $('#strategy-id').val(e.currentTarget.dataset.strid)
-                $.ajax({
-                    url: apiUrl('/Lookup/GetCodification'),
-                    type: 'GET',
-                    data: { type: 'APN', pilar: 'IMPV' },
-                    headers: { 'Authorization': 'Bearer ' + token },
-                    success: function (response) {
-                        $('#ap-codification').val(response.data.no);
-                    },
-                    error: function (error) {
-                        // Tampilkan sweet alert jika terjadi kesalahan
-                        console.error('Failed to load the codification no', error);
-                    }
-                });
             })
             .on('click', '.btn-edit-ap', e => {
                 const btn = e.currentTarget.dataset;
