@@ -1755,7 +1755,7 @@
                                     <td rowspan="${kpiRows}">
                                       ${
                                         kpi.expense
-                                          ? kpi.expense.toLocaleString('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 4, maximumFractionDigits: 4 })
+                                          ? kpi.expense.toLocaleString('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 0 })
                                           : ''
                                       }
                                     </td>
@@ -1930,7 +1930,7 @@
                               divisionRendered = true;
                             }
                             $tr.append(`<td>${kpi.expense
-                              ? kpi.expense.toLocaleString('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 4, maximumFractionDigits: 4 })
+                              ? kpi.expense.toLocaleString('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 0 })
                               : ''
                             }</td>`);
 
