@@ -110,7 +110,9 @@
 
                 dataFromApi.forEach(item => {
                     if (item.startDate && item.dueDate) {
-                        const percent = calculatePercentComplete(item.actionPlanChecklists);
+                        const percent = item.completedAt 
+                                            ? 100
+                                            : calculatePercentComplete(item.actionPlanChecklists);
                         data.addRow([
                             String(item.id),
                             item.codification,
